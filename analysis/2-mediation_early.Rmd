@@ -1,0 +1,291 @@
+---
+title: "2-mediation_early"
+author: "bernard-liew"
+date: "2020-06-10"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+
+# Load library 
+
+```{r message=FALSE, warning=FALSE}
+
+# Helper packages
+library (tidyverse)
+library (tidyselect)
+library (arsenal)
+library (janitor)
+library (magrittr)
+library (Rgraphviz)
+
+# Import
+library(readxl)
+library (xlsx)
+
+# Missing data
+library (mice)
+library (VIM)
+
+# Modelling
+library (bnlearn)
+library (caret)
+
+# Parallel
+library (doParallel)
+
+```
+
+# Import data
+
+```{r}
+
+rm (list = ls())
+df <- readRDS("output/df_early.RDS")
+
+
+```
+
+# BN analysis
+
+## Early change 
+
+### Create blacklist
+
+```{r}
+
+df.bn = as.data.frame (df)
+df.bn$id <- NULL
+df.bn$subgrp <- NULL # since the earlier descriptives show no difference using ANOVA
+
+tiers_bl = list (colnames (df.bn)[colnames(df.bn) %in% grep ("grp",colnames(df.bn), value = TRUE)], 
+                 colnames (df.bn)[colnames(df.bn) %in% grep ("early",colnames(df.bn), value = TRUE)])
+
+bl1 = tiers2blacklist(tiers_bl)
+bl = rbind(bl1)
+
+```
+
+## Create whitelist
+
+```{r}
+wl =  matrix(c("grp", "lbp_early"), nrow = 1, ncol = 2, byrow = TRUE, 
+              dimnames = list(NULL,c("from", "to"))) 
+wl = rbind(wl, 
+           c("grp", "lp_early"),
+           c("grp", "osw_early")) 
+```
+
+
+### Build BN model
+
+#### Just with blacklist 
+
+```{r}
+
+doParallel::registerDoParallel(7)
+n_boot = 200
+
+
+
+############
+
+boot_bl <-  foreach (B = 1: n_boot) %dopar%{
+    boot.sample = df.bn[sample(nrow(df.bn), 
+                                          nrow(df.bn), replace = TRUE), ]
+    bnlearn::structural.em(boot.sample, impute = "bayes-lw", max.iter = 3,
+                              maximize.args = list(blacklist = bl,  
+                                                   #whitelist = wl,
+                                                   k = log(nrow(boot.sample))))
+}
+#############
+
+
+  
+
+```
+
+#### See results
+
+```{r fig.height=15, fig.width=15}
+
+bootstr = custom.strength(boot_bl, nodes = names(df.bn))
+avg = averaged.network(bootstr, threshold = 0.5)
+fit = bn.fit (avg, df.bn, method = "mle")
+
+g = strength.plot(avg, 
+                  bootstr, 
+                  shape = "rectangle",
+                  main = "Figure 2")
+
+graph::nodeRenderInfo(g) = list(fontsize=12)
+
+
+```
+
+#### With blacklist and whitelist
+
+```{r}
+
+doParallel::registerDoParallel(7)
+n_boot = 200
+
+
+
+############
+
+boot_wl  =  foreach (B = 1: n_boot) %dopar%{
+    boot.sample = df.bn[sample(nrow(df.bn), 
+                                          nrow(df.bn), replace = TRUE), ]
+    bnlearn::structural.em(boot.sample, impute = "bayes-lw", max.iter = 3,
+                              maximize.args = list(blacklist = bl,  
+                                                   whitelist = wl,
+                                                   k = log(nrow(boot.sample))))
+}
+#############
+
+
+  
+
+```
+
+### See results
+
+```{r fig.height=15, fig.width=15}
+
+bootstr = custom.strength(boot_wl, nodes = names(df.bn))
+avg = averaged.network(bootstr, threshold = 0.5)
+fit = bn.fit (avg, df.bn, method = "mle")
+
+g = strength.plot(avg, 
+                  bootstr, 
+                  shape = "rectangle",
+                  highlight = list (arcs = wl), 
+                  main = "Figure 2")
+
+graph::nodeRenderInfo(g) = list(fontsize=12)
+
+```
+
+## Performance evaluation 
+
+### On model with just blacklist
+
+Nested Cross validation. 
+Inner is bootstrap resampling for model averaging. 
+Outer is 10 fold CV for performance evaluation.
+
+```{r, eval = FALSE}
+
+flds <- flds <- createFolds(1:nrow(df.bn), 
+                            k = 10, list = TRUE, returnTrain = TRUE)
+n_boot = 200
+doParallel::registerDoParallel(7)
+
+corr.df.list <- list()
+
+for (k in seq_along(flds)) {
+  
+  train <-  df.bn [flds[[k]], ] %>% as.data.frame()
+  test <- df.bn [-flds[[k]], ] %>% as.data.frame()
+  
+  ############
+  
+  boot  =  foreach (B = 1: n_boot) %dopar%{
+      boot.sample = train[sample(nrow(train), 
+                                            nrow(train), replace = TRUE), ]
+      bnlearn::structural.em(boot.sample, impute = "bayes-lw", max.iter = 3,
+                                maximize.args = list(blacklist = bl,  
+                                                     #whitelist = wl.list[[n]],
+                                                      k = log(nrow(boot.sample))))
+  }
+  #############
+  
+  bootstr <-  custom.strength(boot, nodes = names(train))
+  avg <-  averaged.network(bootstr, threshold = 0.5)
+  fit <-  bn.fit (avg, train, method = "mle")
+  
+  imp.list = impute (fit, data = test, method = "bayes-lw")
+  inames = names (imp.list) [!names (imp.list) %in% c("grp", "subgrp")]
+  corr.df =  structure(numeric(length (inames)), names = inames)
+  
+  for (var in inames) {
+      corr.df[var] = cor(predict(fit, data = imp.list, var, method = "bayes-lw"), 
+                         imp.list[, var])
+    }
+  
+  corr.df.list[[k]] <- corr.df
+  
+
+}
+
+corr.df <- bind_cols (corr.df.list) %>%
+  apply (1, mean)
+
+names (corr.df) <- inames
+
+corr.df
+
+cat ("The mean correlation is:", mean (corr.df))
+```
+
+
+### On model with blacklist and whitelist
+
+Nested Cross validation. 
+Inner is bootstrap resampling for model averaging. 
+Outer is 10 fold CV for performance evaluation.
+
+```{r, eval = FALSE}
+
+flds <- flds <- createFolds(1:nrow(df.bn), 
+                            k = 10, list = TRUE, returnTrain = TRUE)
+n_boot = 200
+doParallel::registerDoParallel(7)
+
+corr.df.list <- list()
+
+for (k in seq_along(flds)) {
+  
+  train <-  df.bn [flds[[k]], ] %>% as.data.frame()
+  test <- df.bn [-flds[[k]], ] %>% as.data.frame()
+  
+  ############
+  
+  boot  =  foreach (B = 1: n_boot) %dopar%{
+      boot.sample = train[sample(nrow(train), 
+                                            nrow(train), replace = TRUE), ]
+      bnlearn::structural.em(boot.sample, impute = "bayes-lw", max.iter = 3,
+                                maximize.args = list(blacklist = bl,  
+                                                     whitelist = wl,
+                                                      k = log(nrow(boot.sample))))
+  }
+  #############
+  
+  bootstr <-  custom.strength(boot, nodes = names(train))
+  avg <-  averaged.network(bootstr, threshold = 0.5)
+  fit <-  bn.fit (avg, train, method = "mle")
+  
+  imp.list = impute (fit, data = test, method = "bayes-lw")
+  inames = names (imp.list) [!names (imp.list) %in% c("grp", "subgrp")]
+  corr.df =  structure(numeric(length (inames)), names = inames)
+  
+  for (var in inames) {
+      corr.df[var] = cor(predict(fit, data = imp.list, var, method = "bayes-lw"), 
+                         imp.list[, var])
+    }
+  
+  corr.df.list[[k]] <- corr.df
+  
+
+}
+
+corr.df <- bind_cols (corr.df.list) %>%
+  apply (1, mean)
+
+names (corr.df) <- inames
+
+corr.df
+
+cat ("The mean correlation is:", mean (corr.df))
+```

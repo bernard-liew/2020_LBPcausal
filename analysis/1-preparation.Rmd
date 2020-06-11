@@ -1,0 +1,1175 @@
+---
+title: "1-preparation"
+author: "bernard-liew"
+date: "2020-06-11"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+
+# Load library 
+
+```{r message=FALSE, warning=FALSE}
+
+# Helper packages
+library (tidyverse)
+library (tidyselect)
+library (arsenal)
+library (janitor)
+library (magrittr)
+
+# Import
+library(readxl)
+library (xlsx)
+
+# Statistics
+library (mice)
+library (VIM)
+library (corrr)
+
+
+```
+
+# Import data
+
+```{r}
+
+rm (list = ls())
+dat <-  read_excel("data/stops_dat.xlsx", 
+    sheet = "data")
+
+dat <- dat[c(1:300),]
+
+cnames <- names (dat)
+cnames_mod <- str_replace_all (tolower(cnames), 
+                                           pattern = " ", 
+                                           repl = "_")
+names (dat) <- cnames_mod 
+
+df_orig <- dat
+
+```
+
+# Tidy data
+
+## Remove dummary variables
+
+```{r}
+
+dummy_var <- grep ("dummy|0,|v_", cnames_mod, value = TRUE)
+
+dat_sub <- dat[, !names (dat) %in% dummy_var]
+
+(ncol (dat_sub) + length (dummy_var)) == length (names (dat))
+
+df_orig_sub <- dat_sub
+
+```
+
+## Group variables 
+
+```{r}
+
+cnames_mod <- names (dat_sub)
+
+# Time related variables
+
+base_var <- grep ("baseline", cnames_mod, value = TRUE)
+
+wk5_var <- grep ("5week|5_week", cnames_mod, value = TRUE)
+
+wk10_var <- grep ("10week|10_week", cnames_mod, value = TRUE)
+
+wk26_var <- grep ("26week|26_week", cnames_mod, value = TRUE)
+
+wk52_var <- grep ("52week|52_week", cnames_mod, value = TRUE)
+
+# Baseline variables
+
+id_var<- tidyselect::vars_select (cnames_mod, 
+                                          c("stops_id":
+                                              "baseline_date"))
+
+orebro_var <- grep ("orebro", cnames_mod, value = TRUE)
+
+fab_var <- grep ("fab", cnames_mod, value = TRUE)
+
+work_var <- grep ("work|industry|occupation", cnames_mod, value = TRUE)
+
+symptom_var <- grep ("symptom|next", cnames_mod, value = TRUE)
+
+symptomLoc_var <- grep ("location", cnames_mod, value = TRUE)
+
+episode_var <- grep ("episode", cnames_mod, value = TRUE)
+
+sfbs_var <- grep ("sfbs", cnames_mod, value = TRUE)
+
+other_var <- grep ("other_rx", cnames_mod, value = TRUE) # remove
+
+treatment_var <- tidyselect::vars_select (cnames_mod, 
+                                          c("treatment:_number_of_practitioners_seen_(all)":
+                                              "10:_rest_of_life"))
+
+meds_var <- tidyselect::vars_select (cnames_mod, c("paracetamol":
+                                                     "medication:_number_of_med_types_(all)")) # remove
+
+
+
+misc_var <-  tidyselect::vars_select (cnames_mod, 
+                                          c("weight_(kg)":
+                                              "sa1_(code)"))
+
+ses_var <- grep ("ses:", cnames_mod, value = TRUE)
+
+personal_var <-  tidyselect::vars_select (cnames_mod, 
+                                          c("highest_level_of_education":
+                                              "number_of_smokes...316"))
+
+symptHx_var <-  tidyselect::vars_select (cnames_mod, 
+                                          c("have_you_taken_any_tablets_for_your_back_today?":
+                                              "if_you_have_leg_and_back_symptoms,_are_they_related?...338"))
+
+
+aggr_var <-  grep ("agg|difficult|sorer", cnames_mod, value = TRUE)
+
+ease_var <-  grep ("ease|comfortable", cnames_mod, value = TRUE)
+
+obj_curve_var <- tidyselect::vars_select (cnames_mod, 
+                                          c("assessment:_obs:_standing-increased_lordosis":
+                                              "list_corresponding_to_worst_side"))
+
+obj_rom_var <- tidyselect::vars_select (cnames_mod, 
+                                          c("amt:_flexion_range_(cm)...462":
+                                              "range_of_side_with_most_limited_lf"))
+
+obj_core_var <- tidyselect::vars_select (cnames_mod, 
+                                          c("core_stability_in_standing":
+                                              "ta_low_tone"))
+
+obj_sit_var <- grep ("sitting:", cnames_mod, value = TRUE)
+
+obj_neuro_var <- tidyselect::vars_select (cnames_mod, 
+                                          c("positive_slr":
+                                            "clinical_radiculopathy_with_no_mechanical_cause_on_imaging"))
+
+aggr2_var <-  tidyselect::vars_select (cnames_mod, 
+                                          c("oswestry:_sitting_(p3)":
+                                              "repeated_movements:_reducible?"))
+
+obj_core2_var <- grep ("multifidus", cnames_mod, value = TRUE)
+
+obj_disc_var <- tidyselect::vars_select (cnames_mod, 
+                                          c("regular_compression":
+                                            "degree_of_nerve_contact"))
+
+redflag_var <- tidyselect::vars_select (cnames_mod, 
+                                          c("constant_symptoms":
+                                            "general_health_state"))
+
+euroqol_var <- grep ("euroqol", cnames_mod, value = TRUE)
+
+```
+
+
+## Rename variables
+
+### Baseline outcome variables
+
+```{r}
+
+dat_base_var <- dat_sub[, names (dat_sub) %in% base_var]
+dat_base_var <- dat_base_var[, !names (dat_base_var) %in% c ("baseline_date",
+                                                             "baseline_time_(0_weeks)",
+                                                             "baseline_pain_(leg)...9")]
+dat_base_var $working_at_baseline <- NULL
+new.name1 <- paste0("base_", c ("osw",
+                                 "lbp",
+                                 "lp"))  
+new.name2 <- paste0 ("base_osw_q", c(1:10))
+
+names(dat_base_var) <- c(new.name1, new.name2)
+  
+```
+
+### Week 5 outcome variables
+
+```{r}
+
+dat_wk5_var <- dat_sub [, names (dat_sub) %in% wk5_var]
+dat_wk5_var  <- dat_wk5_var [, !names (dat_wk5_var) %in% c ("5_week_outcome_date", 
+                                                            "5_weeks_(days_since_om_completed)",
+                                                            "5_weeks_(weeks_since_om_completed)")]
+
+new.name1 <- paste0("wk5_", c ("osw",
+                               "lbp",
+                               "lp",
+                               "oreb"))  
+new.name2 <- paste0 ("wk5_oreb_q", c(4:24))
+
+names(dat_wk5_var) <- c(new.name1, new.name2)
+  
+```
+
+### Week 10 outcome variables
+
+```{r}
+
+dat_wk10_var <- dat_sub [, names (dat_sub) %in% wk10_var]
+dat_wk10_var  <- dat_wk10_var [, !names (dat_wk10_var) %in% c ("10_week_outcome_date", 
+                                                            "10_weeks_(days_since_om_completed)",
+                                                            "10_weeks_(weeks_since_om_completed)")]
+
+new.name1 <- paste0("wk10_", c ("osw",
+                               "lbp",
+                               "lp",
+                               "oreb"))  
+new.name2 <- paste0 ("wk10_oreb_q", c(4:24))
+
+names(dat_wk10_var) <- c(new.name1, new.name2)
+  
+```
+
+### Week 26 outcome variables
+
+```{r}
+
+dat_wk26_var <- dat_sub [, names (dat_sub) %in% wk26_var]
+dat_wk26_var  <- dat_wk26_var [, !names (dat_wk26_var) %in% c ("26_week_outcome_date", 
+                                                            "26_weeks_(days_since_om_completed)",
+                                                            "26_weeks_(weeks_since_om_completed)")]
+
+new.name1 <- paste0("wk26_", c ("osw",
+                               "lbp",
+                               "lp",
+                               "oreb"))  
+new.name2 <- paste0 ("wk26_oreb_q", c(4:24))
+
+names(dat_wk26_var) <- c(new.name1, new.name2)
+  
+```
+
+### Week 52 outcome variables
+
+```{r}
+
+dat_wk52_var <- dat_sub [, names (dat_sub) %in% wk52_var]
+dat_wk52_var  <- dat_wk52_var [, !names (dat_wk52_var) %in% c ("52_week_outcome_date", 
+                                                            "52_weeks_(days_since_om_completed)",
+                                                            "52_weeks_(weeks_since_om_completed)")]
+
+new.name1 <- paste0("wk52_", c ("osw",
+                               "lbp",
+                               "lp",
+                               "oreb"))  
+new.name2 <- paste0 ("wk52_oreb_q", c(4:24))
+
+names(dat_wk52_var) <- c(new.name1, new.name2)
+  
+```
+
+### Baseline id variables
+
+```{r}
+
+dat_id_var <- dat_sub [, names (dat_sub) %in% id_var]
+dat_id_var  <- dat_id_var [, !names (dat_id_var) %in% c ("baseline_date")]
+
+names(dat_id_var) <- c("id", "rx_grp", "rx_subgrp")
+  
+```
+
+
+### Baseline orebro
+
+```{r}
+
+orebro_var_sub <- orebro_var[!grepl("5w|10w|26w|52w|...37", orebro_var)]
+
+dat_orebro_var <- dat_sub [, names (dat_sub) %in% orebro_var_sub ]
+
+new.name1 <- c("base_oreb", paste0 ("base_oreb_q", c(4:24)))
+
+names(dat_orebro_var) <- new.name1  
+
+```
+
+### Baseline fab
+
+```{r}
+
+dat_fab_var <- dat_sub [, names (dat_sub) %in% fab_var]
+
+names(dat_fab_var) <- "base_fab"  
+
+```
+
+### Baseline work
+
+```{r}
+
+work_var2 <- tidyselect::vars_select (work_var, 
+                                          -c("19:_reason_pre-injury_work_status...64":
+                                            "working_other_than_nd_due_to_current__lbp",
+                                            "pre-inj_workers'_perceived_chance_of_working_at_6/12...72",
+                                            "workers'_perception_of_heavy_or_monotonous_work...75" ,
+                                            "pre-injury_workers'_sick_leave_duration_due_to_pain...78",
+                            "pre-injury_house-keepers'_or_workers'_sick_leave_duration_due_to_pain...81",
+                            "pre-injury_house-keepers'_or_workers'_sick_leave_duration_due_to_pain...80",
+                            "ses:_index_of_education_and_occupation" ,
+                             "occupation" ))
+
+dat_work_var <- dat_sub [, names (dat_sub) %in% work_var2]
+
+
+new.name1 <- c("work_status", "work_duty", "reas_not_work", "pre_work_status",
+               "pre_work_duty", "reas_pre_work_status", "pre_perc_work6mth",
+               "work", "prec_work", "work_statifac", "pre_sickleave_pain",
+               "pain_interfer",  "industry", "hx_heavywork")
+
+new.name2 <- paste0 ("base_", new.name1)
+
+names(dat_work_var) <- new.name2  
+
+```
+
+### Baseline symptoms
+
+```{r}
+
+symptom_var2 <- tidyselect::vars_select (symptom_var , 
+                                          -c("duration_of_leg_symptoms...100":
+                                            "duration_of_symptoms:_longest_lx_or_leg" ,
+                                            "if_you_have_leg_and_back_symptoms,_are_they_related?...337",
+                                            "first_time_symptoms_started...422",
+                                            "time_of_day_symptoms_came_on...428",
+                                            "how_next_day...434" ,
+                                            "symptoms_following_day_much_worse_(p25)",
+                                            "constant_symptoms",
+                                            "night_symptoms" ))
+
+dat_symptom_var <- dat_sub [, names (dat_sub) %in% symptom_var2 ]
+
+
+new.name1 <- c("lbp_symptom", "leg_symptom", "lbp_duration", "leg_duration",
+               "freq_symptom", "back_leg_relation", "onset_symptom",
+               "time_symptom", "next_day_symptom", "pain_side")
+
+new.name2 <- paste0 ("base_", new.name1)
+
+names(dat_symptom_var) <- new.name2  
+
+```
+
+### Baseline symptom location
+
+```{r}
+
+symptomLoc_var2 <- tidyselect::vars_select (symptomLoc_var , 
+                                          -c("pain_location:_body_chart_-_psych...96",
+                                            "pain_location:_body_chart_-_psych...97",
+                                            "duration_of_leg_symptoms+pain_location_(body_chart)"))
+
+dat_symptomLoc_var <- dat_sub [, names (dat_sub) %in% symptomLoc_var2]
+
+
+new.name1 <- c("loc_antthigh_pain", "loc_belowknee_pain", "loc_leg_pain", "loc_body_ratio",
+               "loc_mostpain")
+
+new.name2 <- paste0 ("base_", new.name1)
+
+names(dat_symptomLoc_var) <- new.name2  
+
+```
+
+### Baseline episode
+
+```{r}
+
+episode_var2 <- tidyselect::vars_select (episode_var , 
+                                          -c( "previous_lbp_episodes:_<=4,_>4,_n_appl"  ,
+                                             "not_the_first_ep_and_previous_lbp_episodes:_<=4,_>4,_n_appl"))
+
+dat_episode_var <- dat_sub [, names (dat_sub) %in% episode_var2]
+
+
+new.name1 <- c("first_episode", "first_episode_period")
+
+new.name2 <- paste0 ("base_", new.name1)
+
+names(dat_episode_var ) <- new.name2  
+
+```
+
+
+### Baseline sfbs
+
+```{r}
+
+dat_sfbs_var <- dat_sub [, names (dat_sub) %in% sfbs_var]
+
+
+new.name1 <- c("freq_1", "freq_2", "freq_3", "freq_4", "freq_5",
+               "sciatica_freq_lbp", "sciatica_freq_nolbp", "bother_1",
+               "bother_2", "bother_3", "bother_4", "bother_5",
+               "sciatica_bother_lbp", "sciatica_bother_nolbp")
+
+new.name2 <- paste0 ("base_sfbs_", new.name1)
+
+names(dat_sfbs_var) <- new.name2  
+
+```
+
+### Baseline other
+
+```{r}
+
+dat_other_var <- dat_sub [, names (dat_sub) %in% other_var]
+
+
+```
+
+
+### Baseline treatment
+
+```{r}
+
+
+treatment_var2 <- tidyselect::vars_select (treatment_var, 
+                                          c( "total_number_of_treatments_across_all_types...228",
+                                             "8:_satisfaction_with_healthcare" ,
+                                             "9:_satisfaction_results",
+                                             "10:_rest_of_life" ))
+
+dat_treatment_var <- dat_sub [, names (dat_sub) %in% treatment_var2]
+
+
+new.name1 <- c("total_rx_no", "statisfac_healthcare", "statisfac_result", "rest_of_life")
+
+new.name2 <- paste0 ("base_", new.name1)
+
+names(dat_treatment_var) <- new.name2  
+
+
+```
+
+### Baseline medicine
+
+```{r}
+
+
+treatment_var2 <- tidyselect::vars_select (treatment_var, 
+                                          c( "total_number_of_treatments_across_all_types...228",
+                                             "8:_satisfaction_with_healthcare" ,
+                                             "9:_satisfaction_results",
+                                             "10:_rest_of_life" ))
+
+dat_meds_var <- dat_sub [, names (dat_sub) %in% meds_var]
+
+
+```
+
+### Baseline demographics
+
+```{r}
+
+
+misc_var2 <- tidyselect::vars_select (misc_var, 
+                                          c( "weight_(kg)",
+                                             "height_(cm)"))
+
+dat_misc_var <- dat_sub [, names (dat_sub) %in% misc_var2]
+
+
+new.name1 <- c("ht", "wt")
+
+new.name2 <- paste0 ("base_", new.name1)
+
+names(dat_misc_var) <- new.name2  
+```
+
+### Baseline ses
+
+```{r}
+
+
+dat_ses_var  <- dat_sub [, names (dat_sub) %in% ses_var]
+
+
+new.name1 <- c("ses_income", "ses_economic", "ses_occ", "ses_resource", "ses_advantage")
+
+new.name2 <- paste0 ("base_", new.name1)
+
+names(dat_ses_var) <- new.name2  
+```
+
+### Baseline symptom history variables
+
+```{r}
+
+
+symptHx_var2  <- tidyselect::vars_select (symptHx_var, 
+                                          c("currently_having_a_flare_up?",
+                                            "p&n/n_below__waist_in_past_3_days"))
+
+dat_symptHx_var  <- dat_sub [, names (dat_sub) %in% symptHx_var2]
+
+new.name1 <- c("current_flare", "pnn_below_waist")
+
+new.name2 <- paste0 ("base_", new.name1)
+
+names(dat_symptHx_var) <- new.name2  
+```
+
+### Baseline aggravating variables
+
+```{r}
+aggr_var2 <-  tidyselect::vars_select (aggr_var, 
+                                          -c("done_anything_to_agg?" ,
+                                             "agg:_lying_on_back...360",
+                                             "agg:_lying_on_stomach...362",
+                                             "what_is_most_difficult_about_getting_into_a_car?...370",
+                                             "what_is_most_difficult_about__sit_to_stand?",
+                                             "what_is_most_difficult_about_getting_into_a_car?...369",
+                                             "what_is_most_difficult_about_sit_to_stand?",
+                                             "sorer_to_lie_on_one_side_than_the_other?"))
+
+dat_aggr_var  <- dat_sub [, names (dat_sub) %in% aggr_var2]
+
+new.name1 <- c( "walk", "stand", "sitfirm", "sitsoft", "lie_back", "lie_stom", "car", "sts",
+               "cough", "bend", "lift")
+
+new.name2 <- paste0 ("base_agg_", new.name1)
+
+names(dat_aggr_var) <- new.name2  
+```
+
+### Baseline easing variables
+
+```{r}
+ease_var2 <-  tidyselect::vars_select (ease_var, 
+                                          -c("most_comfortable_side_to_lie_on?...386" ,
+                                             "most_comfortable_side_to_lie_on?...387"  ,
+                                             "ease:_lying_sore_side...416",
+                                             "ease:_lying_good_side...418",
+                                             "assessment:_obs:_standing-increased_lordosis",
+                                             "observation:_standing-increased_lordosis",
+                                             "decreased_lordosis...446",
+                                             "decreased_lordosis...447",
+                                             "movement_eases_sympt",
+                                             "night_pain+_movement_eases"))
+
+dat_ease_var  <- dat_sub [, names (dat_sub) %in% ease_var2]
+
+new.name1 <- c("stand", "sitfirm", "sitsoft", "walk", "lie_back", "lie_back_bent", "lie_sore", "lie_good", "lie_stom")
+
+new.name2 <- paste0 ("base_ease_", new.name1)
+
+names(dat_ease_var) <- new.name2  
+```
+
+### Baseline lumbar curve variables
+
+```{r}
+obj_curve_var2 <-  tidyselect::vars_select (obj_curve_var, 
+                                          c("observation:_standing-increased_lordosis",
+                                             "decreased_lordosis...447" ,
+                                             "presence_of_a_list...452",
+                                             "list_direction...457" ,
+                                            "list_corresponding_to_worst_side" ))
+
+dat_obj_curve_var <- dat_sub [, names (dat_sub) %in% obj_curve_var2]
+
+new.name1 <- c("inc_lord", "dec_lord", "list", "list_dir", "list_dir_side")
+
+new.name2 <- paste0 ("base_", new.name1)
+
+names(dat_obj_curve_var) <- new.name2  
+```
+
+### Baseline rom variables
+
+```{r}
+obj_rom_var2 <-  tidyselect::vars_select (obj_rom_var, 
+                                          c("amt:_flexion_range_(cm)...462",
+                                             "amt:_extension_range_(cm)" ,
+                                             "amt:_llf_range_(cm)",
+                                             "amt:_rlf_range_(cm)"))
+
+dat_obj_rom_var  <- dat_sub [, names (dat_sub) %in% obj_rom_var2]
+
+new.name1 <- c("flex", "ext", "llf", "rlf")
+
+new.name2 <- paste0 ("base_rom_", new.name1)
+
+names(dat_obj_rom_var) <- new.name2  
+```
+
+### Baseline core variables
+
+```{r}
+obj_core_var2 <-  tidyselect::vars_select (obj_core_var, 
+                                          c("core_stability_in_standing" ,
+                                             "ta_quality_(lower_threshold)" ,
+                                             "ta_hypervig.",
+                                             "ta_low_tone"))
+
+dat_obj_core_var <- dat_sub [, names (dat_sub) %in% obj_core_var2]
+
+new.name1 <- c("core", "ta_qual", "ta_hyper", "ta_tone")
+
+new.name2 <- paste0 ("base_", new.name1)
+
+names(dat_obj_core_var) <- new.name2  
+
+```
+
+### Baseline sitting variables
+
+```{r}
+obj_sit_var2 <-  tidyselect::vars_select (obj_sit_var, 
+                                          c("sitting:_degree_of_flexed_posture...495"  ,
+                                             "sitting:_pain_response_to_correction...500"))
+
+dat_obj_sit_var <- dat_sub [, names (dat_sub) %in% obj_sit_var2]
+
+new.name1 <- c("sit_flex", "sit_pain_corr")
+
+new.name2 <- paste0 ("base_", new.name1)
+
+names(dat_obj_sit_var) <- new.name2  
+
+```
+
+### Baseline neuro variables
+
+```{r}
+obj_neuro_var2 <-  tidyselect::vars_select (obj_neuro_var, 
+                                          c("positive_slr",
+                                            "positive_pkb",
+                                            "comparable_sensory_deficit...508",
+                                            "comparable_myo_deficit...509",
+                                            "comparable_knee_jerk_deficit",
+                                            "comparable_ankle_jerk_reflex",
+                                             "total_comparable_neuro_signs...513",
+                                            "clinical_radiculo-_pathy...515",
+                                            "clinical_radiculopathy_with_no_mechanical_cause_on_imaging" ))
+
+dat_obj_neuro_var <- dat_sub [, names (dat_sub) %in% obj_neuro_var2]
+
+new.name1 <- c("slr", "pkb", "sens_deficit", "myo_deficit", "knee_jerk_deficit", "ank_jerk_deficit", "total_neuro", "radiculo", "radiculo_image")
+
+new.name2 <- paste0 ("base_", new.name1)
+
+names(dat_obj_neuro_var) <- new.name2  
+
+```
+
+### Baseline aggravating2 variables
+
+```{r}
+aggr2_var2 <-  tidyselect::vars_select (aggr2_var, 
+                                          c("history_of_heavy_lifting_job_(p25)",
+                                            "discogenic_pain" ,
+                                            "discogenic_factors",
+                                            "repeated_movements:_reducible?"))
+
+dat_aggr2_var <- dat_sub [, names (dat_sub) %in% aggr2_var2]
+
+new.name1 <- c("hx_lift", "disc_pain", "disc_fac", "rep_movt_reduce")
+
+new.name2 <- paste0 ("base_", new.name1)
+
+names(dat_aggr2_var) <- new.name2  
+
+```
+
+### Baseline multifidus variables
+
+```{r}
+obj_core2_var2 <-  tidyselect::vars_select (obj_core2_var, 
+                                          -c("multifidus_substitution"))
+
+dat_obj_core2_var  <- dat_sub [, names (dat_sub) %in% obj_core2_var2 ]
+
+new.name1 <- c("mf_tone", "mf_qual", "mf_hyper")
+
+new.name2 <- paste0 ("base_", new.name1)
+
+names(dat_obj_core2_var) <- new.name2  
+
+```
+
+### Baseline disc variables
+
+```{r}
+obj_disc_var2 <-  tidyselect::vars_select (obj_disc_var, 
+                                           c("regular_compression",
+                                             "palpation:_comparable_level_of_pain_and/or_stiffness"))
+
+dat_obj_disc_var   <- dat_sub [, names (dat_sub) %in% obj_disc_var2]
+
+new.name1 <- c("reg_compress", "comparable_stiff")
+
+new.name2 <- paste0 ("base_", new.name1)
+
+names(dat_obj_disc_var) <- new.name2  
+
+```
+
+### Baseline redflag variables
+
+```{r}
+redflag_var2 <-  tidyselect::vars_select (redflag_var, 
+                                           c("general_health_state"))
+
+dat_redflag_var  <- dat_sub [, names (dat_sub) %in% redflag_var2]
+
+new.name1 <- c("gen_health")
+
+new.name2 <- paste0 ("base_", new.name1)
+
+names(dat_redflag_var) <- new.name2  
+
+```
+
+### Baseline euroqol_var variables
+
+```{r}
+euroqol_var2 <-  tidyselect::vars_select (euroqol_var, 
+                                           c("21:_euroqol:_mobility",
+                                             "euroqol:_person_appll_care",
+                                             "euroqol:_usual_activities",
+                                             "euroqol:_pain/discomfort",
+                                             "euroqol:_anxiety/depression",
+                                             "euroqol_utility_score_(uk_tto)"))
+
+dat_euroqol_var  <- dat_sub [, names (dat_sub) %in% euroqol_var2]
+
+new.name1 <- c("mobility", "person_care", "activities", "pain", "anx_dep", "utility")
+
+new.name2 <- paste0 ("base_euroq_", new.name1)
+
+names(dat_euroqol_var) <- new.name2  
+
+```
+
+
+# Create new dataframe
+
+```{r}
+
+df <- bind_cols(dat_id_var,
+                dat_misc_var,
+                dat_base_var,
+                dat_orebro_var,
+                dat_wk5_var,
+                dat_wk10_var,
+                dat_wk26_var,
+                dat_wk52_var,
+                dat_aggr_var,
+                dat_aggr2_var,
+                dat_ease_var,
+                dat_obj_core2_var,
+                dat_obj_core_var,
+                dat_obj_curve_var,
+                dat_obj_disc_var,
+                dat_obj_neuro_var,
+                dat_obj_rom_var,
+                dat_obj_sit_var,
+                dat_redflag_var,
+                dat_ses_var,
+                dat_sfbs_var,
+                dat_symptHx_var,
+                dat_symptom_var,
+                dat_symptomLoc_var,
+                dat_treatment_var,
+                dat_episode_var,
+                dat_fab_var,
+                dat_euroqol_var)
+
+```
+
+# Check class
+
+```{r}
+df_chr2num <- df %>%
+  dplyr::select_if(is.character) %>%
+  dplyr::select (matches ("wk|oreb|rom")) %>%
+  mutate_all(as.numeric)
+
+df[names (df_chr2num)] <- df_chr2num
+
+df_class <- map_chr(df, class)
+
+df_num2chr <- df %>%
+  dplyr::select_if(is.numeric) %>%
+  dplyr::select (-matches ("id|ht|wt|time|osw|lbp|lp|osw|oreb|rom|gen|ses|sfbs|total_rx|fab|euroq|ratio|duration")) %>%
+  mutate_all(as.character)
+
+df[names (df_num2chr)] <- df_num2chr
+
+
+df_chr <- df %>%
+  dplyr::select_if(is.character) 
+
+df_num <- df %>%
+  dplyr::select_if(is.numeric) 
+
+
+```
+
+
+```{r}
+tab1 <- tableby (~., data = df, digits = 2, digits.p = 2)
+
+summary (tab1)
+```
+
+# Create factor levels
+
+```{r}
+
+df$rx_grp <- tolower(df$rx_grp )
+df$rx_subgrp <- tolower(df$rx_subgrp)
+df$base_leg_duration <- as.numeric(df$base_leg_duration)
+df$base_loc_body_ratio <- as.numeric (df$base_loc_body_ratio)
+df$base_pain_side <- tolower(df$base_pain_side)
+df$base_core <- ifelse (df$base_core == "nil", NA, df$base_core)
+df$base_mf_tone <- ifelse (df$base_mf_tone == "nil", NA, df$base_mf_tone)
+df$base_leg_symptom <- ifelse (df$base_leg_symptom == "nil", "no", df$base_leg_symptom)
+df$base_list_dir_side <- as.character(df$base_list_dir_side)
+
+df_chr <- df %>%
+  dplyr::select_if(is.character) %>%
+  mutate_all(as.factor)
+
+levels (df_chr$rx_grp) <- c ("advice", "individualisedphysio")
+levels (df_chr$rx_subgrp) <- c ("dhr",  "nrdp", "rdp",  "mfp",  "mtg" )
+
+levels (df_chr$base_agg_walk) <-
+  levels (df_chr$base_agg_stand)  <- 
+  levels (df_chr$base_agg_sitfirm) <- 
+  levels (df_chr$base_agg_sitsoft) <- 
+  c("0", "1", "2", "3", "4") # 0 good, 4 bad
+
+levels (df_chr$base_agg_lie_back) <-
+  levels (df_chr$base_agg_lie_stom) <- 
+  levels (df_chr$base_agg_car) <- 
+  levels (df_chr$base_agg_sts) <- 
+  levels (df_chr$base_agg_cough) <- 
+  levels (df_chr$base_agg_bend) <- 
+  levels (df_chr$base_agg_lift) <- 
+  c("0", "1", "2", "3", "4", "5") # 0 good, 5 bad
+
+levels (df_chr$base_ease_stand) <-
+  levels (df_chr$base_ease_sitfirm) <- 
+  levels (df_chr$base_ease_sitsoft) <- 
+  levels (df_chr$base_ease_walk) <- 
+  levels (df_chr$base_ease_lie_back) <- 
+  levels (df_chr$base_ease_lie_back_bent) <- 
+  levels (df_chr$base_ease_lie_sore) <-
+  levels (df_chr$base_ease_lie_good) <- 
+  levels (df_chr$base_ease_lie_stom) <- 
+  c("0", "1") # 0 good, 1 bad
+
+levels (df_chr$base_hx_lift) <- 
+  levels (df_chr$base_disc_pain) <- 
+  levels (df_chr$base_rep_movt_reduce) <- 
+  c("0", "1") # 0 yes, 1 no
+
+levels (df_chr$base_disc_fac) <- 
+  as.character (c(0:9))
+
+
+levels (df_chr$base_core) <- 
+  c("minimal", "fair", "good" )
+
+levels (df_chr$base_ta_qual) <- 
+  levels (df_chr$base_ta_hyper) <- # 0 yes, 1 no
+  levels (df_chr$base_ta_tone) <-  # 0 yes, 1 no
+  levels (df_chr$base_mf_hyper) <-  # 0 yes, 1 no
+  levels (df_chr$base_mf_qual) <-  # 0 yes, 1 no
+  c("0", "1") 
+
+levels (df_chr$base_mf_tone) <- c("> 30% MVC", "< 30% MVC")
+
+levels (df_chr$base_inc_lord) <- c("0", "1", "2") # 0 nil, 1 mild, 2 mod
+
+levels (df_chr$base_dec_lord) <- c("0", "1", "2", "3") # 0 nil, 1 mild, 2 mod, 3 marked
+
+levels (df_chr$base_list) <- c("0", "1", "2") # 0 nil, 1 mild, 2 mod
+
+levels (df_chr$base_list_dir) <- c("0", "1", "2") # 0 na, 1 left, 2 right
+
+levels (df_chr$base_reg_compress) <- c("0", "1") # 0 yes, 1 no
+
+levels (df_chr$base_slr) <- 
+  levels (df_chr$base_pkb) <- 
+  levels (df_chr$base_sens_deficit) <- 
+  levels (df_chr$base_myo_deficit)<- 
+  levels (df_chr$base_knee_jerk_deficit) <- 
+  levels (df_chr$base_ank_jerk_deficit) <- 
+  levels (df_chr$base_total_neuro) <- 
+  levels (df_chr$base_radiculo) <- 
+  levels (df_chr$base_radiculo_image) <- 
+  c("0", "1") # 0 yes, 1 no
+
+levels (df_chr$base_sit_flex) <- c("0", "1", "2", "3") # 0 nil, 1 mild, 2 mod, 3 mark
+
+levels (df_chr$base_sit_pain_corr) <- c("0", "1", "2") # 0 improve, 1 same, 2 worse
+
+levels (df_chr$base_current_flare)  <-
+  levels (df_chr$base_pnn_below_waist)
+  levels (df_chr$base_list_dir_side) <- c("0", "1") # 0 yes, 1 no
+
+levels (df_chr$base_back_leg_relation) <- c("0", "1", "2") # 0 yes, 1 no
+
+levels (df_chr$base_lbp_symptom) <- c("no", "yes")
+  
+levels (df_chr$base_leg_symptom) <- c("no", " ant thigh", "below knee", "both") # 0 deep, 1 superficial, 2 na # need to check
+
+levels (df_chr$base_freq_symptom) <- c("0", "1", "2") # 0 <50%, 1 >50%, 2 constant
+
+levels (df_chr$base_back_leg_relation) <- c("0", "1", "2") # 0 yes, 1 no, 2 na
+
+levels (df_chr$base_onset_symptom) <- 
+  levels (df_chr$base_time_symptom) <- 
+  levels (df_chr$base_next_day_symptom) <- c("n_appl", "0", "1", "2", "3") 
+
+levels (df_chr$base_pain_side) <- c("n_appl", "left", "right") 
+
+levels (df_chr$base_loc_antthigh_pain) <- 
+  levels (df_chr$base_loc_belowknee_pain) <- 
+  levels (df_chr$base_loc_leg_pain) <-
+  c("0", "1") # 0 yes, 1 no
+
+levels (df_chr$base_loc_mostpain) <- 
+  c("0", "1", "2", "3", "4", "5") # 0 back, 1 buttock, 2 groin, 3 thigh, 4 leg, 5 foot
+
+levels (df_chr$base_statisfac_healthcare) <- 
+ levels (df_chr$base_statisfac_result) <- 
+ levels (df_chr$base_rest_of_life) <-  c("0", "1", "2", "3", "4") # 0 dissatistied 4 very satisfied
+
+levels (df_chr$base_first_episode) <- c("0", "1") # 0 yes, 1 no
+
+# 0 <1mth , 1 2-6mth, 2 6-12mth, 3 1-2yr, 4 >3yr, 5 na
+levels (df_chr$base_first_episode_period) <- c("0", "1", "2", "3", "4", "5")
+
+
+```
+
+
+
+```{r}
+
+df2 <- df %>%
+  dplyr::select_if(is.numeric) %>%
+  bind_cols(df_chr)
+
+
+```
+
+```{r}
+var_keep1 <- !grepl ("osw_q|ses|sfbs|euroq|statisfac|hyper|total_rx|rest|first|fab", names (df2)) 
+
+df3 <- df2 [, var_keep1 ]
+
+```
+
+# Save cleaned data
+
+```{r}
+
+saveRDS (df3, "output/df_clean.RDS")
+
+xlsx::write.xlsx2 (df3, "output/data_clean.xlsx")
+
+```
+
+# Load cleaned data
+
+```{r}
+rm (list = ls())
+df <- readRDS("output/df_clean.RDS")
+```
+
+# Select important variables
+
+```{r}
+
+df_sub <- df[, grepl ("id|rx_grp|rx_sub|oreb_q|osw|lbp|_lp", names (df))]
+df_sub <- df_sub [, !grepl ("pain|dir", names (df_sub))]
+
+```
+
+# Rename orebro variables
+
+- removed question 8 and 15, as I do not feel meaningful. can change
+
+```{r}
+# names (df_sub) [grepl ("oreb_q8", names (df_sub))] <-
+#   str_replace(names (df_sub) [grepl ("oreb_q8", names (df_sub))], "oreb_q8", "pain_pastwk")
+
+names (df_sub) [grepl ("oreb_q11", names (df_sub))] <- 
+  str_replace(names (df_sub) [grepl ("oreb_q11", names (df_sub))], "oreb_q11", "pain_cope_success")
+
+names (df_sub) [grepl ("oreb_q12", names (df_sub))] <- 
+  str_replace(names (df_sub) [grepl ("oreb_q12", names (df_sub))], "oreb_q12", "anx")
+
+names (df_sub) [grepl ("oreb_q13", names (df_sub))] <- 
+  str_replace(names (df_sub) [grepl ("oreb_q13", names (df_sub))], "oreb_q13", "depress")
+
+names (df_sub) [grepl ("oreb_q14", names (df_sub))] <- 
+  str_replace(names (df_sub) [grepl ("oreb_q14", names (df_sub))], "oreb_q14", "pain_persist")
+
+# names (df_sub) [grepl ("oreb_q15", names (df_sub))] <-
+#   str_replace(names (df_sub) [grepl ("oreb_q15", names (df_sub))], "oreb_q15", "work_expect")
+
+
+```
+
+# Recode orebro function
+
+- func = sum of questions 20 to 24
+- fear = sum of questions 17 to 19
+
+```{r}
+df_sub <- df_sub %>%
+  mutate (base_func = base_oreb_q20 + base_oreb_q21 + base_oreb_q22 + base_oreb_q23 ,
+          wk5_func =  wk5_oreb_q20 + wk5_oreb_q21 + wk5_oreb_q22 + wk5_oreb_q23 ,
+          wk10_func = wk10_oreb_q20 + wk10_oreb_q21 + wk10_oreb_q22 + wk10_oreb_q23 ,
+          wk26_func = wk26_oreb_q20 + wk26_oreb_q21 + wk26_oreb_q22 + wk26_oreb_q23 ,
+          wk52_func = wk52_oreb_q20 + wk52_oreb_q21 + wk52_oreb_q22 + wk52_oreb_q23,
+          base_fear = base_oreb_q17 + base_oreb_q18 + base_oreb_q19,
+          wk5_fear = wk5_oreb_q17 + wk5_oreb_q18 + wk5_oreb_q19,
+          wk10_fear = wk10_oreb_q17 + wk10_oreb_q18 + wk10_oreb_q19,
+          wk26_fear = wk26_oreb_q17 + wk26_oreb_q18 + wk26_oreb_q19,
+          wk52_fear = wk52_oreb_q17 + wk52_oreb_q18 + wk52_oreb_q19) %>%
+  dplyr::select (-matches ("oreb")) %>%
+  dplyr::select (-matches ("func")) %>% # remove this as use oswestry as functional outcome
+  dplyr::select (id, rx_grp, rx_subgrp, matches ("base_"), matches ("wk5_"), 
+          matches ("wk10_"), matches ("wk26_"), matches ("wk52_"))
+          
+
+```
+
+
+# Check missing
+
+## Check percentage number of missing variables with missing columns
+
+```{r}
+
+missing_per_indv <- (rowSums(is.na(df_sub))/ ncol (df_sub)) * 100 
+missing_per_indv
+
+```
+
+
+### Remove subjects with more than 50% missing columns
+
+```{r}
+
+
+df_sub2 <- df_sub  [missing_per_indv < 50, ] 
+
+```
+
+# Create a new dataframe of early and late change
+
+early change - week 10 values - baseline values
+late change - week 52 values - baseline values
+
+```{r}
+const.df <- df_sub2[,!grepl ("base|wk", names(df_sub2))]
+base.df <- df_sub2[,grepl ("base_|duration|symptom", names(df_sub2))]
+base.df <- base.df[,!grepl ("duration|symptom", names(base.df))]
+wk5.df <- df_sub2[,grepl ("wk5_", names(df_sub2))]
+wk10.df <- df_sub2[,grepl ("wk10_", names(df_sub2))]
+wk26.df <- df_sub2[,grepl ("wk26_", names(df_sub2))]
+wk52.df <- df_sub2[,grepl ("wk52_", names(df_sub2))]
+
+
+early_diff <- wk10.df - base.df
+late_diff <- wk52.df - base.df
+
+
+names(early_diff) <- paste0(str_remove(names (early_diff), "wk10_"), "_early")
+names(late_diff) <- paste0(str_remove(names (late_diff), "wk52_"), "_late")
+
+early.df <- early_diff %>%
+  mutate (grp = const.df$rx_grp,
+          subgrp = const.df$rx_subgrp,
+          id = const.df$id)
+
+late.df <- late_diff %>%
+  mutate (grp = const.df$rx_grp,
+          subgrp = const.df$rx_subgrp,
+          id = const.df$id)
+
+
+```
+
+
+# Descriptive statistics
+
+## Between group comparisons
+
+```{r}
+tableby (subgrp ~., data = early.df , digits = 2, digits.p = 2) %>%
+  summary (text = TRUE) 
+
+tableby (grp ~., data = early.df , digits = 2, digits.p = 2) %>%
+  summary (text = TRUE) 
+
+tableby (subgrp ~., data = late.df , digits = 2, digits.p = 2) %>%
+  summary (text = TRUE) 
+
+tableby (grp ~., data = late.df , digits = 2, digits.p = 2) %>%
+  summary (text = TRUE)
+
+```
+
+## Missing data pattern
+
+```{r}
+ aggr(early.df , col=c('navyblue','yellow'),
+            numbers=TRUE, sortVars=TRUE,
+            labels=names(early.df), cex.axis=.7,
+            gap=3, ylab=c("Missing data","Pattern"))
+
+ aggr(late.df , col=c('navyblue','yellow'),
+            numbers=TRUE, sortVars=TRUE,
+            labels=names(late.df), cex.axis=.7,
+            gap=3, ylab=c("Missing data","Pattern"))
+
+```
+
+## Correlation plots
+
+```{r}
+early.df %>%
+     select_if (is.numeric) %>%
+     select(-id) %>%
+     correlate() %>%
+     rearrange() %>%
+     network_plot(colors = c("red", "green"))
+
+late.df %>%
+     select_if (is.numeric) %>%
+     select(-id) %>%
+     correlate() %>%
+     rearrange() %>%
+     network_plot(colors = c("red", "green"))
+```
+
+# Save split dataframes
+
+```{r}
+
+saveRDS (early.df, "output/df_early.RDS")
+saveRDS (late.df, "output/df_late.RDS")
+
+```
+
+
