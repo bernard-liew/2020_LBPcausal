@@ -49,7 +49,7 @@ df_list <- readRDS("output/df_change.RDS")
 
 ```{r}
 df <- df_list[["wk10_base"]]
-names(df)[1:9] <- paste0(str_remove(names(df)[1:9] , "wk10_"), "_early")
+names(df)[1:8] <- paste0(str_remove(names(df)[1:8] , "wk10_"), "_early")
 ```
 
 
@@ -101,9 +101,7 @@ boot_bl <-  foreach (B = 1: n_boot) %dopar%{
     boot.sample = df.bn[sample(nrow(df.bn), 
                                           nrow(df.bn), replace = TRUE), ]
     bnlearn::structural.em(boot.sample, impute = "bayes-lw", max.iter = 3,
-                              maximize.args = list(blacklist = bl,  
-                                                   #whitelist = wl,
-                                                   k = log(nrow(boot.sample))))
+                              maximize.args = list(blacklist = bl))
 }
 #############
 
@@ -146,8 +144,7 @@ boot_wl  =  foreach (B = 1: n_boot) %dopar%{
                                           nrow(df.bn), replace = TRUE), ]
     bnlearn::structural.em(boot.sample, impute = "bayes-lw", max.iter = 3,
                               maximize.args = list(blacklist = bl,  
-                                                   whitelist = wl,
-                                                   k = log(nrow(boot.sample))))
+                                                   whitelist = wl))
 }
 #############
 
