@@ -41,9 +41,15 @@ library (doParallel)
 ```{r}
 
 rm (list = ls())
-df <- readRDS("output/df_late.RDS")
+df_list <- readRDS("output/df_change.RDS")
 
+```
 
+# Subset data
+
+```{r}
+df <- df_list[["wk52_base"]]
+names(df)[1:9] <- paste0(str_remove(names(df)[1:9] , "wk52_"), "_late")
 ```
 
 

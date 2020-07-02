@@ -41,10 +41,17 @@ library (doParallel)
 ```{r}
 
 rm (list = ls())
-df <- readRDS("output/df_early.RDS")
-
+df_list <- readRDS("output/df_change.RDS")
 
 ```
+
+# Subset data
+
+```{r}
+df <- df_list[["wk10_base"]]
+names(df)[1:9] <- paste0(str_remove(names(df)[1:9] , "wk10_"), "_early")
+```
+
 
 # BN analysis
 

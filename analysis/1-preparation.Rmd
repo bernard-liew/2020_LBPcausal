@@ -1089,86 +1089,58 @@ wk10.df <- df_sub2[,grepl ("wk10_", names(df_sub2))]
 wk26.df <- df_sub2[,grepl ("wk26_", names(df_sub2))]
 wk52.df <- df_sub2[,grepl ("wk52_", names(df_sub2))]
 
+wk5_base <- wk5.df - base.df
+wk10_base <- wk10.df - base.df
+wk26_base <- wk26.df - base.df
+wk52_base <- wk52.df - base.df
 
-early_diff <- wk10.df - base.df
-late_diff <- wk52.df - base.df
+wk10_wk5 <- wk10.df - wk5.df
+wk26_wk5 <- wk26.df - wk5.df
+wk52_wk5 <- wk52.df - wk5.df
+
+wk26_wk10 <- wk26.df - wk10.df
+wk52_wk10 <- wk52.df - wk10.df
+
+wk52_wk26 <- wk52.df - wk26.df
 
 
-names(early_diff) <- paste0(str_remove(names (early_diff), "wk10_"), "_early")
-names(late_diff) <- paste0(str_remove(names (late_diff), "wk52_"), "_late")
+df.list <- list (wk5_base, 
+                 wk10_base,
+                 wk26_base,
+                 wk52_base,
+                 wk10_wk5,
+                 wk26_wk5,
+                 wk52_wk5,
+                 wk26_wk10,
+                 wk52_wk10,
+                 wk52_wk26)
 
-early.df <- early_diff %>%
-  mutate (grp = const.df$rx_grp,
+for (n in seq_along (df.list)){
+  
+  df.list[[n]] <- df.list[[n]] %>%
+       mutate (grp = const.df$rx_grp,
           subgrp = const.df$rx_subgrp,
           id = const.df$id)
+}
 
-late.df <- late_diff %>%
-  mutate (grp = const.df$rx_grp,
-          subgrp = const.df$rx_subgrp,
-          id = const.df$id)
+names (df.list) <- c("wk5_base", 
+                     "wk10_base",
+                     "wk26_base",
+                     "wk52_base",
+                     "wk10_wk5",
+                     "wk26_wk5",
+                     "wk52_wk5",
+                     "wk26_wk10",
+                     "wk52_wk10",
+                     "wk52_wk26")
 
-
-```
-
-
-# Descriptive statistics
-
-## Between group comparisons
-
-```{r}
-tableby (subgrp ~., data = early.df , digits = 2, digits.p = 2) %>%
-  summary (text = TRUE) 
-
-tableby (grp ~., data = early.df , digits = 2, digits.p = 2) %>%
-  summary (text = TRUE) 
-
-tableby (subgrp ~., data = late.df , digits = 2, digits.p = 2) %>%
-  summary (text = TRUE) 
-
-tableby (grp ~., data = late.df , digits = 2, digits.p = 2) %>%
-  summary (text = TRUE)
-
-```
-
-## Missing data pattern
-
-```{r}
- aggr(early.df , col=c('navyblue','yellow'),
-            numbers=TRUE, sortVars=TRUE,
-            labels=names(early.df), cex.axis=.7,
-            gap=3, ylab=c("Missing data","Pattern"))
-
- aggr(late.df , col=c('navyblue','yellow'),
-            numbers=TRUE, sortVars=TRUE,
-            labels=names(late.df), cex.axis=.7,
-            gap=3, ylab=c("Missing data","Pattern"))
-
-```
-
-## Correlation plots
-
-```{r}
-early.df %>%
-     select_if (is.numeric) %>%
-     select(-id) %>%
-     correlate() %>%
-     rearrange() %>%
-     network_plot(colors = c("red", "green"))
-
-late.df %>%
-     select_if (is.numeric) %>%
-     select(-id) %>%
-     correlate() %>%
-     rearrange() %>%
-     network_plot(colors = c("red", "green"))
 ```
 
 # Save split dataframes
 
 ```{r}
 
-saveRDS (early.df, "output/df_early.RDS")
-saveRDS (late.df, "output/df_late.RDS")
+saveRDS (df.list, "output/df_change.RDS")
 
 ```
 
