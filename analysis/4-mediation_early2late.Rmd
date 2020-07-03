@@ -19,6 +19,7 @@ library (arsenal)
 library (janitor)
 library (magrittr)
 library (Rgraphviz)
+library (corrr)
 
 # Import
 library(readxl)
@@ -36,6 +37,10 @@ library (caret)
 library (doParallel)
 
 ```
+
+# Introduction
+
+This is a bayesian network analysis where the early change variables are between week 10 and baseline. The late change variables are between week 52 and baseline.
 
 # Import data
 
@@ -60,7 +65,25 @@ df <- bind_cols(df1, df2) %>%
 
 ```
 
+# Exploratory  analysis
 
+## Between group comparisons
+
+```{r}
+tableby (subgrp ~., data = df, digits = 2, digits.p = 2) %>%	
+  summary (text = TRUE) 
+```
+
+## Correlation plots
+
+```{r}
+df %>%	
+     select_if (is.numeric) %>%	
+     select(-id) %>%	
+     correlate() %>%	
+     rearrange() %>%	
+     network_plot(colors = c("red", "green"))
+```
 
 # BN analysis
 

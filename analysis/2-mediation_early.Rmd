@@ -7,6 +7,10 @@ editor_options:
   chunk_output_type: console
 ---
 
+# Introduction
+
+This is a bayesian network analysis where the variables are the change scores between week 10 and baseline.
+
 # Load library 
 
 ```{r message=FALSE, warning=FALSE}
@@ -18,6 +22,7 @@ library (arsenal)
 library (janitor)
 library (magrittr)
 library (Rgraphviz)
+library (corrr)
 
 # Import
 library(readxl)
@@ -52,6 +57,25 @@ df <- df_list[["wk10_base"]]
 names(df)[1:8] <- paste0(str_remove(names(df)[1:8] , "wk10_"), "_early")
 ```
 
+# Exploratory  analysis
+
+## Between group comparisons
+
+```{r}
+tableby (subgrp ~., data = df, digits = 2, digits.p = 2) %>%	
+  summary (text = TRUE) 
+```
+
+## Correlation plots
+
+```{r}
+df %>%	
+     select_if (is.numeric) %>%	
+     select(-id) %>%	
+     correlate() %>%	
+     rearrange() %>%	
+     network_plot(colors = c("red", "green"))
+```
 
 # BN analysis
 
