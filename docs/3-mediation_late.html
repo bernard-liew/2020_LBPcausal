@@ -387,7 +387,7 @@ div.tocify {
 
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
-<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span>
 </button>
 </p>
 <div id="workflowr-report" class="collapse">
@@ -396,7 +396,7 @@ div.tocify {
 <a data-toggle="tab" href="#summary">Summary</a>
 </li>
 <li>
-<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> </a>
+<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> </a>
 </li>
 <li>
 <a data-toggle="tab" href="#versions">Past versions</a>
@@ -408,7 +408,7 @@ div.tocify {
 <strong>Last updated:</strong> 2020-07-03
 </p>
 <p>
-<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
+<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 1
 </p>
 <p>
 <strong>Knit directory:</strong> <code>2020_LBPcausal/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
@@ -424,12 +424,12 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges"> <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted changes </a>
 </p>
 </div>
-<div id="strongRMarkdownfilestronguptodate" class="panel-collapse collapse">
+<div id="strongRMarkdownfilestronguncommittedchanges" class="panel-collapse collapse">
 <div class="panel-body">
-<p>Great! Since the R Markdown file has been committed to the Git repository, you know the exact version of the code that produced these results.</p>
+<p>The R Markdown file has unstaged changes. To know which version of the R Markdown file created these results, you’ll want to first commit it to the Git repo. If you’re still working on the analysis, you can ignore this warning. When you’re finished, you can run <code>wflow_publish</code> to commit the R Markdown file and build the HTML.</p>
 </div>
 </div>
 </div>
@@ -496,16 +496,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcombernardliew2020LBPcausaltreeed632b0c794258ffb9820ea287aa69b7720c2445targetblanked632b0a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/bernard-liew/2020_LBPcausal/tree/ed632b0c794258ffb9820ea287aa69b7720c2445" target="_blank">ed632b0</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcombernardliew2020LBPcausaltree89a544b28a282305453625216182bb8e4af5950ctargetblank89a544ba"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/bernard-liew/2020_LBPcausal/tree/89a544b28a282305453625216182bb8e4af5950c" target="_blank">89a544b</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcombernardliew2020LBPcausaltreeed632b0c794258ffb9820ea287aa69b7720c2445targetblanked632b0a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcombernardliew2020LBPcausaltree89a544b28a282305453625216182bb8e4af5950ctargetblank89a544ba" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/bernard-liew/2020_LBPcausal/tree/ed632b0c794258ffb9820ea287aa69b7720c2445" target="_blank">ed632b0</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/bernard-liew/2020_LBPcausal/tree/89a544b28a282305453625216182bb8e4af5950c" target="_blank">89a544b</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -515,6 +515,11 @@ Ignored files:
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
     Ignored:    output/data_clean.xlsx
+
+Unstaged changes:
+    Modified:   analysis/2-mediation_early.Rmd
+    Modified:   analysis/3-mediation_late.Rmd
+    Modified:   analysis/4-mediation_early2late.Rmd
 
 </code></pre>
 <p>
@@ -553,6 +558,23 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/bernard-liew/2020_LBPcausal/e41cc86000c4cbae036a312597e8807cc85f3f6e/docs/3-mediation_late.html" target="_blank">e41cc86</a>
+</td>
+<td>
+bernard-liew
+</td>
+<td>
+2020-07-03
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -673,49 +695,49 @@ names(df)[1:8] &lt;- paste0(str_remove(names(df)[1:8] , &quot;wk52_&quot;), &quo
 <div id="between-group-comparisons" class="section level2">
 <h2>Between group comparisons</h2>
 <pre class="r"><code>tableby (subgrp ~., data = df, digits = 2, digits.p = 2) %&gt;%    
-  summary (text = TRUE) </code></pre>
+  summary () </code></pre>
 <pre><code>
 
-|                        |    dhr (N=54)     |    nrdp (N=8)     |    rdp (N=63)     |    mfp (N=91)     |    mtg (N=74)     |   Total (N=290)   | p value|
-|:-----------------------|:-----------------:|:-----------------:|:-----------------:|:-----------------:|:-----------------:|:-----------------:|-------:|
-|osw_late                |                   |                   |                   |                   |                   |                   |    0.10|
-|-  N-Miss               |         1         |         0         |         6         |         4         |         2         |        13         |        |
-|-  Mean (SD)            |  -18.81 (16.70)   |   -14.50 (7.15)   |  -11.42 (11.50)   |  -13.85 (12.69)   |  -14.21 (15.68)   |  -14.41 (14.13)   |        |
-|-  Range                |  -48.00 - 24.00   |   -22.00 - 0.00   |  -40.00 - 20.00   |  -35.00 - 27.56   |  -58.00 - 30.00   |  -58.00 - 30.00   |        |
-|lbp_late                |                   |                   |                   |                   |                   |                   |    0.06|
-|-  N-Miss               |         1         |         0         |         6         |         4         |         1         |        12         |        |
-|-  Mean (SD)            |   -2.07 (2.78)    |   -2.44 (3.62)    |   -2.40 (2.24)    |   -2.72 (2.44)    |   -3.33 (2.21)    |   -2.68 (2.47)    |        |
-|-  Range                |   -6.50 - 4.00    |   -9.00 - 2.00    |   -7.00 - 2.00    |   -7.00 - 4.00    |   -8.00 - 2.00    |   -9.00 - 4.00    |        |
-|lp_late                 |                   |                   |                   |                   |                   |                   |    0.24|
-|-  N-Miss               |         1         |         1         |        19         |        18         |        10         |        49         |        |
-|-  Mean (SD)            |   -3.41 (2.99)    |   -2.86 (2.12)    |   -2.14 (2.67)    |   -2.71 (2.60)    |   -2.48 (3.05)    |   -2.70 (2.82)    |        |
-|-  Range                |   -8.00 - 1.50    |   -5.00 - 0.00    |   -7.00 - 2.50    |   -9.00 - 6.00    |   -8.00 - 7.00    |   -9.00 - 7.00    |        |
-|pain_cope_success_late  |                   |                   |                   |                   |                   |                   |    0.63|
-|-  N-Miss               |         2         |         1         |        11         |        18         |        12         |        44         |        |
-|-  Mean (SD)            |   -1.30 (3.09)    |   -1.27 (3.36)    |   -2.13 (2.88)    |   -1.36 (3.38)    |   -1.82 (3.55)    |   -1.62 (3.26)    |        |
-|-  Range                |   -6.00 - 7.00    |   -5.00 - 5.00    |   -9.00 - 4.00    |   -9.00 - 7.00    |   -8.00 - 7.00    |   -9.00 - 7.00    |        |
-|anx_late                |                   |                   |                   |                   |                   |                   |    0.05|
-|-  N-Miss               |         2         |         1         |        11         |        17         |        12         |        43         |        |
-|-  Mean (SD)            |   -2.15 (2.87)    |   -4.71 (3.35)    |   -1.45 (2.47)    |   -1.69 (2.96)    |   -2.22 (2.88)    |   -1.96 (2.87)    |        |
-|-  Range                |   -9.00 - 3.00    |  -10.00 - -2.00   |   -8.00 - 3.00    |   -9.00 - 6.00    |   -7.00 - 6.00    |   -10.00 - 6.00   |        |
-|depress_late            |                   |                   |                   |                   |                   |                   |    0.02|
-|-  N-Miss               |         2         |         1         |        13         |        17         |        13         |        46         |        |
-|-  Mean (SD)            |   -1.75 (3.03)    |   -4.43 (3.60)    |   -0.99 (2.80)    |   -0.76 (3.13)    |   -1.40 (2.70)    |   -1.28 (3.00)    |        |
-|-  Range                |   -9.00 - 7.00    |  -10.00 - -1.00   |   -7.00 - 7.00    |   -8.00 - 8.00    |   -7.00 - 6.00    |   -10.00 - 8.00   |        |
-|pain_persist_late       |                   |                   |                   |                   |                   |                   |    0.03|
-|-  N-Miss               |         2         |         1         |        12         |        18         |        12         |        45         |        |
-|-  Mean (SD)            |   -2.25 (3.35)    |   -6.29 (2.69)    |   -1.66 (3.50)    |   -2.40 (3.60)    |   -2.19 (3.64)    |   -2.27 (3.56)    |        |
-|-  Range                |   -9.00 - 8.00    |   -9.00 - -1.00   |   -9.00 - 8.00    |   -10.00 - 6.00   |   -8.00 - 8.00    |   -10.00 - 8.00   |        |
-|fear_late               |                   |                   |                   |                   |                   |                   |    0.90|
-|-  N-Miss               |         5         |         2         |        12         |        18         |        13         |        50         |        |
-|-  Mean (SD)            |   -4.57 (6.65)    |   -2.33 (10.41)   |   -3.63 (6.34)    |   -4.35 (7.00)    |   -4.50 (7.05)    |   -4.23 (6.86)    |        |
-|-  Range                |  -20.00 - 10.00   |   -19.00 - 8.00   |  -25.00 - 10.00   |  -21.00 - 18.00   |   -24.00 - 9.00   |  -25.00 - 18.00   |        |
-|grp                     |                   |                   |                   |                   |                   |                   |    0.99|
-|-  advice               |    26 (48.1%)     |     3 (37.5%)     |    30 (47.6%)     |    43 (47.3%)     |    35 (47.3%)     |    137 (47.2%)    |        |
-|-  individualisedphysio |    28 (51.9%)     |     5 (62.5%)     |    33 (52.4%)     |    48 (52.7%)     |    39 (52.7%)     |    153 (52.8%)    |        |
-|id                      |                   |                   |                   |                   |                   |                   |  &lt; 0.01|
-|-  Mean (SD)            | 1526.96 (209.06)  |  4571.12 (52.77)  | 5529.14 (211.09)  | 2514.09 (228.03)  | 3515.42 (234.58)  | 3297.53 (1403.37) |        |
-|-  Range                | 1101.00 - 1806.00 | 4501.00 - 4652.00 | 5101.00 - 5903.00 | 2101.00 - 2951.00 | 3101.00 - 3905.00 | 1101.00 - 5903.00 |        |</code></pre>
+|                                       |    dhr (N=54)     |    nrdp (N=8)     |    rdp (N=63)     |    mfp (N=91)     |    mtg (N=74)     |   Total (N=290)   | p value|
+|:--------------------------------------|:-----------------:|:-----------------:|:-----------------:|:-----------------:|:-----------------:|:-----------------:|-------:|
+|**osw_late**                           |                   |                   |                   |                   |                   |                   |    0.10|
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |         1         |         0         |         6         |         4         |         2         |        13         |        |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |  -18.81 (16.70)   |   -14.50 (7.15)   |  -11.42 (11.50)   |  -13.85 (12.69)   |  -14.21 (15.68)   |  -14.41 (14.13)   |        |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |  -48.00 - 24.00   |   -22.00 - 0.00   |  -40.00 - 20.00   |  -35.00 - 27.56   |  -58.00 - 30.00   |  -58.00 - 30.00   |        |
+|**lbp_late**                           |                   |                   |                   |                   |                   |                   |    0.06|
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |         1         |         0         |         6         |         4         |         1         |        12         |        |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |   -2.07 (2.78)    |   -2.44 (3.62)    |   -2.40 (2.24)    |   -2.72 (2.44)    |   -3.33 (2.21)    |   -2.68 (2.47)    |        |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   -6.50 - 4.00    |   -9.00 - 2.00    |   -7.00 - 2.00    |   -7.00 - 4.00    |   -8.00 - 2.00    |   -9.00 - 4.00    |        |
+|**lp_late**                            |                   |                   |                   |                   |                   |                   |    0.24|
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |         1         |         1         |        19         |        18         |        10         |        49         |        |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |   -3.41 (2.99)    |   -2.86 (2.12)    |   -2.14 (2.67)    |   -2.71 (2.60)    |   -2.48 (3.05)    |   -2.70 (2.82)    |        |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   -8.00 - 1.50    |   -5.00 - 0.00    |   -7.00 - 2.50    |   -9.00 - 6.00    |   -8.00 - 7.00    |   -9.00 - 7.00    |        |
+|**pain_cope_success_late**             |                   |                   |                   |                   |                   |                   |    0.63|
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |         2         |         1         |        11         |        18         |        12         |        44         |        |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |   -1.30 (3.09)    |   -1.27 (3.36)    |   -2.13 (2.88)    |   -1.36 (3.38)    |   -1.82 (3.55)    |   -1.62 (3.26)    |        |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   -6.00 - 7.00    |   -5.00 - 5.00    |   -9.00 - 4.00    |   -9.00 - 7.00    |   -8.00 - 7.00    |   -9.00 - 7.00    |        |
+|**anx_late**                           |                   |                   |                   |                   |                   |                   |    0.05|
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |         2         |         1         |        11         |        17         |        12         |        43         |        |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |   -2.15 (2.87)    |   -4.71 (3.35)    |   -1.45 (2.47)    |   -1.69 (2.96)    |   -2.22 (2.88)    |   -1.96 (2.87)    |        |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   -9.00 - 3.00    |  -10.00 - -2.00   |   -8.00 - 3.00    |   -9.00 - 6.00    |   -7.00 - 6.00    |   -10.00 - 6.00   |        |
+|**depress_late**                       |                   |                   |                   |                   |                   |                   |    0.02|
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |         2         |         1         |        13         |        17         |        13         |        46         |        |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |   -1.75 (3.03)    |   -4.43 (3.60)    |   -0.99 (2.80)    |   -0.76 (3.13)    |   -1.40 (2.70)    |   -1.28 (3.00)    |        |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   -9.00 - 7.00    |  -10.00 - -1.00   |   -7.00 - 7.00    |   -8.00 - 8.00    |   -7.00 - 6.00    |   -10.00 - 8.00   |        |
+|**pain_persist_late**                  |                   |                   |                   |                   |                   |                   |    0.03|
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |         2         |         1         |        12         |        18         |        12         |        45         |        |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |   -2.25 (3.35)    |   -6.29 (2.69)    |   -1.66 (3.50)    |   -2.40 (3.60)    |   -2.19 (3.64)    |   -2.27 (3.56)    |        |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   -9.00 - 8.00    |   -9.00 - -1.00   |   -9.00 - 8.00    |   -10.00 - 6.00   |   -8.00 - 8.00    |   -10.00 - 8.00   |        |
+|**fear_late**                          |                   |                   |                   |                   |                   |                   |    0.90|
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |         5         |         2         |        12         |        18         |        13         |        50         |        |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |   -4.57 (6.65)    |   -2.33 (10.41)   |   -3.63 (6.34)    |   -4.35 (7.00)    |   -4.50 (7.05)    |   -4.23 (6.86)    |        |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |  -20.00 - 10.00   |   -19.00 - 8.00   |  -25.00 - 10.00   |  -21.00 - 18.00   |   -24.00 - 9.00   |  -25.00 - 18.00   |        |
+|**grp**                                |                   |                   |                   |                   |                   |                   |    0.99|
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;advice               |    26 (48.1%)     |     3 (37.5%)     |    30 (47.6%)     |    43 (47.3%)     |    35 (47.3%)     |    137 (47.2%)    |        |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;individualisedphysio |    28 (51.9%)     |     5 (62.5%)     |    33 (52.4%)     |    48 (52.7%)     |    39 (52.7%)     |    153 (52.8%)    |        |
+|**id**                                 |                   |                   |                   |                   |                   |                   |  &lt; 0.01|
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            | 1526.96 (209.06)  |  4571.12 (52.77)  | 5529.14 (211.09)  | 2514.09 (228.03)  | 3515.42 (234.58)  | 3297.53 (1403.37) |        |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                | 1101.00 - 1806.00 | 4501.00 - 4652.00 | 5101.00 - 5903.00 | 2101.00 - 2951.00 | 3101.00 - 3905.00 | 1101.00 - 5903.00 |        |</code></pre>
 </div>
 <div id="correlation-plots" class="section level2">
 <h2>Correlation plots</h2>
@@ -780,15 +802,17 @@ boot_bl &lt;-  foreach (B = 1: n_boot) %dopar%{
 <div id="see-results" class="section level4">
 <h4>See results</h4>
 <pre class="r"><code>bootstr = custom.strength(boot_bl, nodes = names(df.bn))
-avg = averaged.network(bootstr, threshold = 0.5)
-fit = bn.fit (avg, df.bn, method = &quot;mle&quot;)
+avg = averaged.network(bootstr, threshold = 0.5)</code></pre>
+<pre><code>Warning in averaged.network.backend(strength = strength, nodes = nodes, : arc
+anx_late -&gt; depress_late would introduce cycles in the graph, ignoring.</code></pre>
+<pre class="r"><code>fit = bn.fit (avg, df.bn, method = &quot;mle&quot;)
 
 g = strength.plot(avg, 
                   bootstr, 
                   shape = &quot;rectangle&quot;,
-                  main = &quot;Figure 2&quot;)</code></pre>
-<p><img src="figure/3-mediation_late.Rmd/unnamed-chunk-9-1.png" width="1440" style="display: block; margin: auto;" /></p>
-<pre class="r"><code>graph::nodeRenderInfo(g) = list(fontsize=12)</code></pre>
+                  main = &quot;Figure&quot;)</code></pre>
+<p><img src="figure/3-mediation_late.Rmd/unnamed-chunk-9-1.png" width="960" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>graph::nodeRenderInfo(g) = list(fontsize=18)</code></pre>
 </div>
 <div id="with-blacklist-and-whitelist" class="section level4">
 <h4>With blacklist and whitelist</h4>
@@ -810,17 +834,19 @@ boot_wl  =  foreach (B = 1: n_boot) %dopar%{
 </div>
 <div id="see-results-1" class="section level3">
 <h3>See results</h3>
-<pre class="r"><code>bootstr = custom.strength(boot_wl, nodes = names(df.bn))
-avg = averaged.network(bootstr, threshold = 0.5)
-fit = bn.fit (avg, df.bn, method = &quot;mle&quot;)
+<pre class="r"><code>bootstr = custom.strength(boot_bl, nodes = names(df.bn))
+avg = averaged.network(bootstr, threshold = 0.5)</code></pre>
+<pre><code>Warning in averaged.network.backend(strength = strength, nodes = nodes, : arc
+anx_late -&gt; depress_late would introduce cycles in the graph, ignoring.</code></pre>
+<pre class="r"><code>fit = bn.fit (avg, df.bn, method = &quot;mle&quot;)
 
 g = strength.plot(avg, 
                   bootstr, 
                   shape = &quot;rectangle&quot;,
                   highlight = list (arcs = wl), 
-                  main = &quot;Figure 2&quot;)</code></pre>
-<p><img src="figure/3-mediation_late.Rmd/unnamed-chunk-11-1.png" width="1440" style="display: block; margin: auto;" /></p>
-<pre class="r"><code>graph::nodeRenderInfo(g) = list(fontsize=12)</code></pre>
+                  main = &quot;Figure&quot;)</code></pre>
+<p><img src="figure/3-mediation_late.Rmd/unnamed-chunk-11-1.png" width="960" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>graph::nodeRenderInfo(g) = list(fontsize=18)</code></pre>
 </div>
 </div>
 <div id="performance-evaluation" class="section level2">

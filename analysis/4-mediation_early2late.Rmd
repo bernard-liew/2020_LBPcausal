@@ -69,9 +69,9 @@ df <- bind_cols(df1, df2) %>%
 
 ## Between group comparisons
 
-```{r}
+```{r, asis = TRUE}
 tableby (subgrp ~., data = df, digits = 2, digits.p = 2) %>%	
-  summary (text = TRUE) 
+  summary () 
 ```
 
 ## Correlation plots
@@ -144,7 +144,7 @@ boot_bl <-  foreach (B = 1: n_boot) %dopar%{
 
 #### See results
 
-```{r fig.height=15, fig.width=15}
+```{r fig.height=10, fig.width=10}
 
 bootstr = custom.strength(boot_bl, nodes = names(df.bn))
 avg = averaged.network(bootstr, threshold = 0.5)
@@ -153,9 +153,9 @@ fit = bn.fit (avg, df.bn, method = "mle")
 g = strength.plot(avg, 
                   bootstr, 
                   shape = "rectangle",
-                  main = "Figure 2")
+                  main = "Figure")
 
-graph::nodeRenderInfo(g) = list(fontsize=12)
+graph::nodeRenderInfo(g) = list(fontsize=18)
 
 
 ```
