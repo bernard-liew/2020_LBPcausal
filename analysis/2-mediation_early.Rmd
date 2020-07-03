@@ -61,9 +61,9 @@ names(df)[1:8] <- paste0(str_remove(names(df)[1:8] , "wk10_"), "_early")
 
 ## Between group comparisons
 
-```{r, asis = TRUE}
+```{r, results = "asis"}
 tableby (subgrp ~., data = df, digits = 2, digits.p = 2) %>%	
-  summary (t) 
+  summary () 
 ```
 
 ## Correlation plots

@@ -496,16 +496,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcombernardliew2020LBPcausaltree89a544b28a282305453625216182bb8e4af5950ctargetblank89a544ba"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/bernard-liew/2020_LBPcausal/tree/89a544b28a282305453625216182bb8e4af5950c" target="_blank">89a544b</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcombernardliew2020LBPcausaltree024005a342e06b73d5bdec1da16a40e595d79bd0targetblank024005aa"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/bernard-liew/2020_LBPcausal/tree/024005a342e06b73d5bdec1da16a40e595d79bd0" target="_blank">024005a</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcombernardliew2020LBPcausaltree89a544b28a282305453625216182bb8e4af5950ctargetblank89a544ba" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcombernardliew2020LBPcausaltree024005a342e06b73d5bdec1da16a40e595d79bd0targetblank024005aa" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/bernard-liew/2020_LBPcausal/tree/89a544b28a282305453625216182bb8e4af5950c" target="_blank">89a544b</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/bernard-liew/2020_LBPcausal/tree/024005a342e06b73d5bdec1da16a40e595d79bd0" target="_blank">024005a</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -558,6 +558,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/bernard-liew/2020_LBPcausal/blob/024005a342e06b73d5bdec1da16a40e595d79bd0/analysis/2-mediation_early.Rmd" target="_blank">024005a</a>
+</td>
+<td>
+bernard-liew
+</td>
+<td>
+2020-07-03
+</td>
+<td>
+changed figures and plot size
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/bernard-liew/2020_LBPcausal/024005a342e06b73d5bdec1da16a40e595d79bd0/docs/2-mediation_early.html" target="_blank">024005a</a>
+</td>
+<td>
+bernard-liew
+</td>
+<td>
+2020-07-03
+</td>
+<td>
+changed figures and plot size
+</td>
+</tr>
 <tr>
 <td>
 html
@@ -695,49 +729,413 @@ names(df)[1:8] &lt;- paste0(str_remove(names(df)[1:8] , &quot;wk10_&quot;), &quo
 <div id="between-group-comparisons" class="section level2">
 <h2>Between group comparisons</h2>
 <pre class="r"><code>tableby (subgrp ~., data = df, digits = 2, digits.p = 2) %&gt;%    
-  summary (t) </code></pre>
-<pre><code>
-
-|                                       |    dhr (N=54)     |    nrdp (N=8)     |    rdp (N=63)     |    mfp (N=91)     |    mtg (N=74)     |   Total (N=290)   | p value|
-|:--------------------------------------|:-----------------:|:-----------------:|:-----------------:|:-----------------:|:-----------------:|:-----------------:|-------:|
-|**osw_early**                          |                   |                   |                   |                   |                   |                   |    0.35|
-|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |         0         |         0         |         1         |         2         |         1         |         4         |        |
-|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |  -12.63 (14.97)   |   -10.00 (6.68)   |   -7.97 (10.81)   |   -9.58 (12.55)   |  -11.23 (13.56)   |  -10.24 (12.86)   |        |
-|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |  -42.00 - 30.00   |   -16.00 - 4.00   |  -34.00 - 14.00   |  -36.00 - 38.00   |  -44.00 - 30.00   |  -44.00 - 38.00   |        |
-|**lbp_early**                          |                   |                   |                   |                   |                   |                   |    0.31|
-|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |         0         |         0         |         0         |         0         |         1         |         1         |        |
-|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |   -1.84 (2.47)    |   -1.81 (1.36)    |   -2.54 (2.26)    |   -2.13 (2.31)    |   -2.62 (2.57)    |   -2.28 (2.38)    |        |
-|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   -6.00 - 3.00    |   -3.00 - 1.00    |   -8.00 - 3.00    |   -7.00 - 4.00    |   -8.00 - 4.00    |   -8.00 - 4.00    |        |
-|**lp_early**                           |                   |                   |                   |                   |                   |                   |    0.64|
-|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |         0         |         1         |        14         |        15         |        10         |        40         |        |
-|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |   -2.53 (2.82)    |   -2.86 (1.77)    |   -2.20 (2.78)    |   -1.84 (2.49)    |   -2.30 (3.04)    |   -2.21 (2.75)    |        |
-|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   -8.00 - 3.00    |   -5.00 - 0.00    |   -8.00 - 3.00    |   -6.00 - 5.00    |   -9.00 - 5.00    |   -9.00 - 5.00    |        |
-|**pain_cope_success_early**            |                   |                   |                   |                   |                   |                   |    0.38|
-|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |         3         |         1         |         0         |         4         |         3         |        11         |        |
-|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |   -0.96 (2.84)    |    0.29 (3.40)    |   -1.57 (3.14)    |   -1.12 (3.33)    |   -1.70 (3.19)    |   -1.30 (3.17)    |        |
-|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   -7.00 - 6.00    |   -4.00 - 4.00    |   -9.00 - 6.00    |   -9.00 - 9.00    |   -10.00 - 6.00   |   -10.00 - 9.00   |        |
-|**anx_early**                          |                   |                   |                   |                   |                   |                   |    0.16|
-|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |         3         |         1         |         0         |         3         |         3         |        10         |        |
-|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |   -1.57 (2.95)    |   -3.86 (2.73)    |   -1.74 (2.64)    |   -1.33 (2.93)    |   -2.00 (2.72)    |   -1.70 (2.83)    |        |
-|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   -8.00 - 4.00    |   -9.00 - -1.00   |   -7.00 - 4.00    |   -8.00 - 5.00    |   -9.00 - 4.00    |   -9.00 - 5.00    |        |
-|**depress_early**                      |                   |                   |                   |                   |                   |                   |    0.12|
-|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |         3         |         1         |         2         |         3         |         4         |        13         |        |
-|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |   -1.59 (2.82)    |   -3.29 (3.50)    |   -1.20 (2.82)    |   -0.68 (2.96)    |   -1.00 (2.88)    |   -1.11 (2.92)    |        |
-|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   -8.00 - 5.00    |   -9.00 - 1.00    |   -8.00 - 6.00    |   -7.00 - 8.00    |   -8.00 - 6.00    |   -9.00 - 8.00    |        |
-|**pain_persist_early**                 |                   |                   |                   |                   |                   |                   |    0.61|
-|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |         3         |         1         |         1         |         4         |         3         |        12         |        |
-|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |   -2.08 (3.52)    |   -3.86 (2.19)    |   -1.98 (3.48)    |   -1.93 (2.68)    |   -2.30 (3.40)    |   -2.11 (3.20)    |        |
-|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   -9.00 - 7.00    |   -7.00 - -1.00   |   -10.00 - 6.00   |   -8.00 - 5.00    |   -9.00 - 6.00    |   -10.00 - 7.00   |        |
-|**fear_early**                         |                   |                   |                   |                   |                   |                   |    0.76|
-|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |         6         |         2         |         1         |         3         |         4         |        16         |        |
-|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |   -3.15 (7.57)    |   -5.80 (11.28)   |   -2.28 (6.39)    |   -3.32 (6.73)    |   -2.88 (7.02)    |   -3.00 (6.97)    |        |
-|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |  -19.00 - 11.00   |   -22.00 - 8.00   |  -17.00 - 18.00   |  -24.00 - 12.00   |  -25.00 - 13.00   |  -25.00 - 18.00   |        |
-|**grp**                                |                   |                   |                   |                   |                   |                   |    0.99|
-|&amp;nbsp;&amp;nbsp;&amp;nbsp;advice               |    26 (48.1%)     |     3 (37.5%)     |    30 (47.6%)     |    43 (47.3%)     |    35 (47.3%)     |    137 (47.2%)    |        |
-|&amp;nbsp;&amp;nbsp;&amp;nbsp;individualisedphysio |    28 (51.9%)     |     5 (62.5%)     |    33 (52.4%)     |    48 (52.7%)     |    39 (52.7%)     |    153 (52.8%)    |        |
-|**id**                                 |                   |                   |                   |                   |                   |                   |  &lt; 0.01|
-|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            | 1526.96 (209.06)  |  4571.12 (52.77)  | 5529.14 (211.09)  | 2514.09 (228.03)  | 3515.42 (234.58)  | 3297.53 (1403.37) |        |
-|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                | 1101.00 - 1806.00 | 4501.00 - 4652.00 | 5101.00 - 5903.00 | 2101.00 - 2951.00 | 3101.00 - 3905.00 | 1101.00 - 5903.00 |        |</code></pre>
+  summary () </code></pre>
+<table>
+<colgroup>
+<col width="24%" />
+<col width="11%" />
+<col width="11%" />
+<col width="11%" />
+<col width="11%" />
+<col width="11%" />
+<col width="11%" />
+<col width="4%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="center">dhr (N=54)</th>
+<th align="center">nrdp (N=8)</th>
+<th align="center">rdp (N=63)</th>
+<th align="center">mfp (N=91)</th>
+<th align="center">mtg (N=74)</th>
+<th align="center">Total (N=290)</th>
+<th align="right">p value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><strong>osw_early</strong></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="right">0.35</td>
+</tr>
+<tr class="even">
+<td align="left">   N-Miss</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">1</td>
+<td align="center">2</td>
+<td align="center">1</td>
+<td align="center">4</td>
+<td align="right"></td>
+</tr>
+<tr class="odd">
+<td align="left">   Mean (SD)</td>
+<td align="center">-12.63 (14.97)</td>
+<td align="center">-10.00 (6.68)</td>
+<td align="center">-7.97 (10.81)</td>
+<td align="center">-9.58 (12.55)</td>
+<td align="center">-11.23 (13.56)</td>
+<td align="center">-10.24 (12.86)</td>
+<td align="right"></td>
+</tr>
+<tr class="even">
+<td align="left">   Range</td>
+<td align="center">-42.00 - 30.00</td>
+<td align="center">-16.00 - 4.00</td>
+<td align="center">-34.00 - 14.00</td>
+<td align="center">-36.00 - 38.00</td>
+<td align="center">-44.00 - 30.00</td>
+<td align="center">-44.00 - 38.00</td>
+<td align="right"></td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>lbp_early</strong></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="right">0.31</td>
+</tr>
+<tr class="even">
+<td align="left">   N-Miss</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="right"></td>
+</tr>
+<tr class="odd">
+<td align="left">   Mean (SD)</td>
+<td align="center">-1.84 (2.47)</td>
+<td align="center">-1.81 (1.36)</td>
+<td align="center">-2.54 (2.26)</td>
+<td align="center">-2.13 (2.31)</td>
+<td align="center">-2.62 (2.57)</td>
+<td align="center">-2.28 (2.38)</td>
+<td align="right"></td>
+</tr>
+<tr class="even">
+<td align="left">   Range</td>
+<td align="center">-6.00 - 3.00</td>
+<td align="center">-3.00 - 1.00</td>
+<td align="center">-8.00 - 3.00</td>
+<td align="center">-7.00 - 4.00</td>
+<td align="center">-8.00 - 4.00</td>
+<td align="center">-8.00 - 4.00</td>
+<td align="right"></td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>lp_early</strong></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="right">0.64</td>
+</tr>
+<tr class="even">
+<td align="left">   N-Miss</td>
+<td align="center">0</td>
+<td align="center">1</td>
+<td align="center">14</td>
+<td align="center">15</td>
+<td align="center">10</td>
+<td align="center">40</td>
+<td align="right"></td>
+</tr>
+<tr class="odd">
+<td align="left">   Mean (SD)</td>
+<td align="center">-2.53 (2.82)</td>
+<td align="center">-2.86 (1.77)</td>
+<td align="center">-2.20 (2.78)</td>
+<td align="center">-1.84 (2.49)</td>
+<td align="center">-2.30 (3.04)</td>
+<td align="center">-2.21 (2.75)</td>
+<td align="right"></td>
+</tr>
+<tr class="even">
+<td align="left">   Range</td>
+<td align="center">-8.00 - 3.00</td>
+<td align="center">-5.00 - 0.00</td>
+<td align="center">-8.00 - 3.00</td>
+<td align="center">-6.00 - 5.00</td>
+<td align="center">-9.00 - 5.00</td>
+<td align="center">-9.00 - 5.00</td>
+<td align="right"></td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>pain_cope_success_early</strong></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="right">0.38</td>
+</tr>
+<tr class="even">
+<td align="left">   N-Miss</td>
+<td align="center">3</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td align="center">4</td>
+<td align="center">3</td>
+<td align="center">11</td>
+<td align="right"></td>
+</tr>
+<tr class="odd">
+<td align="left">   Mean (SD)</td>
+<td align="center">-0.96 (2.84)</td>
+<td align="center">0.29 (3.40)</td>
+<td align="center">-1.57 (3.14)</td>
+<td align="center">-1.12 (3.33)</td>
+<td align="center">-1.70 (3.19)</td>
+<td align="center">-1.30 (3.17)</td>
+<td align="right"></td>
+</tr>
+<tr class="even">
+<td align="left">   Range</td>
+<td align="center">-7.00 - 6.00</td>
+<td align="center">-4.00 - 4.00</td>
+<td align="center">-9.00 - 6.00</td>
+<td align="center">-9.00 - 9.00</td>
+<td align="center">-10.00 - 6.00</td>
+<td align="center">-10.00 - 9.00</td>
+<td align="right"></td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>anx_early</strong></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="right">0.16</td>
+</tr>
+<tr class="even">
+<td align="left">   N-Miss</td>
+<td align="center">3</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td align="center">3</td>
+<td align="center">3</td>
+<td align="center">10</td>
+<td align="right"></td>
+</tr>
+<tr class="odd">
+<td align="left">   Mean (SD)</td>
+<td align="center">-1.57 (2.95)</td>
+<td align="center">-3.86 (2.73)</td>
+<td align="center">-1.74 (2.64)</td>
+<td align="center">-1.33 (2.93)</td>
+<td align="center">-2.00 (2.72)</td>
+<td align="center">-1.70 (2.83)</td>
+<td align="right"></td>
+</tr>
+<tr class="even">
+<td align="left">   Range</td>
+<td align="center">-8.00 - 4.00</td>
+<td align="center">-9.00 - -1.00</td>
+<td align="center">-7.00 - 4.00</td>
+<td align="center">-8.00 - 5.00</td>
+<td align="center">-9.00 - 4.00</td>
+<td align="center">-9.00 - 5.00</td>
+<td align="right"></td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>depress_early</strong></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="right">0.12</td>
+</tr>
+<tr class="even">
+<td align="left">   N-Miss</td>
+<td align="center">3</td>
+<td align="center">1</td>
+<td align="center">2</td>
+<td align="center">3</td>
+<td align="center">4</td>
+<td align="center">13</td>
+<td align="right"></td>
+</tr>
+<tr class="odd">
+<td align="left">   Mean (SD)</td>
+<td align="center">-1.59 (2.82)</td>
+<td align="center">-3.29 (3.50)</td>
+<td align="center">-1.20 (2.82)</td>
+<td align="center">-0.68 (2.96)</td>
+<td align="center">-1.00 (2.88)</td>
+<td align="center">-1.11 (2.92)</td>
+<td align="right"></td>
+</tr>
+<tr class="even">
+<td align="left">   Range</td>
+<td align="center">-8.00 - 5.00</td>
+<td align="center">-9.00 - 1.00</td>
+<td align="center">-8.00 - 6.00</td>
+<td align="center">-7.00 - 8.00</td>
+<td align="center">-8.00 - 6.00</td>
+<td align="center">-9.00 - 8.00</td>
+<td align="right"></td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>pain_persist_early</strong></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="right">0.61</td>
+</tr>
+<tr class="even">
+<td align="left">   N-Miss</td>
+<td align="center">3</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">4</td>
+<td align="center">3</td>
+<td align="center">12</td>
+<td align="right"></td>
+</tr>
+<tr class="odd">
+<td align="left">   Mean (SD)</td>
+<td align="center">-2.08 (3.52)</td>
+<td align="center">-3.86 (2.19)</td>
+<td align="center">-1.98 (3.48)</td>
+<td align="center">-1.93 (2.68)</td>
+<td align="center">-2.30 (3.40)</td>
+<td align="center">-2.11 (3.20)</td>
+<td align="right"></td>
+</tr>
+<tr class="even">
+<td align="left">   Range</td>
+<td align="center">-9.00 - 7.00</td>
+<td align="center">-7.00 - -1.00</td>
+<td align="center">-10.00 - 6.00</td>
+<td align="center">-8.00 - 5.00</td>
+<td align="center">-9.00 - 6.00</td>
+<td align="center">-10.00 - 7.00</td>
+<td align="right"></td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>fear_early</strong></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="right">0.76</td>
+</tr>
+<tr class="even">
+<td align="left">   N-Miss</td>
+<td align="center">6</td>
+<td align="center">2</td>
+<td align="center">1</td>
+<td align="center">3</td>
+<td align="center">4</td>
+<td align="center">16</td>
+<td align="right"></td>
+</tr>
+<tr class="odd">
+<td align="left">   Mean (SD)</td>
+<td align="center">-3.15 (7.57)</td>
+<td align="center">-5.80 (11.28)</td>
+<td align="center">-2.28 (6.39)</td>
+<td align="center">-3.32 (6.73)</td>
+<td align="center">-2.88 (7.02)</td>
+<td align="center">-3.00 (6.97)</td>
+<td align="right"></td>
+</tr>
+<tr class="even">
+<td align="left">   Range</td>
+<td align="center">-19.00 - 11.00</td>
+<td align="center">-22.00 - 8.00</td>
+<td align="center">-17.00 - 18.00</td>
+<td align="center">-24.00 - 12.00</td>
+<td align="center">-25.00 - 13.00</td>
+<td align="center">-25.00 - 18.00</td>
+<td align="right"></td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>grp</strong></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="right">0.99</td>
+</tr>
+<tr class="even">
+<td align="left">   advice</td>
+<td align="center">26 (48.1%)</td>
+<td align="center">3 (37.5%)</td>
+<td align="center">30 (47.6%)</td>
+<td align="center">43 (47.3%)</td>
+<td align="center">35 (47.3%)</td>
+<td align="center">137 (47.2%)</td>
+<td align="right"></td>
+</tr>
+<tr class="odd">
+<td align="left">   individualisedphysio</td>
+<td align="center">28 (51.9%)</td>
+<td align="center">5 (62.5%)</td>
+<td align="center">33 (52.4%)</td>
+<td align="center">48 (52.7%)</td>
+<td align="center">39 (52.7%)</td>
+<td align="center">153 (52.8%)</td>
+<td align="right"></td>
+</tr>
+<tr class="even">
+<td align="left"><strong>id</strong></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="right">&lt; 0.01</td>
+</tr>
+<tr class="odd">
+<td align="left">   Mean (SD)</td>
+<td align="center">1526.96 (209.06)</td>
+<td align="center">4571.12 (52.77)</td>
+<td align="center">5529.14 (211.09)</td>
+<td align="center">2514.09 (228.03)</td>
+<td align="center">3515.42 (234.58)</td>
+<td align="center">3297.53 (1403.37)</td>
+<td align="right"></td>
+</tr>
+<tr class="even">
+<td align="left">   Range</td>
+<td align="center">1101.00 - 1806.00</td>
+<td align="center">4501.00 - 4652.00</td>
+<td align="center">5101.00 - 5903.00</td>
+<td align="center">2101.00 - 2951.00</td>
+<td align="center">3101.00 - 3905.00</td>
+<td align="center">1101.00 - 5903.00</td>
+<td align="right"></td>
+</tr>
+</tbody>
+</table>
 </div>
 <div id="correlation-plots" class="section level2">
 <h2>Correlation plots</h2>

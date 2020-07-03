@@ -40,7 +40,7 @@ library (doParallel)
 
 # Introduction
 
-This is a bayesian network analysis where the early change variables are between week 10 and baseline. The late change variables are between week 52 and baseline.
+This is a bayesian network analysis where the early change variables are between week 10 and baseline. The late change variables are between week 52 and week 10.
 
 # Import data
 
@@ -57,7 +57,7 @@ df_list <- readRDS("output/df_change.RDS")
 df1 <- df_list[["wk10_base"]]
 names(df1)[1:8] <- paste0(str_remove(names(df1)[1:8] , "wk10_"), "_early")
 
-df2 <- df_list[["wk52_wk26"]]
+df2 <- df_list[["wk52_wk10"]]
 names(df2)[1:8] <- paste0(str_remove(names(df2)[1:8] , "wk52_"), "_late")
 
 df <- bind_cols(df1, df2) %>%
@@ -69,7 +69,7 @@ df <- bind_cols(df1, df2) %>%
 
 ## Between group comparisons
 
-```{r, asis = TRUE}
+```{r, results = "asis"}
 tableby (subgrp ~., data = df, digits = 2, digits.p = 2) %>%	
   summary () 
 ```
