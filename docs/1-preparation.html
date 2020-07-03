@@ -1,0 +1,2762 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="bernard-liew" />
+
+<meta name="date" content="2020-06-11" />
+
+<title>1-preparation</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/master/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">2020_LBPcausal</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="license.html">License</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">1-preparation</h1>
+<h4 class="author">bernard-liew</h4>
+<h4 class="date">2020-06-11</h4>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> </a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2020-07-03
+</p>
+<p>
+<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
+</p>
+<p>
+<strong>Knit directory:</strong> <code>2020_LBPcausal/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
+</p>
+<p>
+This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis was created with <a
+  href="https://github.com/jdblischak/workflowr">workflowr</a> (version 1.6.2). The <em>Checks</em> tab describes the reproducibility checks that were applied when the results were created. The <em>Past versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date </a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguptodate" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great! Since the R Markdown file has been committed to the Git repository, you know the exact version of the code that produced these results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the global environment can affect the analysis in your R Markdown file in unknown ways. For reproduciblity it’s best to always run the code in an empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20200422code"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Seed:</strong> <code>set.seed(20200422)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20200422code" class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20200422)</code> was run prior to running the code in the R Markdown file. Setting a seed ensures that any results that rely on randomness, e.g. subsampling or permutations, are reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Session information:</strong> recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be confident that you successfully produced the results during this run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcombernardliew2020LBPcausaltreebd418c91f435d46638987d73e086f276c8c6ec6dtargetblankbd418c9a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/bernard-liew/2020_LBPcausal/tree/bd418c91f435d46638987d73e086f276c8c6ec6d" target="_blank">bd418c9</a> </a>
+</p>
+</div>
+<div id="strongRepositoryversionstrongahrefhttpsgithubcombernardliew2020LBPcausaltreebd418c91f435d46638987d73e086f276c8c6ec6dtargetblankbd418c9a" class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version <a href="https://github.com/bernard-liew/2020_LBPcausal/tree/bd418c91f435d46638987d73e086f276c8c6ec6d" target="_blank">bd418c9</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    .Rhistory
+    Ignored:    .Rproj.user/
+    Ignored:    output/data_clean.xlsx
+
+Unstaged changes:
+    Modified:   analysis/2-mediation_early.Rmd
+    Modified:   analysis/3-mediation_late.Rmd
+    Modified:   analysis/4-mediation_early2late.Rmd
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not included in this status report because it is ok for generated content to have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+
+<p>
+These are the previous versions of the repository in which changes were made to the R Markdown (<code>analysis/1-preparation.Rmd</code>) and HTML (<code>docs/1-preparation.html</code>) files. If you’ve configured a remote Git repository (see <code>?wflow_git_remote</code>), click on the hyperlinks in the table below to view the files as they were in that past version.
+</p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/bernard-liew/2020_LBPcausal/blob/f5b55d7ed4ad5852190253724ca0608a818be839/analysis/1-preparation.Rmd" target="_blank">f5b55d7</a>
+</td>
+<td>
+bernard-liew
+</td>
+<td>
+2020-07-02
+</td>
+<td>
+removed function variable
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/bernard-liew/2020_LBPcausal/blob/807f52cb152468dc7a193afd7089a13bafc86cc7/analysis/1-preparation.Rmd" target="_blank">807f52c</a>
+</td>
+<td>
+bernard-liew
+</td>
+<td>
+2020-07-02
+</td>
+<td>
+added all possible change values
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/bernard-liew/2020_LBPcausal/blob/127e9d3393ad80327b61a77c673803a2f465a442/analysis/1-preparation.Rmd" target="_blank">127e9d3</a>
+</td>
+<td>
+bernard-liew
+</td>
+<td>
+2020-06-11
+</td>
+<td>
+Original analysis
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<div id="load-library" class="section level1">
+<h1>Load library</h1>
+<pre class="r"><code># Helper packages
+library (tidyverse)
+library (tidyselect)
+library (arsenal)
+library (janitor)
+library (magrittr)
+
+# Import
+library(readxl)
+library (xlsx)
+
+# Statistics
+library (mice)
+library (VIM)
+library (corrr)</code></pre>
+</div>
+<div id="import-data" class="section level1">
+<h1>Import data</h1>
+<pre class="r"><code>rm (list = ls())
+dat &lt;-  read_excel(&quot;data/stops_dat.xlsx&quot;, 
+    sheet = &quot;data&quot;)</code></pre>
+<pre><code>New names:
+* `BASELINE Pain (leg)` -&gt; `BASELINE Pain (leg)...8`
+* `BASELINE Pain (leg)` -&gt; `BASELINE Pain (leg)...9`
+* `Orebro Q5` -&gt; `Orebro Q5...36`
+* `Orebro Q5` -&gt; `Orebro Q5...37`
+* `19: Reason pre-injury work status` -&gt; `19: Reason pre-injury work status...63`
+* ...</code></pre>
+<pre class="r"><code>dat &lt;- dat[c(1:300),]
+
+cnames &lt;- names (dat)
+cnames_mod &lt;- str_replace_all (tolower(cnames), 
+                                           pattern = &quot; &quot;, 
+                                           repl = &quot;_&quot;)
+names (dat) &lt;- cnames_mod 
+
+df_orig &lt;- dat</code></pre>
+</div>
+<div id="tidy-data" class="section level1">
+<h1>Tidy data</h1>
+<div id="remove-dummary-variables" class="section level2">
+<h2>Remove dummary variables</h2>
+<pre class="r"><code>dummy_var &lt;- grep (&quot;dummy|0,|v_&quot;, cnames_mod, value = TRUE)
+
+dat_sub &lt;- dat[, !names (dat) %in% dummy_var]
+
+(ncol (dat_sub) + length (dummy_var)) == length (names (dat))</code></pre>
+<pre><code>[1] TRUE</code></pre>
+<pre class="r"><code>df_orig_sub &lt;- dat_sub</code></pre>
+</div>
+<div id="group-variables" class="section level2">
+<h2>Group variables</h2>
+<pre class="r"><code>cnames_mod &lt;- names (dat_sub)
+
+# Time related variables
+
+base_var &lt;- grep (&quot;baseline&quot;, cnames_mod, value = TRUE)
+
+wk5_var &lt;- grep (&quot;5week|5_week&quot;, cnames_mod, value = TRUE)
+
+wk10_var &lt;- grep (&quot;10week|10_week&quot;, cnames_mod, value = TRUE)
+
+wk26_var &lt;- grep (&quot;26week|26_week&quot;, cnames_mod, value = TRUE)
+
+wk52_var &lt;- grep (&quot;52week|52_week&quot;, cnames_mod, value = TRUE)
+
+# Baseline variables
+
+id_var&lt;- tidyselect::vars_select (cnames_mod, 
+                                          c(&quot;stops_id&quot;:
+                                              &quot;baseline_date&quot;))
+
+orebro_var &lt;- grep (&quot;orebro&quot;, cnames_mod, value = TRUE)
+
+fab_var &lt;- grep (&quot;fab&quot;, cnames_mod, value = TRUE)
+
+work_var &lt;- grep (&quot;work|industry|occupation&quot;, cnames_mod, value = TRUE)
+
+symptom_var &lt;- grep (&quot;symptom|next&quot;, cnames_mod, value = TRUE)
+
+symptomLoc_var &lt;- grep (&quot;location&quot;, cnames_mod, value = TRUE)
+
+episode_var &lt;- grep (&quot;episode&quot;, cnames_mod, value = TRUE)
+
+sfbs_var &lt;- grep (&quot;sfbs&quot;, cnames_mod, value = TRUE)
+
+other_var &lt;- grep (&quot;other_rx&quot;, cnames_mod, value = TRUE) # remove
+
+treatment_var &lt;- tidyselect::vars_select (cnames_mod, 
+                                          c(&quot;treatment:_number_of_practitioners_seen_(all)&quot;:
+                                              &quot;10:_rest_of_life&quot;))
+
+meds_var &lt;- tidyselect::vars_select (cnames_mod, c(&quot;paracetamol&quot;:
+                                                     &quot;medication:_number_of_med_types_(all)&quot;)) # remove
+
+
+
+misc_var &lt;-  tidyselect::vars_select (cnames_mod, 
+                                          c(&quot;weight_(kg)&quot;:
+                                              &quot;sa1_(code)&quot;))
+
+ses_var &lt;- grep (&quot;ses:&quot;, cnames_mod, value = TRUE)
+
+personal_var &lt;-  tidyselect::vars_select (cnames_mod, 
+                                          c(&quot;highest_level_of_education&quot;:
+                                              &quot;number_of_smokes...316&quot;))
+
+symptHx_var &lt;-  tidyselect::vars_select (cnames_mod, 
+                                          c(&quot;have_you_taken_any_tablets_for_your_back_today?&quot;:
+                                              &quot;if_you_have_leg_and_back_symptoms,_are_they_related?...338&quot;))
+
+
+aggr_var &lt;-  grep (&quot;agg|difficult|sorer&quot;, cnames_mod, value = TRUE)
+
+ease_var &lt;-  grep (&quot;ease|comfortable&quot;, cnames_mod, value = TRUE)
+
+obj_curve_var &lt;- tidyselect::vars_select (cnames_mod, 
+                                          c(&quot;assessment:_obs:_standing-increased_lordosis&quot;:
+                                              &quot;list_corresponding_to_worst_side&quot;))
+
+obj_rom_var &lt;- tidyselect::vars_select (cnames_mod, 
+                                          c(&quot;amt:_flexion_range_(cm)...462&quot;:
+                                              &quot;range_of_side_with_most_limited_lf&quot;))
+
+obj_core_var &lt;- tidyselect::vars_select (cnames_mod, 
+                                          c(&quot;core_stability_in_standing&quot;:
+                                              &quot;ta_low_tone&quot;))
+
+obj_sit_var &lt;- grep (&quot;sitting:&quot;, cnames_mod, value = TRUE)
+
+obj_neuro_var &lt;- tidyselect::vars_select (cnames_mod, 
+                                          c(&quot;positive_slr&quot;:
+                                            &quot;clinical_radiculopathy_with_no_mechanical_cause_on_imaging&quot;))
+
+aggr2_var &lt;-  tidyselect::vars_select (cnames_mod, 
+                                          c(&quot;oswestry:_sitting_(p3)&quot;:
+                                              &quot;repeated_movements:_reducible?&quot;))
+
+obj_core2_var &lt;- grep (&quot;multifidus&quot;, cnames_mod, value = TRUE)
+
+obj_disc_var &lt;- tidyselect::vars_select (cnames_mod, 
+                                          c(&quot;regular_compression&quot;:
+                                            &quot;degree_of_nerve_contact&quot;))
+
+redflag_var &lt;- tidyselect::vars_select (cnames_mod, 
+                                          c(&quot;constant_symptoms&quot;:
+                                            &quot;general_health_state&quot;))
+
+euroqol_var &lt;- grep (&quot;euroqol&quot;, cnames_mod, value = TRUE)</code></pre>
+</div>
+<div id="rename-variables" class="section level2">
+<h2>Rename variables</h2>
+<div id="baseline-outcome-variables" class="section level3">
+<h3>Baseline outcome variables</h3>
+<pre class="r"><code>dat_base_var &lt;- dat_sub[, names (dat_sub) %in% base_var]
+dat_base_var &lt;- dat_base_var[, !names (dat_base_var) %in% c (&quot;baseline_date&quot;,
+                                                             &quot;baseline_time_(0_weeks)&quot;,
+                                                             &quot;baseline_pain_(leg)...9&quot;)]
+dat_base_var $working_at_baseline &lt;- NULL
+new.name1 &lt;- paste0(&quot;base_&quot;, c (&quot;osw&quot;,
+                                 &quot;lbp&quot;,
+                                 &quot;lp&quot;))  
+new.name2 &lt;- paste0 (&quot;base_osw_q&quot;, c(1:10))
+
+names(dat_base_var) &lt;- c(new.name1, new.name2)</code></pre>
+</div>
+<div id="week-5-outcome-variables" class="section level3">
+<h3>Week 5 outcome variables</h3>
+<pre class="r"><code>dat_wk5_var &lt;- dat_sub [, names (dat_sub) %in% wk5_var]
+dat_wk5_var  &lt;- dat_wk5_var [, !names (dat_wk5_var) %in% c (&quot;5_week_outcome_date&quot;, 
+                                                            &quot;5_weeks_(days_since_om_completed)&quot;,
+                                                            &quot;5_weeks_(weeks_since_om_completed)&quot;)]
+
+new.name1 &lt;- paste0(&quot;wk5_&quot;, c (&quot;osw&quot;,
+                               &quot;lbp&quot;,
+                               &quot;lp&quot;,
+                               &quot;oreb&quot;))  
+new.name2 &lt;- paste0 (&quot;wk5_oreb_q&quot;, c(4:24))
+
+names(dat_wk5_var) &lt;- c(new.name1, new.name2)</code></pre>
+</div>
+<div id="week-10-outcome-variables" class="section level3">
+<h3>Week 10 outcome variables</h3>
+<pre class="r"><code>dat_wk10_var &lt;- dat_sub [, names (dat_sub) %in% wk10_var]
+dat_wk10_var  &lt;- dat_wk10_var [, !names (dat_wk10_var) %in% c (&quot;10_week_outcome_date&quot;, 
+                                                            &quot;10_weeks_(days_since_om_completed)&quot;,
+                                                            &quot;10_weeks_(weeks_since_om_completed)&quot;)]
+
+new.name1 &lt;- paste0(&quot;wk10_&quot;, c (&quot;osw&quot;,
+                               &quot;lbp&quot;,
+                               &quot;lp&quot;,
+                               &quot;oreb&quot;))  
+new.name2 &lt;- paste0 (&quot;wk10_oreb_q&quot;, c(4:24))
+
+names(dat_wk10_var) &lt;- c(new.name1, new.name2)</code></pre>
+</div>
+<div id="week-26-outcome-variables" class="section level3">
+<h3>Week 26 outcome variables</h3>
+<pre class="r"><code>dat_wk26_var &lt;- dat_sub [, names (dat_sub) %in% wk26_var]
+dat_wk26_var  &lt;- dat_wk26_var [, !names (dat_wk26_var) %in% c (&quot;26_week_outcome_date&quot;, 
+                                                            &quot;26_weeks_(days_since_om_completed)&quot;,
+                                                            &quot;26_weeks_(weeks_since_om_completed)&quot;)]
+
+new.name1 &lt;- paste0(&quot;wk26_&quot;, c (&quot;osw&quot;,
+                               &quot;lbp&quot;,
+                               &quot;lp&quot;,
+                               &quot;oreb&quot;))  
+new.name2 &lt;- paste0 (&quot;wk26_oreb_q&quot;, c(4:24))
+
+names(dat_wk26_var) &lt;- c(new.name1, new.name2)</code></pre>
+</div>
+<div id="week-52-outcome-variables" class="section level3">
+<h3>Week 52 outcome variables</h3>
+<pre class="r"><code>dat_wk52_var &lt;- dat_sub [, names (dat_sub) %in% wk52_var]
+dat_wk52_var  &lt;- dat_wk52_var [, !names (dat_wk52_var) %in% c (&quot;52_week_outcome_date&quot;, 
+                                                            &quot;52_weeks_(days_since_om_completed)&quot;,
+                                                            &quot;52_weeks_(weeks_since_om_completed)&quot;)]
+
+new.name1 &lt;- paste0(&quot;wk52_&quot;, c (&quot;osw&quot;,
+                               &quot;lbp&quot;,
+                               &quot;lp&quot;,
+                               &quot;oreb&quot;))  
+new.name2 &lt;- paste0 (&quot;wk52_oreb_q&quot;, c(4:24))
+
+names(dat_wk52_var) &lt;- c(new.name1, new.name2)</code></pre>
+</div>
+<div id="baseline-id-variables" class="section level3">
+<h3>Baseline id variables</h3>
+<pre class="r"><code>dat_id_var &lt;- dat_sub [, names (dat_sub) %in% id_var]
+dat_id_var  &lt;- dat_id_var [, !names (dat_id_var) %in% c (&quot;baseline_date&quot;)]
+
+names(dat_id_var) &lt;- c(&quot;id&quot;, &quot;rx_grp&quot;, &quot;rx_subgrp&quot;)</code></pre>
+</div>
+<div id="baseline-orebro" class="section level3">
+<h3>Baseline orebro</h3>
+<pre class="r"><code>orebro_var_sub &lt;- orebro_var[!grepl(&quot;5w|10w|26w|52w|...37&quot;, orebro_var)]
+
+dat_orebro_var &lt;- dat_sub [, names (dat_sub) %in% orebro_var_sub ]
+
+new.name1 &lt;- c(&quot;base_oreb&quot;, paste0 (&quot;base_oreb_q&quot;, c(4:24)))
+
+names(dat_orebro_var) &lt;- new.name1  </code></pre>
+</div>
+<div id="baseline-fab" class="section level3">
+<h3>Baseline fab</h3>
+<pre class="r"><code>dat_fab_var &lt;- dat_sub [, names (dat_sub) %in% fab_var]
+
+names(dat_fab_var) &lt;- &quot;base_fab&quot;  </code></pre>
+</div>
+<div id="baseline-work" class="section level3">
+<h3>Baseline work</h3>
+<pre class="r"><code>work_var2 &lt;- tidyselect::vars_select (work_var, 
+                                          -c(&quot;19:_reason_pre-injury_work_status...64&quot;:
+                                            &quot;working_other_than_nd_due_to_current__lbp&quot;,
+                                            &quot;pre-inj_workers&#39;_perceived_chance_of_working_at_6/12...72&quot;,
+                                            &quot;workers&#39;_perception_of_heavy_or_monotonous_work...75&quot; ,
+                                            &quot;pre-injury_workers&#39;_sick_leave_duration_due_to_pain...78&quot;,
+                            &quot;pre-injury_house-keepers&#39;_or_workers&#39;_sick_leave_duration_due_to_pain...81&quot;,
+                            &quot;pre-injury_house-keepers&#39;_or_workers&#39;_sick_leave_duration_due_to_pain...80&quot;,
+                            &quot;ses:_index_of_education_and_occupation&quot; ,
+                             &quot;occupation&quot; ))
+
+dat_work_var &lt;- dat_sub [, names (dat_sub) %in% work_var2]
+
+
+new.name1 &lt;- c(&quot;work_status&quot;, &quot;work_duty&quot;, &quot;reas_not_work&quot;, &quot;pre_work_status&quot;,
+               &quot;pre_work_duty&quot;, &quot;reas_pre_work_status&quot;, &quot;pre_perc_work6mth&quot;,
+               &quot;work&quot;, &quot;prec_work&quot;, &quot;work_statifac&quot;, &quot;pre_sickleave_pain&quot;,
+               &quot;pain_interfer&quot;,  &quot;industry&quot;, &quot;hx_heavywork&quot;)
+
+new.name2 &lt;- paste0 (&quot;base_&quot;, new.name1)
+
+names(dat_work_var) &lt;- new.name2  </code></pre>
+</div>
+<div id="baseline-symptoms" class="section level3">
+<h3>Baseline symptoms</h3>
+<pre class="r"><code>symptom_var2 &lt;- tidyselect::vars_select (symptom_var , 
+                                          -c(&quot;duration_of_leg_symptoms...100&quot;:
+                                            &quot;duration_of_symptoms:_longest_lx_or_leg&quot; ,
+                                            &quot;if_you_have_leg_and_back_symptoms,_are_they_related?...337&quot;,
+                                            &quot;first_time_symptoms_started...422&quot;,
+                                            &quot;time_of_day_symptoms_came_on...428&quot;,
+                                            &quot;how_next_day...434&quot; ,
+                                            &quot;symptoms_following_day_much_worse_(p25)&quot;,
+                                            &quot;constant_symptoms&quot;,
+                                            &quot;night_symptoms&quot; ))
+
+dat_symptom_var &lt;- dat_sub [, names (dat_sub) %in% symptom_var2 ]
+
+
+new.name1 &lt;- c(&quot;lbp_symptom&quot;, &quot;leg_symptom&quot;, &quot;lbp_duration&quot;, &quot;leg_duration&quot;,
+               &quot;freq_symptom&quot;, &quot;back_leg_relation&quot;, &quot;onset_symptom&quot;,
+               &quot;time_symptom&quot;, &quot;next_day_symptom&quot;, &quot;pain_side&quot;)
+
+new.name2 &lt;- paste0 (&quot;base_&quot;, new.name1)
+
+names(dat_symptom_var) &lt;- new.name2  </code></pre>
+</div>
+<div id="baseline-symptom-location" class="section level3">
+<h3>Baseline symptom location</h3>
+<pre class="r"><code>symptomLoc_var2 &lt;- tidyselect::vars_select (symptomLoc_var , 
+                                          -c(&quot;pain_location:_body_chart_-_psych...96&quot;,
+                                            &quot;pain_location:_body_chart_-_psych...97&quot;,
+                                            &quot;duration_of_leg_symptoms+pain_location_(body_chart)&quot;))
+
+dat_symptomLoc_var &lt;- dat_sub [, names (dat_sub) %in% symptomLoc_var2]
+
+
+new.name1 &lt;- c(&quot;loc_antthigh_pain&quot;, &quot;loc_belowknee_pain&quot;, &quot;loc_leg_pain&quot;, &quot;loc_body_ratio&quot;,
+               &quot;loc_mostpain&quot;)
+
+new.name2 &lt;- paste0 (&quot;base_&quot;, new.name1)
+
+names(dat_symptomLoc_var) &lt;- new.name2  </code></pre>
+</div>
+<div id="baseline-episode" class="section level3">
+<h3>Baseline episode</h3>
+<pre class="r"><code>episode_var2 &lt;- tidyselect::vars_select (episode_var , 
+                                          -c( &quot;previous_lbp_episodes:_&lt;=4,_&gt;4,_n_appl&quot;  ,
+                                             &quot;not_the_first_ep_and_previous_lbp_episodes:_&lt;=4,_&gt;4,_n_appl&quot;))
+
+dat_episode_var &lt;- dat_sub [, names (dat_sub) %in% episode_var2]
+
+
+new.name1 &lt;- c(&quot;first_episode&quot;, &quot;first_episode_period&quot;)
+
+new.name2 &lt;- paste0 (&quot;base_&quot;, new.name1)
+
+names(dat_episode_var ) &lt;- new.name2  </code></pre>
+</div>
+<div id="baseline-sfbs" class="section level3">
+<h3>Baseline sfbs</h3>
+<pre class="r"><code>dat_sfbs_var &lt;- dat_sub [, names (dat_sub) %in% sfbs_var]
+
+
+new.name1 &lt;- c(&quot;freq_1&quot;, &quot;freq_2&quot;, &quot;freq_3&quot;, &quot;freq_4&quot;, &quot;freq_5&quot;,
+               &quot;sciatica_freq_lbp&quot;, &quot;sciatica_freq_nolbp&quot;, &quot;bother_1&quot;,
+               &quot;bother_2&quot;, &quot;bother_3&quot;, &quot;bother_4&quot;, &quot;bother_5&quot;,
+               &quot;sciatica_bother_lbp&quot;, &quot;sciatica_bother_nolbp&quot;)
+
+new.name2 &lt;- paste0 (&quot;base_sfbs_&quot;, new.name1)
+
+names(dat_sfbs_var) &lt;- new.name2  </code></pre>
+</div>
+<div id="baseline-other" class="section level3">
+<h3>Baseline other</h3>
+<pre class="r"><code>dat_other_var &lt;- dat_sub [, names (dat_sub) %in% other_var]</code></pre>
+</div>
+<div id="baseline-treatment" class="section level3">
+<h3>Baseline treatment</h3>
+<pre class="r"><code>treatment_var2 &lt;- tidyselect::vars_select (treatment_var, 
+                                          c( &quot;total_number_of_treatments_across_all_types...228&quot;,
+                                             &quot;8:_satisfaction_with_healthcare&quot; ,
+                                             &quot;9:_satisfaction_results&quot;,
+                                             &quot;10:_rest_of_life&quot; ))
+
+dat_treatment_var &lt;- dat_sub [, names (dat_sub) %in% treatment_var2]
+
+
+new.name1 &lt;- c(&quot;total_rx_no&quot;, &quot;statisfac_healthcare&quot;, &quot;statisfac_result&quot;, &quot;rest_of_life&quot;)
+
+new.name2 &lt;- paste0 (&quot;base_&quot;, new.name1)
+
+names(dat_treatment_var) &lt;- new.name2  </code></pre>
+</div>
+<div id="baseline-medicine" class="section level3">
+<h3>Baseline medicine</h3>
+<pre class="r"><code>treatment_var2 &lt;- tidyselect::vars_select (treatment_var, 
+                                          c( &quot;total_number_of_treatments_across_all_types...228&quot;,
+                                             &quot;8:_satisfaction_with_healthcare&quot; ,
+                                             &quot;9:_satisfaction_results&quot;,
+                                             &quot;10:_rest_of_life&quot; ))
+
+dat_meds_var &lt;- dat_sub [, names (dat_sub) %in% meds_var]</code></pre>
+</div>
+<div id="baseline-demographics" class="section level3">
+<h3>Baseline demographics</h3>
+<pre class="r"><code>misc_var2 &lt;- tidyselect::vars_select (misc_var, 
+                                          c( &quot;weight_(kg)&quot;,
+                                             &quot;height_(cm)&quot;))
+
+dat_misc_var &lt;- dat_sub [, names (dat_sub) %in% misc_var2]
+
+
+new.name1 &lt;- c(&quot;ht&quot;, &quot;wt&quot;)
+
+new.name2 &lt;- paste0 (&quot;base_&quot;, new.name1)
+
+names(dat_misc_var) &lt;- new.name2  </code></pre>
+</div>
+<div id="baseline-ses" class="section level3">
+<h3>Baseline ses</h3>
+<pre class="r"><code>dat_ses_var  &lt;- dat_sub [, names (dat_sub) %in% ses_var]
+
+
+new.name1 &lt;- c(&quot;ses_income&quot;, &quot;ses_economic&quot;, &quot;ses_occ&quot;, &quot;ses_resource&quot;, &quot;ses_advantage&quot;)
+
+new.name2 &lt;- paste0 (&quot;base_&quot;, new.name1)
+
+names(dat_ses_var) &lt;- new.name2  </code></pre>
+</div>
+<div id="baseline-symptom-history-variables" class="section level3">
+<h3>Baseline symptom history variables</h3>
+<pre class="r"><code>symptHx_var2  &lt;- tidyselect::vars_select (symptHx_var, 
+                                          c(&quot;currently_having_a_flare_up?&quot;,
+                                            &quot;p&amp;n/n_below__waist_in_past_3_days&quot;))
+
+dat_symptHx_var  &lt;- dat_sub [, names (dat_sub) %in% symptHx_var2]
+
+new.name1 &lt;- c(&quot;current_flare&quot;, &quot;pnn_below_waist&quot;)
+
+new.name2 &lt;- paste0 (&quot;base_&quot;, new.name1)
+
+names(dat_symptHx_var) &lt;- new.name2  </code></pre>
+</div>
+<div id="baseline-aggravating-variables" class="section level3">
+<h3>Baseline aggravating variables</h3>
+<pre class="r"><code>aggr_var2 &lt;-  tidyselect::vars_select (aggr_var, 
+                                          -c(&quot;done_anything_to_agg?&quot; ,
+                                             &quot;agg:_lying_on_back...360&quot;,
+                                             &quot;agg:_lying_on_stomach...362&quot;,
+                                             &quot;what_is_most_difficult_about_getting_into_a_car?...370&quot;,
+                                             &quot;what_is_most_difficult_about__sit_to_stand?&quot;,
+                                             &quot;what_is_most_difficult_about_getting_into_a_car?...369&quot;,
+                                             &quot;what_is_most_difficult_about_sit_to_stand?&quot;,
+                                             &quot;sorer_to_lie_on_one_side_than_the_other?&quot;))
+
+dat_aggr_var  &lt;- dat_sub [, names (dat_sub) %in% aggr_var2]
+
+new.name1 &lt;- c( &quot;walk&quot;, &quot;stand&quot;, &quot;sitfirm&quot;, &quot;sitsoft&quot;, &quot;lie_back&quot;, &quot;lie_stom&quot;, &quot;car&quot;, &quot;sts&quot;,
+               &quot;cough&quot;, &quot;bend&quot;, &quot;lift&quot;)
+
+new.name2 &lt;- paste0 (&quot;base_agg_&quot;, new.name1)
+
+names(dat_aggr_var) &lt;- new.name2  </code></pre>
+</div>
+<div id="baseline-easing-variables" class="section level3">
+<h3>Baseline easing variables</h3>
+<pre class="r"><code>ease_var2 &lt;-  tidyselect::vars_select (ease_var, 
+                                          -c(&quot;most_comfortable_side_to_lie_on?...386&quot; ,
+                                             &quot;most_comfortable_side_to_lie_on?...387&quot;  ,
+                                             &quot;ease:_lying_sore_side...416&quot;,
+                                             &quot;ease:_lying_good_side...418&quot;,
+                                             &quot;assessment:_obs:_standing-increased_lordosis&quot;,
+                                             &quot;observation:_standing-increased_lordosis&quot;,
+                                             &quot;decreased_lordosis...446&quot;,
+                                             &quot;decreased_lordosis...447&quot;,
+                                             &quot;movement_eases_sympt&quot;,
+                                             &quot;night_pain+_movement_eases&quot;))
+
+dat_ease_var  &lt;- dat_sub [, names (dat_sub) %in% ease_var2]
+
+new.name1 &lt;- c(&quot;stand&quot;, &quot;sitfirm&quot;, &quot;sitsoft&quot;, &quot;walk&quot;, &quot;lie_back&quot;, &quot;lie_back_bent&quot;, &quot;lie_sore&quot;, &quot;lie_good&quot;, &quot;lie_stom&quot;)
+
+new.name2 &lt;- paste0 (&quot;base_ease_&quot;, new.name1)
+
+names(dat_ease_var) &lt;- new.name2  </code></pre>
+</div>
+<div id="baseline-lumbar-curve-variables" class="section level3">
+<h3>Baseline lumbar curve variables</h3>
+<pre class="r"><code>obj_curve_var2 &lt;-  tidyselect::vars_select (obj_curve_var, 
+                                          c(&quot;observation:_standing-increased_lordosis&quot;,
+                                             &quot;decreased_lordosis...447&quot; ,
+                                             &quot;presence_of_a_list...452&quot;,
+                                             &quot;list_direction...457&quot; ,
+                                            &quot;list_corresponding_to_worst_side&quot; ))
+
+dat_obj_curve_var &lt;- dat_sub [, names (dat_sub) %in% obj_curve_var2]
+
+new.name1 &lt;- c(&quot;inc_lord&quot;, &quot;dec_lord&quot;, &quot;list&quot;, &quot;list_dir&quot;, &quot;list_dir_side&quot;)
+
+new.name2 &lt;- paste0 (&quot;base_&quot;, new.name1)
+
+names(dat_obj_curve_var) &lt;- new.name2  </code></pre>
+</div>
+<div id="baseline-rom-variables" class="section level3">
+<h3>Baseline rom variables</h3>
+<pre class="r"><code>obj_rom_var2 &lt;-  tidyselect::vars_select (obj_rom_var, 
+                                          c(&quot;amt:_flexion_range_(cm)...462&quot;,
+                                             &quot;amt:_extension_range_(cm)&quot; ,
+                                             &quot;amt:_llf_range_(cm)&quot;,
+                                             &quot;amt:_rlf_range_(cm)&quot;))
+
+dat_obj_rom_var  &lt;- dat_sub [, names (dat_sub) %in% obj_rom_var2]
+
+new.name1 &lt;- c(&quot;flex&quot;, &quot;ext&quot;, &quot;llf&quot;, &quot;rlf&quot;)
+
+new.name2 &lt;- paste0 (&quot;base_rom_&quot;, new.name1)
+
+names(dat_obj_rom_var) &lt;- new.name2  </code></pre>
+</div>
+<div id="baseline-core-variables" class="section level3">
+<h3>Baseline core variables</h3>
+<pre class="r"><code>obj_core_var2 &lt;-  tidyselect::vars_select (obj_core_var, 
+                                          c(&quot;core_stability_in_standing&quot; ,
+                                             &quot;ta_quality_(lower_threshold)&quot; ,
+                                             &quot;ta_hypervig.&quot;,
+                                             &quot;ta_low_tone&quot;))
+
+dat_obj_core_var &lt;- dat_sub [, names (dat_sub) %in% obj_core_var2]
+
+new.name1 &lt;- c(&quot;core&quot;, &quot;ta_qual&quot;, &quot;ta_hyper&quot;, &quot;ta_tone&quot;)
+
+new.name2 &lt;- paste0 (&quot;base_&quot;, new.name1)
+
+names(dat_obj_core_var) &lt;- new.name2  </code></pre>
+</div>
+<div id="baseline-sitting-variables" class="section level3">
+<h3>Baseline sitting variables</h3>
+<pre class="r"><code>obj_sit_var2 &lt;-  tidyselect::vars_select (obj_sit_var, 
+                                          c(&quot;sitting:_degree_of_flexed_posture...495&quot;  ,
+                                             &quot;sitting:_pain_response_to_correction...500&quot;))
+
+dat_obj_sit_var &lt;- dat_sub [, names (dat_sub) %in% obj_sit_var2]
+
+new.name1 &lt;- c(&quot;sit_flex&quot;, &quot;sit_pain_corr&quot;)
+
+new.name2 &lt;- paste0 (&quot;base_&quot;, new.name1)
+
+names(dat_obj_sit_var) &lt;- new.name2  </code></pre>
+</div>
+<div id="baseline-neuro-variables" class="section level3">
+<h3>Baseline neuro variables</h3>
+<pre class="r"><code>obj_neuro_var2 &lt;-  tidyselect::vars_select (obj_neuro_var, 
+                                          c(&quot;positive_slr&quot;,
+                                            &quot;positive_pkb&quot;,
+                                            &quot;comparable_sensory_deficit...508&quot;,
+                                            &quot;comparable_myo_deficit...509&quot;,
+                                            &quot;comparable_knee_jerk_deficit&quot;,
+                                            &quot;comparable_ankle_jerk_reflex&quot;,
+                                             &quot;total_comparable_neuro_signs...513&quot;,
+                                            &quot;clinical_radiculo-_pathy...515&quot;,
+                                            &quot;clinical_radiculopathy_with_no_mechanical_cause_on_imaging&quot; ))
+
+dat_obj_neuro_var &lt;- dat_sub [, names (dat_sub) %in% obj_neuro_var2]
+
+new.name1 &lt;- c(&quot;slr&quot;, &quot;pkb&quot;, &quot;sens_deficit&quot;, &quot;myo_deficit&quot;, &quot;knee_jerk_deficit&quot;, &quot;ank_jerk_deficit&quot;, &quot;total_neuro&quot;, &quot;radiculo&quot;, &quot;radiculo_image&quot;)
+
+new.name2 &lt;- paste0 (&quot;base_&quot;, new.name1)
+
+names(dat_obj_neuro_var) &lt;- new.name2  </code></pre>
+</div>
+<div id="baseline-aggravating2-variables" class="section level3">
+<h3>Baseline aggravating2 variables</h3>
+<pre class="r"><code>aggr2_var2 &lt;-  tidyselect::vars_select (aggr2_var, 
+                                          c(&quot;history_of_heavy_lifting_job_(p25)&quot;,
+                                            &quot;discogenic_pain&quot; ,
+                                            &quot;discogenic_factors&quot;,
+                                            &quot;repeated_movements:_reducible?&quot;))
+
+dat_aggr2_var &lt;- dat_sub [, names (dat_sub) %in% aggr2_var2]
+
+new.name1 &lt;- c(&quot;hx_lift&quot;, &quot;disc_pain&quot;, &quot;disc_fac&quot;, &quot;rep_movt_reduce&quot;)
+
+new.name2 &lt;- paste0 (&quot;base_&quot;, new.name1)
+
+names(dat_aggr2_var) &lt;- new.name2  </code></pre>
+</div>
+<div id="baseline-multifidus-variables" class="section level3">
+<h3>Baseline multifidus variables</h3>
+<pre class="r"><code>obj_core2_var2 &lt;-  tidyselect::vars_select (obj_core2_var, 
+                                          -c(&quot;multifidus_substitution&quot;))
+
+dat_obj_core2_var  &lt;- dat_sub [, names (dat_sub) %in% obj_core2_var2 ]
+
+new.name1 &lt;- c(&quot;mf_tone&quot;, &quot;mf_qual&quot;, &quot;mf_hyper&quot;)
+
+new.name2 &lt;- paste0 (&quot;base_&quot;, new.name1)
+
+names(dat_obj_core2_var) &lt;- new.name2  </code></pre>
+</div>
+<div id="baseline-disc-variables" class="section level3">
+<h3>Baseline disc variables</h3>
+<pre class="r"><code>obj_disc_var2 &lt;-  tidyselect::vars_select (obj_disc_var, 
+                                           c(&quot;regular_compression&quot;,
+                                             &quot;palpation:_comparable_level_of_pain_and/or_stiffness&quot;))
+
+dat_obj_disc_var   &lt;- dat_sub [, names (dat_sub) %in% obj_disc_var2]
+
+new.name1 &lt;- c(&quot;reg_compress&quot;, &quot;comparable_stiff&quot;)
+
+new.name2 &lt;- paste0 (&quot;base_&quot;, new.name1)
+
+names(dat_obj_disc_var) &lt;- new.name2  </code></pre>
+</div>
+<div id="baseline-redflag-variables" class="section level3">
+<h3>Baseline redflag variables</h3>
+<pre class="r"><code>redflag_var2 &lt;-  tidyselect::vars_select (redflag_var, 
+                                           c(&quot;general_health_state&quot;))
+
+dat_redflag_var  &lt;- dat_sub [, names (dat_sub) %in% redflag_var2]
+
+new.name1 &lt;- c(&quot;gen_health&quot;)
+
+new.name2 &lt;- paste0 (&quot;base_&quot;, new.name1)
+
+names(dat_redflag_var) &lt;- new.name2  </code></pre>
+</div>
+<div id="baseline-euroqol_var-variables" class="section level3">
+<h3>Baseline euroqol_var variables</h3>
+<pre class="r"><code>euroqol_var2 &lt;-  tidyselect::vars_select (euroqol_var, 
+                                           c(&quot;21:_euroqol:_mobility&quot;,
+                                             &quot;euroqol:_person_appll_care&quot;,
+                                             &quot;euroqol:_usual_activities&quot;,
+                                             &quot;euroqol:_pain/discomfort&quot;,
+                                             &quot;euroqol:_anxiety/depression&quot;,
+                                             &quot;euroqol_utility_score_(uk_tto)&quot;))
+
+dat_euroqol_var  &lt;- dat_sub [, names (dat_sub) %in% euroqol_var2]
+
+new.name1 &lt;- c(&quot;mobility&quot;, &quot;person_care&quot;, &quot;activities&quot;, &quot;pain&quot;, &quot;anx_dep&quot;, &quot;utility&quot;)
+
+new.name2 &lt;- paste0 (&quot;base_euroq_&quot;, new.name1)
+
+names(dat_euroqol_var) &lt;- new.name2  </code></pre>
+</div>
+</div>
+</div>
+<div id="create-new-dataframe" class="section level1">
+<h1>Create new dataframe</h1>
+<pre class="r"><code>df &lt;- bind_cols(dat_id_var,
+                dat_misc_var,
+                dat_base_var,
+                dat_orebro_var,
+                dat_wk5_var,
+                dat_wk10_var,
+                dat_wk26_var,
+                dat_wk52_var,
+                dat_aggr_var,
+                dat_aggr2_var,
+                dat_ease_var,
+                dat_obj_core2_var,
+                dat_obj_core_var,
+                dat_obj_curve_var,
+                dat_obj_disc_var,
+                dat_obj_neuro_var,
+                dat_obj_rom_var,
+                dat_obj_sit_var,
+                dat_redflag_var,
+                dat_ses_var,
+                dat_sfbs_var,
+                dat_symptHx_var,
+                dat_symptom_var,
+                dat_symptomLoc_var,
+                dat_treatment_var,
+                dat_episode_var,
+                dat_fab_var,
+                dat_euroqol_var)</code></pre>
+</div>
+<div id="check-class" class="section level1">
+<h1>Check class</h1>
+<pre class="r"><code>df_chr2num &lt;- df %&gt;%
+  dplyr::select_if(is.character) %&gt;%
+  dplyr::select (matches (&quot;wk|oreb|rom&quot;)) %&gt;%
+  mutate_all(as.numeric)</code></pre>
+<pre><code>Warning: NAs introduced by coercion
+
+Warning: NAs introduced by coercion
+
+Warning: NAs introduced by coercion
+
+Warning: NAs introduced by coercion
+
+Warning: NAs introduced by coercion
+
+Warning: NAs introduced by coercion</code></pre>
+<pre class="r"><code>df[names (df_chr2num)] &lt;- df_chr2num
+
+df_class &lt;- map_chr(df, class)
+
+df_num2chr &lt;- df %&gt;%
+  dplyr::select_if(is.numeric) %&gt;%
+  dplyr::select (-matches (&quot;id|ht|wt|time|osw|lbp|lp|osw|oreb|rom|gen|ses|sfbs|total_rx|fab|euroq|ratio|duration&quot;)) %&gt;%
+  mutate_all(as.character)
+
+df[names (df_num2chr)] &lt;- df_num2chr
+
+
+df_chr &lt;- df %&gt;%
+  dplyr::select_if(is.character) 
+
+df_num &lt;- df %&gt;%
+  dplyr::select_if(is.numeric) </code></pre>
+<pre class="r"><code>tab1 &lt;- tableby (~., data = df, digits = 2, digits.p = 2)
+
+summary (tab1)</code></pre>
+<pre><code>
+
+|                                       |  Overall (N=300)  |
+|:--------------------------------------|:-----------------:|
+|**id**                                 |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            | 3294.19 (1387.70) |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                | 1101.00 - 5903.00 |
+|**rx_grp**                             |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;advice               |    34 (11.3%)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Advice               |    110 (36.7%)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;IndividualisedPhysio |    156 (52.0%)    |
+|**rx_subgrp**                          |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;DHR                  |    54 (18.0%)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;MFP                  |     8 (2.7%)      |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;MTG                  |    64 (21.3%)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;NRDP                 |    96 (32.0%)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;RDP                  |    78 (26.0%)     |
+|**base_ht**                            |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        25         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |   77.24 (16.62)   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |  47.00 - 160.00   |
+|**base_wt**                            |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        51         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |  171.27 (10.90)   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |  115.00 - 200.00  |
+|**base_osw**                           |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |   29.40 (12.33)   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   2.00 - 74.00    |
+|**base_lbp**                           |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    5.36 (1.94)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   0.00 - 10.00    |
+|**base_lp**                            |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        40         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    4.67 (2.67)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   0.00 - 10.00    |
+|**base_osw_q1**                        |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    1.95 (0.91)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |    0.00 - 4.00    |
+|**base_osw_q2**                        |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    0.72 (0.76)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |    0.00 - 4.00    |
+|**base_osw_q3**                        |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    1.85 (1.18)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |    0.00 - 5.00    |
+|**base_osw_q4**                        |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    0.95 (1.04)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |    0.00 - 3.00    |
+|**base_osw_q5**                        |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    1.97 (1.01)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |    0.00 - 5.00    |
+|**base_osw_q6**                        |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    1.64 (1.10)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |    0.00 - 5.00    |
+|**base_osw_q7**                        |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    1.22 (0.77)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |    0.00 - 4.00    |
+|**base_osw_q8**                        |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    1.49 (1.01)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |    0.00 - 5.00    |
+|**base_osw_q9**                        |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    1.43 (1.03)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |    0.00 - 5.00    |
+|**base_osw_q10**                       |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    1.51 (0.87)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |    0.00 - 5.00    |
+|**base_oreb**                          |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |   97.70 (24.53)   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |  37.00 - 175.41   |
+|**base_oreb_q4**                       |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    4.93 (2.37)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   2.00 - 10.00    |
+|**base_oreb_q5**                       |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        22         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    2.52 (1.94)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   1.00 - 10.00    |
+|**base_oreb_q6**                       |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |         1         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    6.55 (1.59)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   1.00 - 10.00    |
+|**base_oreb_q7**                       |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        25         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    3.70 (3.22)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   0.00 - 10.00    |
+|**base_oreb_q8**                       |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |         1         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    5.81 (1.95)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   1.00 - 10.00    |
+|**base_oreb_q9**                       |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |         1         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    6.28 (1.97)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   1.00 - 10.00    |
+|**base_oreb_q10**                      |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    7.01 (2.26)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   1.00 - 10.00    |
+|**base_oreb_q11**                      |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |         1         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    5.08 (2.27)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   0.00 - 10.00    |
+|**base_oreb_q12**                      |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    4.81 (2.59)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   0.00 - 10.00    |
+|**base_oreb_q13**                      |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |         3         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    3.28 (3.00)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   0.00 - 10.00    |
+|**base_oreb_q14**                      |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |         2         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    6.97 (2.32)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   0.00 - 10.00    |
+|**base_oreb_q15**                      |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |         8         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    1.95 (3.20)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   0.00 - 10.00    |
+|**base_oreb_q16**                      |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        19         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    2.98 (2.82)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   0.00 - 10.00    |
+|**base_oreb_q17**                      |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    6.71 (2.63)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   0.00 - 10.00    |
+|**base_oreb_q18**                      |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |         1         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    7.46 (2.38)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   0.00 - 10.00    |
+|**base_oreb_q19**                      |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |         8         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    4.34 (3.34)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   0.00 - 10.00    |
+|**base_oreb_q20**                      |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    2.40 (2.23)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   0.00 - 10.00    |
+|**base_oreb_q21**                      |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    3.60 (2.98)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   0.00 - 10.00    |
+|**base_oreb_q22**                      |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    3.48 (2.32)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |    0.00 - 9.00    |
+|**base_oreb_q23**                      |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    2.96 (2.33)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   0.00 - 10.00    |
+|**base_oreb_q24**                      |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    3.62 (2.51)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   0.00 - 10.00    |
+|**wk5_osw**                            |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        11         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |   23.00 (13.84)   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   0.00 - 81.00    |
+|**wk5_lbp**                            |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |         8         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    3.48 (2.20)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   0.00 - 10.00    |
+|**wk5_lp**                             |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        47         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    3.00 (2.58)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   0.00 - 10.00    |
+|**wk5_oreb**                           |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        18         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |   82.26 (27.37)   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |  18.00 - 156.00   |
+|**wk5_oreb_q4**                        |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        18         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    3.94 (2.24)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   0.00 - 10.00    |
+|**wk5_oreb_q5**                        |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        18         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    2.65 (2.14)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   0.00 - 10.00    |
+|**wk5_oreb_q6**                        |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        18         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    7.18 (1.82)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   0.00 - 10.00    |
+|**wk5_oreb_q7**                        |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        18         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    3.45 (3.09)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   0.00 - 10.00    |
+|**wk5_oreb_q8**                        |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        18         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    3.76 (2.37)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   0.00 - 10.00    |
+|**wk5_oreb_q9**                        |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        18         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    5.57 (2.13)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   1.00 - 10.00    |
+|**wk5_oreb_q10**                       |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        18         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    6.00 (2.38)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   0.00 - 10.00    |
+|**wk5_oreb_q11**                       |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        18         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    3.96 (2.53)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   0.00 - 10.00    |
+|**wk5_oreb_q12**                       |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        18         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    3.67 (2.75)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   0.00 - 10.00    |
+|**wk5_oreb_q13**                       |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        18         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    2.49 (2.84)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   0.00 - 10.00    |
+|**wk5_oreb_q14**                       |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        18         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    5.37 (2.87)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   0.00 - 10.00    |
+|**wk5_oreb_q15**                       |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        18         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    1.90 (3.12)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   0.00 - 10.00    |
+|**wk5_oreb_q16**                       |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        18         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    3.47 (2.55)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   0.00 - 10.00    |
+|**wk5_oreb_q17**                       |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        18         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    5.60 (2.97)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   0.00 - 10.00    |
+|**wk5_oreb_q18**                       |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        18         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    7.19 (2.65)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   0.00 - 10.00    |
+|**wk5_oreb_q19**                       |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        18         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    3.60 (3.19)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   0.00 - 10.00    |
+|**wk5_oreb_q20**                       |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        18         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    2.08 (2.13)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |    0.00 - 9.00    |
+|**wk5_oreb_q21**                       |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        18         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    2.71 (2.75)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   0.00 - 10.00    |
+|**wk5_oreb_q22**                       |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        18         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    2.69 (2.23)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   0.00 - 10.00    |
+|**wk5_oreb_q23**                       |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        18         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    2.32 (2.25)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   0.00 - 10.00    |
+|**wk5_oreb_q24**                       |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        18         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    2.63 (2.56)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   0.00 - 10.00    |
+|**wk10_osw**                           |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        11         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |   19.36 (14.11)   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   0.00 - 74.00    |
+|**wk10_lbp**                           |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |         8         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    3.11 (2.38)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   0.00 - 10.00    |
+|**wk10_lp**                            |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        47         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    2.46 (2.56)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   0.00 - 10.00    |
+|**wk10_oreb**                          |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        20         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |   74.13 (28.09)   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |  18.78 - 156.45   |
+|**wk10_oreb_q4**                       |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        20         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    3.58 (2.08)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   0.00 - 10.00    |
+|**wk10_oreb_q5**                       |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        20         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    2.48 (2.15)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   1.00 - 10.00    |
+|**wk10_oreb_q6**                       |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        20         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    7.30 (2.08)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   0.00 - 10.00    |
+|**wk10_oreb_q7**                       |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        20         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    3.33 (3.06)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   0.00 - 10.00    |
+|**wk10_oreb_q8**                       |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        20         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    3.34 (2.41)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   0.00 - 10.00    |
+|**wk10_oreb_q9**                       |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        20         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    4.62 (2.26)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   0.00 - 10.00    |
+|**wk10_oreb_q10**                      |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        20         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    5.28 (2.65)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   0.00 - 10.00    |
+|**wk10_oreb_q11**                      |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        20         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    3.80 (2.60)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   0.00 - 10.00    |
+|**wk10_oreb_q12**                      |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        20         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    3.14 (2.78)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   0.00 - 10.00    |
+|**wk10_oreb_q13**                      |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        20         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    2.12 (2.76)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   0.00 - 10.00    |
+|**wk10_oreb_q14**                      |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        20         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    4.88 (3.08)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   0.00 - 10.00    |
+|**wk10_oreb_q15**                      |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        20         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    1.68 (2.89)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   0.00 - 10.00    |
+|**wk10_oreb_q16**                      |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        20         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    3.09 (2.49)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   0.00 - 10.00    |
+|**wk10_oreb_q17**                      |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        19         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    5.30 (2.93)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   0.00 - 10.00    |
+|**wk10_oreb_q18**                      |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        19         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    6.94 (2.82)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   0.00 - 10.00    |
+|**wk10_oreb_q19**                      |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        19         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    3.16 (3.01)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   0.00 - 10.00    |
+|**wk10_oreb_q20**                      |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        19         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    1.77 (2.22)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   0.00 - 10.00    |
+|**wk10_oreb_q21**                      |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        19         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    2.10 (2.58)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   0.00 - 10.00    |
+|**wk10_oreb_q22**                      |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        19         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    2.29 (2.33)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   0.00 - 10.00    |
+|**wk10_oreb_q23**                      |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        19         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    1.84 (2.15)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |    0.00 - 9.00    |
+|**wk10_oreb_q24**                      |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        19         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    2.04 (2.22)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   0.00 - 10.00    |
+|**wk26_osw**                           |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        19         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |   17.23 (14.79)   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   0.00 - 76.00    |
+|**wk26_lbp**                           |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        16         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    2.95 (2.32)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   0.00 - 10.00    |
+|**wk26_lp**                            |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        55         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    2.28 (2.54)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   0.00 - 10.00    |
+|**wk26_oreb**                          |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        39         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |   69.20 (31.81)   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   0.00 - 162.48   |
+|**wk26_oreb_q4**                       |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        39         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    3.39 (2.20)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   0.00 - 10.00    |
+|**wk26_oreb_q5**                       |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        39         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    2.51 (2.20)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   0.00 - 10.00    |
+|**wk26_oreb_q6**                       |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        39         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    7.42 (3.06)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   0.00 - 10.00    |
+|**wk26_oreb_q7**                       |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        39         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    3.29 (3.03)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   0.00 - 10.00    |
+|**wk26_oreb_q8**                       |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        39         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    3.03 (2.51)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   0.00 - 10.00    |
+|**wk26_oreb_q9**                       |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        39         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    3.41 (2.32)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |    0.00 - 9.00    |
+|**wk26_oreb_q10**                      |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        39         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    4.04 (2.60)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   0.00 - 10.00    |
+|**wk26_oreb_q11**                      |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        39         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    3.57 (2.78)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   0.00 - 10.00    |
+|**wk26_oreb_q12**                      |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        39         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    2.95 (2.67)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   0.00 - 10.00    |
+|**wk26_oreb_q13**                      |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        39         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    1.92 (2.52)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   0.00 - 10.00    |
+|**wk26_oreb_q14**                      |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        39         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    4.77 (3.23)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   0.00 - 10.00    |
+|**wk26_oreb_q15**                      |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        39         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    1.60 (2.80)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   0.00 - 10.00    |
+|**wk26_oreb_q16**                      |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        39         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    3.05 (2.49)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   0.00 - 10.00    |
+|**wk26_oreb_q17**                      |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        39         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    4.77 (3.06)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   0.00 - 10.00    |
+|**wk26_oreb_q18**                      |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        39         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    6.95 (3.03)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   0.00 - 19.00    |
+|**wk26_oreb_q19**                      |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        39         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    3.07 (3.04)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   0.00 - 10.00    |
+|**wk26_oreb_q20**                      |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        39         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    1.59 (2.08)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   0.00 - 10.00    |
+|**wk26_oreb_q21**                      |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        39         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    2.01 (2.62)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   0.00 - 10.00    |
+|**wk26_oreb_q22**                      |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        39         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    2.05 (2.23)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   0.00 - 10.00    |
+|**wk26_oreb_q23**                      |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        39         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    1.71 (2.24)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   0.00 - 10.00    |
+|**wk26_oreb_q24**                      |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        39         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    2.13 (2.33)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |    0.00 - 9.00    |
+|**wk52_osw**                           |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        23         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |   15.16 (14.56)   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   0.00 - 70.00    |
+|**wk52_lbp**                           |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        22         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    2.68 (2.28)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |    0.00 - 9.00    |
+|**wk52_lp**                            |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        59         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    2.03 (2.46)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |    0.00 - 9.00    |
+|**wk52_oreb**                          |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        53         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |   66.71 (33.35)   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   0.00 - 168.00   |
+|**wk52_oreb_q4**                       |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        53         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    3.30 (2.20)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   0.00 - 10.00    |
+|**wk52_oreb_q5**                       |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        53         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    2.46 (2.19)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   0.00 - 10.00    |
+|**wk52_oreb_q6**                       |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        53         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    7.84 (3.47)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   0.00 - 10.00    |
+|**wk52_oreb_q7**                       |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        53         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    3.06 (3.02)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   0.00 - 10.00    |
+|**wk52_oreb_q8**                       |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        53         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    2.85 (2.50)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |    0.00 - 9.00    |
+|**wk52_oreb_q9**                       |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        53         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    2.98 (2.40)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   0.00 - 10.00    |
+|**wk52_oreb_q10**                      |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        53         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    3.79 (2.89)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   0.00 - 10.00    |
+|**wk52_oreb_q11**                      |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        53         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    3.40 (2.69)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   0.00 - 10.00    |
+|**wk52_oreb_q12**                      |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        53         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    2.85 (2.72)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   0.00 - 10.00    |
+|**wk52_oreb_q13**                      |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        53         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    1.96 (2.64)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   0.00 - 10.00    |
+|**wk52_oreb_q14**                      |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        53         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    4.69 (3.45)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   0.00 - 10.00    |
+|**wk52_oreb_q15**                      |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        53         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    1.86 (3.11)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   0.00 - 10.00    |
+|**wk52_oreb_q16**                      |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        53         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    3.01 (2.53)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   0.00 - 10.00    |
+|**wk52_oreb_q17**                      |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        53         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    4.64 (3.20)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   0.00 - 10.00    |
+|**wk52_oreb_q18**                      |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        53         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    6.50 (3.17)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   0.00 - 10.00    |
+|**wk52_oreb_q19**                      |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        53         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    2.98 (3.02)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   0.00 - 10.00    |
+|**wk52_oreb_q20**                      |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        53         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    1.57 (2.17)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   0.00 - 10.00    |
+|**wk52_oreb_q21**                      |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        53         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    1.82 (2.56)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   0.00 - 10.00    |
+|**wk52_oreb_q22**                      |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        53         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    1.82 (2.18)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   0.00 - 10.00    |
+|**wk52_oreb_q23**                      |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        53         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    1.50 (2.09)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |    0.00 - 9.00    |
+|**wk52_oreb_q24**                      |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        53         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    1.84 (2.35)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   0.00 - 10.00    |
+|**base_agg_walk**                      |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        22         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;0                    |    187 (67.3%)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;1                    |    56 (20.1%)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;2                    |     25 (9.0%)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;3                    |     9 (3.2%)      |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;4                    |     1 (0.4%)      |
+|**base_agg_stand**                     |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |         6         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;0                    |    79 (26.9%)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;1                    |    48 (16.3%)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;2                    |    90 (30.6%)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;3                    |    69 (23.5%)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;4                    |     8 (2.7%)      |
+|**base_agg_sitfirm**                   |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |         8         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;0                    |    109 (37.3%)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;1                    |    78 (26.7%)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;2                    |    76 (26.0%)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;3                    |     23 (7.9%)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;4                    |     6 (2.1%)      |
+|**base_agg_sitsoft**                   |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |         7         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;0                    |    80 (27.3%)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;1                    |    56 (19.1%)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;2                    |    80 (27.3%)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;3                    |    57 (19.5%)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;4                    |     20 (6.8%)     |
+|**base_agg_lie_back**                  |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |         7         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;0                    |    94 (32.1%)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;1                    |    38 (13.0%)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;2                    |    41 (14.0%)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;3                    |     18 (6.1%)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;4                    |     2 (0.7%)      |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;5                    |    100 (34.1%)    |
+|**base_agg_lie_stom**                  |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |         6         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;0                    |    73 (24.8%)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;1                    |    33 (11.2%)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;2                    |    47 (16.0%)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;3                    |     29 (9.9%)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;4                    |     15 (5.1%)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;5                    |    97 (33.0%)     |
+|**base_agg_car**                       |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |         7         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;0                    |    63 (21.5%)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;1                    |    90 (30.7%)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;2                    |    87 (29.7%)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;3                    |    39 (13.3%)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;4                    |     14 (4.8%)     |
+|**base_agg_sts**                       |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |         3         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;0                    |    35 (11.8%)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;1                    |    92 (31.0%)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;2                    |    110 (37.0%)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;3                    |    44 (14.8%)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;4                    |     16 (5.4%)     |
+|**base_agg_cough**                     |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |         1         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;0                    |    138 (46.2%)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;1                    |    72 (24.1%)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;2                    |    43 (14.4%)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;3                    |     27 (9.0%)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;4                    |     19 (6.4%)     |
+|**base_agg_bend**                      |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |         1         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;0                    |    31 (10.4%)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;1                    |    76 (25.4%)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;2                    |    96 (32.1%)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;3                    |    60 (20.1%)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;4                    |    32 (10.7%)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;5                    |     4 (1.3%)      |
+|**base_agg_lift**                      |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |         1         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;0                    |     21 (7.0%)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;1                    |    67 (22.4%)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;2                    |    94 (31.4%)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;3                    |    65 (21.7%)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;4                    |    50 (16.7%)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;5                    |     2 (0.7%)      |
+|**base_hx_lift**                       |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;no                   |    192 (64.0%)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;yes                  |    108 (36.0%)    |
+|**base_disc_pain**                     |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;0                    |    243 (81.0%)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;1                    |    57 (19.0%)     |
+|**base_disc_fac**                      |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;1                    |     3 (1.0%)      |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;2                    |     17 (5.7%)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;3                    |    35 (11.7%)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;4                    |    66 (22.0%)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;5                    |    52 (17.3%)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;6                    |    47 (15.7%)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;7                    |    38 (12.7%)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;8                    |    32 (10.7%)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;9                    |     10 (3.3%)     |
+|**base_rep_movt_reduce**               |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;0                    |    112 (37.3%)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;1                    |    188 (62.7%)    |
+|**base_ease_stand**                    |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |         8         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;0                    |    42 (14.4%)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;1                    |    250 (85.6%)    |
+|**base_ease_sitfirm**                  |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |         9         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;0                    |    126 (43.3%)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;1                    |    165 (56.7%)    |
+|**base_ease_sitsoft**                  |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |         8         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;0                    |    60 (20.5%)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;1                    |    232 (79.5%)    |
+|**base_ease_walk**                     |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        11         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;0                    |    160 (55.4%)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;1                    |    129 (44.6%)    |
+|**base_ease_lie_back**                 |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |         8         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;0                    |    168 (57.5%)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;1                    |    124 (42.5%)    |
+|**base_ease_lie_back_bent**            |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        15         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;0                    |    208 (73.0%)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;1                    |    77 (27.0%)     |
+|**base_ease_lie_sore**                 |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        10         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;0                    |    57 (19.7%)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;1                    |    233 (80.3%)    |
+|**base_ease_lie_good**                 |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |         7         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;0                    |    121 (41.3%)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;1                    |    172 (58.7%)    |
+|**base_ease_lie_stom**                 |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        11         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;0                    |    92 (31.8%)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;1                    |    197 (68.2%)    |
+|**base_mf_tone**                       |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |         4         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt; 30% MVC            |    159 (53.7%)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;&gt; 30% MVC            |    80 (27.0%)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;nil                  |    57 (19.3%)     |
+|**base_mf_qual**                       |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |         4         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;0                    |    86 (29.1%)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;1                    |    210 (70.9%)    |
+|**base_mf_hyper**                      |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |         4         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;0                    |    60 (20.3%)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;1                    |    236 (79.7%)    |
+|**base_core**                          |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |         2         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;fair                 |    93 (31.2%)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;good                 |     11 (3.7%)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;minimal              |    159 (53.4%)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;nil                  |    35 (11.7%)     |
+|**base_ta_qual**                       |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;0                    |     24 (8.0%)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;1                    |    276 (92.0%)    |
+|**base_ta_hyper**                      |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;0                    |    126 (42.0%)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;1                    |    174 (58.0%)    |
+|**base_ta_tone**                       |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;0                    |    109 (36.3%)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;1                    |    191 (63.7%)    |
+|**base_inc_lord**                      |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |         2         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;0                    |    212 (71.1%)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;1                    |    62 (20.8%)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;2                    |     24 (8.1%)     |
+|**base_dec_lord**                      |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        42         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;0                    |    164 (63.6%)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;1                    |    73 (28.3%)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;2                    |     19 (7.4%)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;3                    |     2 (0.8%)      |
+|**base_list**                          |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;0                    |    268 (89.3%)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;1                    |     27 (9.0%)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;2                    |     5 (1.7%)      |
+|**base_list_dir**                      |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;0                    |    268 (89.3%)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;1                    |     21 (7.0%)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;2                    |     11 (3.7%)     |
+|**base_list_dir_side**                 |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    0.95 (0.23)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |    0.00 - 1.00    |
+|**base_reg_compress**                  |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |         1         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;0                    |    86 (28.8%)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;1                    |    213 (71.2%)    |
+|**base_comparable_stiff**              |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |         1         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;0                    |    165 (55.2%)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;1                    |    134 (44.8%)    |
+|**base_slr**                           |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;0                    |    64 (21.3%)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;1                    |    236 (78.7%)    |
+|**base_pkb**                           |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;0                    |     3 (1.0%)      |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;1                    |    297 (99.0%)    |
+|**base_sens_deficit**                  |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;0                    |    55 (18.3%)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;1                    |    245 (81.7%)    |
+|**base_myo_deficit**                   |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;0                    |    36 (12.0%)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;1                    |    264 (88.0%)    |
+|**base_knee_jerk_deficit**             |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;0                    |     5 (1.7%)      |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;1                    |    295 (98.3%)    |
+|**base_ank_jerk_deficit**              |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;0                    |     27 (9.0%)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;1                    |    273 (91.0%)    |
+|**base_total_neuro**                   |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;0                    |    75 (25.0%)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;1                    |    225 (75.0%)    |
+|**base_radiculo**                      |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;0                    |    73 (24.3%)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;1                    |    227 (75.7%)    |
+|**base_radiculo_image**                |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;0                    |    30 (10.0%)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;1                    |    270 (90.0%)    |
+|**base_rom_flex**                      |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |         1         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |   20.06 (16.99)   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   0.00 - 73.00    |
+|**base_rom_ext**                       |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |         2         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |   62.21 (5.95)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   43.50 - 78.00   |
+|**base_rom_llf**                       |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |         2         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |   47.25 (5.85)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   25.00 - 70.00   |
+|**base_rom_rlf**                       |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |         2         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |   46.83 (6.15)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   30.00 - 70.00   |
+|**base_sit_flex**                      |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |         3         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;0                    |    51 (17.2%)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;1                    |    155 (52.2%)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;2                    |    86 (29.0%)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;3                    |     5 (1.7%)      |
+|**base_sit_pain_corr**                 |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        46         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;0                    |    64 (25.2%)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;1                    |    138 (54.3%)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;2                    |    52 (20.5%)     |
+|**base_gen_health**                    |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |         5         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |   63.44 (18.51)   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   6.00 - 99.00    |
+|**base_ses_income**                    |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |         3         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            | 1344.39 (278.67)  |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                | 612.00 - 2329.00  |
+|**base_ses_economic**                  |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |         5         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |  1018.29 (80.79)  |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                | 733.00 - 1145.00  |
+|**base_ses_occ**                       |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |         5         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |  1031.18 (91.19)  |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                | 818.00 - 1224.00  |
+|**base_ses_resource**                  |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |         5         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |  995.73 (85.69)   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                | 389.00 - 1180.00  |
+|**base_ses_advantage**                 |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |         5         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |  1017.13 (79.92)  |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                | 764.00 - 1160.00  |
+|**base_sfbs_freq_1**                   |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |         1         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    3.93 (1.44)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |    0.00 - 6.00    |
+|**base_sfbs_freq_2**                   |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |         1         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    2.95 (2.05)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |    0.00 - 6.00    |
+|**base_sfbs_freq_3**                   |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |         1         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    2.05 (1.99)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |    0.00 - 6.00    |
+|**base_sfbs_freq_4**                   |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |         1         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    1.40 (1.75)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |    0.00 - 6.00    |
+|**base_sfbs_freq_5**                   |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |         1         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    3.90 (1.57)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |    0.00 - 6.00    |
+|**base_sfbs_sciatica_freq_lbp**        |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |   14.18 (6.13)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   0.00 - 28.00    |
+|**base_sfbs_sciatica_freq_nolbp**      |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |   10.26 (5.66)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   0.00 - 24.00    |
+|**base_sfbs_bother_1**                 |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |         2         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    3.85 (1.40)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |    0.00 - 6.00    |
+|**base_sfbs_bother_2**                 |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |         2         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    2.89 (2.16)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |    0.00 - 6.00    |
+|**base_sfbs_bother_3**                 |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |         2         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    1.77 (1.93)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |    0.00 - 6.00    |
+|**base_sfbs_bother_4**                 |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |         2         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    1.33 (1.69)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |    0.00 - 6.00    |
+|**base_sfbs_bother_5**                 |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |         2         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    3.83 (1.59)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |    0.00 - 6.00    |
+|**base_sfbs_sciatica_bother_lbp**      |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |   13.58 (6.19)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   0.00 - 28.00    |
+|**base_sfbs_sciatica_bother_nolbp**    |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    9.76 (5.63)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   0.00 - 24.00    |
+|**base_current_flare**                 |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |         5         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;0                    |    124 (42.0%)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;1                    |    171 (58.0%)    |
+|**base_pnn_below_waist**               |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |         6         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;0                    |    134 (45.6%)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;1                    |    160 (54.4%)    |
+|**base_lbp_symptom**                   |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;no                   |     1 (0.3%)      |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;yes                  |    299 (99.7%)    |
+|**base_leg_symptom**                   |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;ant thigh            |     23 (7.7%)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;below knee           |    126 (42.0%)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;both                 |     17 (5.7%)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;nil                  |    132 (44.0%)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;no                   |     2 (0.7%)      |
+|**base_lbp_duration**                  |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |         8         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |   14.62 (6.54)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   0.00 - 26.00    |
+|**base_leg_duration**                  |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        25         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |   10.64 (7.75)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   0.00 - 26.00    |
+|**base_freq_symptom**                  |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        27         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;0                    |    133 (48.7%)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;1                    |    71 (26.0%)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;2                    |    69 (25.3%)     |
+|**base_back_leg_relation**             |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        58         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;0                    |    197 (81.4%)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;1                    |    45 (18.6%)     |
+|**base_onset_symptom**                 |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;0                    |    92 (30.7%)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;1                    |    57 (19.0%)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;2                    |    47 (15.7%)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;3                    |    56 (18.7%)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;n_appl               |    48 (16.0%)     |
+|**base_time_symptom**                  |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;0                    |    79 (26.3%)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;1                    |    49 (16.3%)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;2                    |     29 (9.7%)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;3                    |     14 (4.7%)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;n_appl               |    129 (43.0%)    |
+|**base_next_day_symptom**              |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;0                    |     21 (7.0%)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;1                    |    101 (33.7%)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;2                    |    35 (11.7%)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;3                    |    66 (22.0%)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;n_appl               |    77 (25.7%)     |
+|**base_pain_side**                     |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |         2         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;left                 |    83 (27.9%)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Left                 |    35 (11.7%)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;n_appl               |    74 (24.8%)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;right                |    77 (25.8%)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Right                |     29 (9.7%)     |
+|**base_loc_antthigh_pain**             |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;0                    |    40 (13.3%)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;1                    |    260 (86.7%)    |
+|**base_loc_belowknee_pain**            |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;0                    |    143 (47.7%)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;1                    |    157 (52.3%)    |
+|**base_loc_leg_pain**                  |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;0                    |     17 (5.7%)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;1                    |    283 (94.3%)    |
+|**base_loc_body_ratio**                |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |   15.17 (9.86)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   1.75 - 68.00    |
+|**base_loc_mostpain**                  |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        41         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;0                    |    169 (65.3%)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;1                    |    41 (15.8%)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;2                    |     3 (1.2%)      |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;3                    |     23 (8.9%)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;4                    |     16 (6.2%)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;5                    |     7 (2.7%)      |
+|**base_total_rx_no**                   |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    8.00 (9.10)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   0.00 - 57.00    |
+|**base_statisfac_healthcare**          |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        22         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;0                    |    29 (10.4%)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;1                    |    74 (26.6%)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;2                    |    87 (31.3%)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;3                    |    70 (25.2%)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;4                    |     18 (6.5%)     |
+|**base_statisfac_result**              |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        26         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;0                    |    35 (12.8%)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;1                    |    88 (32.1%)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;2                    |    74 (27.0%)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;3                    |    65 (23.7%)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;4                    |     12 (4.4%)     |
+|**base_rest_of_life**                  |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |         2         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;0                    |    229 (76.8%)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;1                    |    58 (19.5%)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;2                    |     6 (2.0%)      |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;3                    |     4 (1.3%)      |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;4                    |     1 (0.3%)      |
+|**base_first_episode**                 |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |         1         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;0                    |    84 (28.1%)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;1                    |    215 (71.9%)    |
+|**base_first_episode_period**          |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss               |        30         |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;1                    |     20 (7.4%)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;2                    |     16 (5.9%)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;3                    |    38 (14.1%)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;4                    |    135 (50.0%)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;5                    |    61 (22.6%)     |
+|**base_fab**                           |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    6.18 (2.06)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   1.33 - 10.00    |
+|**base_euroq_mobility**                |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    1.51 (0.50)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |    1.00 - 2.00    |
+|**base_euroq_person_care**             |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    1.26 (0.44)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |    1.00 - 2.00    |
+|**base_euroq_activities**              |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    1.78 (0.51)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |    1.00 - 3.00    |
+|**base_euroq_pain**                    |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    2.07 (0.37)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |    1.00 - 3.00    |
+|**base_euroq_anx_dep**                 |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    1.47 (0.57)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |    1.00 - 3.00    |
+|**base_euroq_utility**                 |                   |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD)            |    0.61 (0.23)    |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range                |   -0.18 - 1.00    |</code></pre>
+</div>
+<div id="create-factor-levels" class="section level1">
+<h1>Create factor levels</h1>
+<pre class="r"><code>df$rx_grp &lt;- tolower(df$rx_grp )
+df$rx_subgrp &lt;- tolower(df$rx_subgrp)
+df$base_leg_duration &lt;- as.numeric(df$base_leg_duration)
+df$base_loc_body_ratio &lt;- as.numeric (df$base_loc_body_ratio)
+df$base_pain_side &lt;- tolower(df$base_pain_side)
+df$base_core &lt;- ifelse (df$base_core == &quot;nil&quot;, NA, df$base_core)
+df$base_mf_tone &lt;- ifelse (df$base_mf_tone == &quot;nil&quot;, NA, df$base_mf_tone)
+df$base_leg_symptom &lt;- ifelse (df$base_leg_symptom == &quot;nil&quot;, &quot;no&quot;, df$base_leg_symptom)
+df$base_list_dir_side &lt;- as.character(df$base_list_dir_side)
+
+df_chr &lt;- df %&gt;%
+  dplyr::select_if(is.character) %&gt;%
+  mutate_all(as.factor)
+
+levels (df_chr$rx_grp) &lt;- c (&quot;advice&quot;, &quot;individualisedphysio&quot;)
+levels (df_chr$rx_subgrp) &lt;- c (&quot;dhr&quot;,  &quot;nrdp&quot;, &quot;rdp&quot;,  &quot;mfp&quot;,  &quot;mtg&quot; )
+
+levels (df_chr$base_agg_walk) &lt;-
+  levels (df_chr$base_agg_stand)  &lt;- 
+  levels (df_chr$base_agg_sitfirm) &lt;- 
+  levels (df_chr$base_agg_sitsoft) &lt;- 
+  c(&quot;0&quot;, &quot;1&quot;, &quot;2&quot;, &quot;3&quot;, &quot;4&quot;) # 0 good, 4 bad
+
+levels (df_chr$base_agg_lie_back) &lt;-
+  levels (df_chr$base_agg_lie_stom) &lt;- 
+  levels (df_chr$base_agg_car) &lt;- 
+  levels (df_chr$base_agg_sts) &lt;- 
+  levels (df_chr$base_agg_cough) &lt;- 
+  levels (df_chr$base_agg_bend) &lt;- 
+  levels (df_chr$base_agg_lift) &lt;- 
+  c(&quot;0&quot;, &quot;1&quot;, &quot;2&quot;, &quot;3&quot;, &quot;4&quot;, &quot;5&quot;) # 0 good, 5 bad
+
+levels (df_chr$base_ease_stand) &lt;-
+  levels (df_chr$base_ease_sitfirm) &lt;- 
+  levels (df_chr$base_ease_sitsoft) &lt;- 
+  levels (df_chr$base_ease_walk) &lt;- 
+  levels (df_chr$base_ease_lie_back) &lt;- 
+  levels (df_chr$base_ease_lie_back_bent) &lt;- 
+  levels (df_chr$base_ease_lie_sore) &lt;-
+  levels (df_chr$base_ease_lie_good) &lt;- 
+  levels (df_chr$base_ease_lie_stom) &lt;- 
+  c(&quot;0&quot;, &quot;1&quot;) # 0 good, 1 bad
+
+levels (df_chr$base_hx_lift) &lt;- 
+  levels (df_chr$base_disc_pain) &lt;- 
+  levels (df_chr$base_rep_movt_reduce) &lt;- 
+  c(&quot;0&quot;, &quot;1&quot;) # 0 yes, 1 no
+
+levels (df_chr$base_disc_fac) &lt;- 
+  as.character (c(0:9))
+
+
+levels (df_chr$base_core) &lt;- 
+  c(&quot;minimal&quot;, &quot;fair&quot;, &quot;good&quot; )
+
+levels (df_chr$base_ta_qual) &lt;- 
+  levels (df_chr$base_ta_hyper) &lt;- # 0 yes, 1 no
+  levels (df_chr$base_ta_tone) &lt;-  # 0 yes, 1 no
+  levels (df_chr$base_mf_hyper) &lt;-  # 0 yes, 1 no
+  levels (df_chr$base_mf_qual) &lt;-  # 0 yes, 1 no
+  c(&quot;0&quot;, &quot;1&quot;) 
+
+levels (df_chr$base_mf_tone) &lt;- c(&quot;&gt; 30% MVC&quot;, &quot;&lt; 30% MVC&quot;)
+
+levels (df_chr$base_inc_lord) &lt;- c(&quot;0&quot;, &quot;1&quot;, &quot;2&quot;) # 0 nil, 1 mild, 2 mod
+
+levels (df_chr$base_dec_lord) &lt;- c(&quot;0&quot;, &quot;1&quot;, &quot;2&quot;, &quot;3&quot;) # 0 nil, 1 mild, 2 mod, 3 marked
+
+levels (df_chr$base_list) &lt;- c(&quot;0&quot;, &quot;1&quot;, &quot;2&quot;) # 0 nil, 1 mild, 2 mod
+
+levels (df_chr$base_list_dir) &lt;- c(&quot;0&quot;, &quot;1&quot;, &quot;2&quot;) # 0 na, 1 left, 2 right
+
+levels (df_chr$base_reg_compress) &lt;- c(&quot;0&quot;, &quot;1&quot;) # 0 yes, 1 no
+
+levels (df_chr$base_slr) &lt;- 
+  levels (df_chr$base_pkb) &lt;- 
+  levels (df_chr$base_sens_deficit) &lt;- 
+  levels (df_chr$base_myo_deficit)&lt;- 
+  levels (df_chr$base_knee_jerk_deficit) &lt;- 
+  levels (df_chr$base_ank_jerk_deficit) &lt;- 
+  levels (df_chr$base_total_neuro) &lt;- 
+  levels (df_chr$base_radiculo) &lt;- 
+  levels (df_chr$base_radiculo_image) &lt;- 
+  c(&quot;0&quot;, &quot;1&quot;) # 0 yes, 1 no
+
+levels (df_chr$base_sit_flex) &lt;- c(&quot;0&quot;, &quot;1&quot;, &quot;2&quot;, &quot;3&quot;) # 0 nil, 1 mild, 2 mod, 3 mark
+
+levels (df_chr$base_sit_pain_corr) &lt;- c(&quot;0&quot;, &quot;1&quot;, &quot;2&quot;) # 0 improve, 1 same, 2 worse
+
+levels (df_chr$base_current_flare)  &lt;-
+  levels (df_chr$base_pnn_below_waist)
+  levels (df_chr$base_list_dir_side) &lt;- c(&quot;0&quot;, &quot;1&quot;) # 0 yes, 1 no
+
+levels (df_chr$base_back_leg_relation) &lt;- c(&quot;0&quot;, &quot;1&quot;, &quot;2&quot;) # 0 yes, 1 no
+
+levels (df_chr$base_lbp_symptom) &lt;- c(&quot;no&quot;, &quot;yes&quot;)
+  
+levels (df_chr$base_leg_symptom) &lt;- c(&quot;no&quot;, &quot; ant thigh&quot;, &quot;below knee&quot;, &quot;both&quot;) # 0 deep, 1 superficial, 2 na # need to check
+
+levels (df_chr$base_freq_symptom) &lt;- c(&quot;0&quot;, &quot;1&quot;, &quot;2&quot;) # 0 &lt;50%, 1 &gt;50%, 2 constant
+
+levels (df_chr$base_back_leg_relation) &lt;- c(&quot;0&quot;, &quot;1&quot;, &quot;2&quot;) # 0 yes, 1 no, 2 na
+
+levels (df_chr$base_onset_symptom) &lt;- 
+  levels (df_chr$base_time_symptom) &lt;- 
+  levels (df_chr$base_next_day_symptom) &lt;- c(&quot;n_appl&quot;, &quot;0&quot;, &quot;1&quot;, &quot;2&quot;, &quot;3&quot;) 
+
+levels (df_chr$base_pain_side) &lt;- c(&quot;n_appl&quot;, &quot;left&quot;, &quot;right&quot;) 
+
+levels (df_chr$base_loc_antthigh_pain) &lt;- 
+  levels (df_chr$base_loc_belowknee_pain) &lt;- 
+  levels (df_chr$base_loc_leg_pain) &lt;-
+  c(&quot;0&quot;, &quot;1&quot;) # 0 yes, 1 no
+
+levels (df_chr$base_loc_mostpain) &lt;- 
+  c(&quot;0&quot;, &quot;1&quot;, &quot;2&quot;, &quot;3&quot;, &quot;4&quot;, &quot;5&quot;) # 0 back, 1 buttock, 2 groin, 3 thigh, 4 leg, 5 foot
+
+levels (df_chr$base_statisfac_healthcare) &lt;- 
+ levels (df_chr$base_statisfac_result) &lt;- 
+ levels (df_chr$base_rest_of_life) &lt;-  c(&quot;0&quot;, &quot;1&quot;, &quot;2&quot;, &quot;3&quot;, &quot;4&quot;) # 0 dissatistied 4 very satisfied
+
+levels (df_chr$base_first_episode) &lt;- c(&quot;0&quot;, &quot;1&quot;) # 0 yes, 1 no
+
+# 0 &lt;1mth , 1 2-6mth, 2 6-12mth, 3 1-2yr, 4 &gt;3yr, 5 na
+levels (df_chr$base_first_episode_period) &lt;- c(&quot;0&quot;, &quot;1&quot;, &quot;2&quot;, &quot;3&quot;, &quot;4&quot;, &quot;5&quot;)</code></pre>
+<pre class="r"><code>df2 &lt;- df %&gt;%
+  dplyr::select_if(is.numeric) %&gt;%
+  bind_cols(df_chr)</code></pre>
+<pre class="r"><code>var_keep1 &lt;- !grepl (&quot;osw_q|ses|sfbs|euroq|statisfac|hyper|total_rx|rest|first|fab&quot;, names (df2)) 
+
+df3 &lt;- df2 [, var_keep1 ]</code></pre>
+</div>
+<div id="save-cleaned-data" class="section level1">
+<h1>Save cleaned data</h1>
+<pre class="r"><code>saveRDS (df3, &quot;output/df_clean.RDS&quot;)
+
+xlsx::write.xlsx2 (df3, &quot;output/data_clean.xlsx&quot;)</code></pre>
+</div>
+<div id="load-cleaned-data" class="section level1">
+<h1>Load cleaned data</h1>
+<pre class="r"><code>rm (list = ls())
+df &lt;- readRDS(&quot;output/df_clean.RDS&quot;)</code></pre>
+</div>
+<div id="select-important-variables" class="section level1">
+<h1>Select important variables</h1>
+<pre class="r"><code>df_sub &lt;- df[, grepl (&quot;id|rx_grp|rx_sub|oreb_q|osw|lbp|_lp&quot;, names (df))]
+df_sub &lt;- df_sub [, !grepl (&quot;pain|dir&quot;, names (df_sub))]</code></pre>
+</div>
+<div id="rename-orebro-variables" class="section level1">
+<h1>Rename orebro variables</h1>
+<ul>
+<li>removed question 8 and 15, as I do not feel meaningful. can change</li>
+</ul>
+<pre class="r"><code># names (df_sub) [grepl (&quot;oreb_q8&quot;, names (df_sub))] &lt;-
+#   str_replace(names (df_sub) [grepl (&quot;oreb_q8&quot;, names (df_sub))], &quot;oreb_q8&quot;, &quot;pain_pastwk&quot;)
+
+names (df_sub) [grepl (&quot;oreb_q11&quot;, names (df_sub))] &lt;- 
+  str_replace(names (df_sub) [grepl (&quot;oreb_q11&quot;, names (df_sub))], &quot;oreb_q11&quot;, &quot;pain_cope_success&quot;)
+
+names (df_sub) [grepl (&quot;oreb_q12&quot;, names (df_sub))] &lt;- 
+  str_replace(names (df_sub) [grepl (&quot;oreb_q12&quot;, names (df_sub))], &quot;oreb_q12&quot;, &quot;anx&quot;)
+
+names (df_sub) [grepl (&quot;oreb_q13&quot;, names (df_sub))] &lt;- 
+  str_replace(names (df_sub) [grepl (&quot;oreb_q13&quot;, names (df_sub))], &quot;oreb_q13&quot;, &quot;depress&quot;)
+
+names (df_sub) [grepl (&quot;oreb_q14&quot;, names (df_sub))] &lt;- 
+  str_replace(names (df_sub) [grepl (&quot;oreb_q14&quot;, names (df_sub))], &quot;oreb_q14&quot;, &quot;pain_persist&quot;)
+
+# names (df_sub) [grepl (&quot;oreb_q15&quot;, names (df_sub))] &lt;-
+#   str_replace(names (df_sub) [grepl (&quot;oreb_q15&quot;, names (df_sub))], &quot;oreb_q15&quot;, &quot;work_expect&quot;)</code></pre>
+</div>
+<div id="recode-orebro-function" class="section level1">
+<h1>Recode orebro function</h1>
+<ul>
+<li>func = sum of questions 20 to 24</li>
+<li>fear = sum of questions 17 to 19</li>
+</ul>
+<pre class="r"><code>df_sub &lt;- df_sub %&gt;%
+  mutate (base_func = base_oreb_q20 + base_oreb_q21 + base_oreb_q22 + base_oreb_q23 ,
+          wk5_func =  wk5_oreb_q20 + wk5_oreb_q21 + wk5_oreb_q22 + wk5_oreb_q23 ,
+          wk10_func = wk10_oreb_q20 + wk10_oreb_q21 + wk10_oreb_q22 + wk10_oreb_q23 ,
+          wk26_func = wk26_oreb_q20 + wk26_oreb_q21 + wk26_oreb_q22 + wk26_oreb_q23 ,
+          wk52_func = wk52_oreb_q20 + wk52_oreb_q21 + wk52_oreb_q22 + wk52_oreb_q23,
+          base_fear = base_oreb_q17 + base_oreb_q18 + base_oreb_q19,
+          wk5_fear = wk5_oreb_q17 + wk5_oreb_q18 + wk5_oreb_q19,
+          wk10_fear = wk10_oreb_q17 + wk10_oreb_q18 + wk10_oreb_q19,
+          wk26_fear = wk26_oreb_q17 + wk26_oreb_q18 + wk26_oreb_q19,
+          wk52_fear = wk52_oreb_q17 + wk52_oreb_q18 + wk52_oreb_q19) %&gt;%
+  dplyr::select (-matches (&quot;oreb&quot;)) %&gt;%
+  dplyr::select (-matches (&quot;func&quot;)) %&gt;% # remove this as use oswestry as functional outcome
+  dplyr::select (id, rx_grp, rx_subgrp, matches (&quot;base_&quot;), matches (&quot;wk5_&quot;), 
+          matches (&quot;wk10_&quot;), matches (&quot;wk26_&quot;), matches (&quot;wk52_&quot;))</code></pre>
+</div>
+<div id="check-missing" class="section level1">
+<h1>Check missing</h1>
+<div id="check-percentage-number-of-missing-variables-with-missing-columns" class="section level2">
+<h2>Check percentage number of missing variables with missing columns</h2>
+<pre class="r"><code>missing_per_indv &lt;- (rowSums(is.na(df_sub))/ ncol (df_sub)) * 100 
+missing_per_indv</code></pre>
+<pre><code>  [1]  2.222222  0.000000  0.000000  0.000000  0.000000  2.222222  0.000000
+  [8]  0.000000  0.000000  0.000000  0.000000  0.000000  0.000000  0.000000
+ [15]  2.222222 13.333333  0.000000  0.000000  0.000000  2.222222  0.000000
+ [22]  0.000000  0.000000 33.333333  0.000000  0.000000 11.111111 11.111111
+ [29]  0.000000 17.777778  0.000000  0.000000  0.000000  0.000000  0.000000
+ [36]  0.000000  2.222222  0.000000  0.000000  2.222222 11.111111  0.000000
+ [43]  0.000000  0.000000  0.000000 11.111111  0.000000  0.000000  0.000000
+ [50]  0.000000  0.000000  0.000000  0.000000  0.000000  0.000000 24.444444
+ [57]  0.000000  0.000000  0.000000  0.000000 28.888889  0.000000 11.111111
+ [64] 33.333333 11.111111  0.000000  0.000000 11.111111 11.111111 11.111111
+ [71]  0.000000  0.000000  0.000000 11.111111  0.000000  0.000000 11.111111
+ [78]  4.444444  0.000000  0.000000 11.111111  0.000000 22.222222 11.111111
+ [85] 53.333333  0.000000  0.000000  0.000000 11.111111 35.555556  0.000000
+ [92]  0.000000  0.000000  0.000000  0.000000  2.222222  0.000000  0.000000
+ [99] 71.111111 71.111111  0.000000  0.000000  0.000000  0.000000  2.222222
+[106]  0.000000 22.222222  0.000000  0.000000  0.000000  0.000000 11.111111
+[113] 22.222222  0.000000  0.000000  0.000000 51.111111 37.777778 11.111111
+[120] 11.111111 11.111111 71.111111  2.222222  0.000000  0.000000  0.000000
+[127]  0.000000  0.000000 22.222222 11.111111  0.000000  0.000000 35.555556
+[134]  0.000000  0.000000  0.000000  0.000000  0.000000 11.111111  0.000000
+[141] 11.111111  0.000000  0.000000 26.666667 11.111111 11.111111 28.888889
+[148] 33.333333  8.888889 35.555556  0.000000  0.000000 11.111111 55.555556
+[155]  0.000000  0.000000 11.111111 11.111111 22.222222 22.222222 17.777778
+[162]  0.000000  0.000000 42.222222 11.111111 33.333333  0.000000  0.000000
+[169]  0.000000  0.000000  0.000000 11.111111  0.000000  0.000000  0.000000
+[176]  0.000000  0.000000  0.000000  0.000000  0.000000 17.777778 11.111111
+[183]  0.000000  0.000000  0.000000  0.000000 13.333333  0.000000 51.111111
+[190]  0.000000 22.222222  0.000000  0.000000 71.111111 13.333333  0.000000
+[197] 11.111111  0.000000  0.000000 11.111111 11.111111  0.000000  0.000000
+[204]  0.000000 11.111111 11.111111 11.111111  0.000000  0.000000  4.444444
+[211] 17.777778  0.000000  0.000000 11.111111 22.222222 11.111111 64.444444
+[218]  0.000000  0.000000  0.000000  0.000000 11.111111  0.000000 11.111111
+[225]  0.000000 11.111111  0.000000  0.000000  0.000000 11.111111  0.000000
+[232] 44.444444  2.222222  0.000000  0.000000  0.000000 11.111111  0.000000
+[239] 11.111111 22.222222 73.333333  2.222222  0.000000 26.666667 13.333333
+[246]  2.222222  0.000000  0.000000 17.777778 35.555556  0.000000  0.000000
+[253] 11.111111 11.111111  0.000000  0.000000  0.000000  2.222222 22.222222
+[260]  0.000000  0.000000 11.111111  0.000000  2.222222 17.777778  2.222222
+[267] 13.333333  2.222222  0.000000  0.000000 11.111111  0.000000 11.111111
+[274]  0.000000  0.000000 17.777778 11.111111  0.000000  0.000000  0.000000
+[281] 11.111111 17.777778  0.000000 13.333333 11.111111  0.000000  0.000000
+[288]  0.000000  0.000000 11.111111  0.000000  0.000000  0.000000  0.000000
+[295] 11.111111  0.000000  0.000000 35.555556 13.333333  0.000000</code></pre>
+<div id="remove-subjects-with-more-than-50-missing-columns" class="section level3">
+<h3>Remove subjects with more than 50% missing columns</h3>
+<pre class="r"><code>df_sub2 &lt;- df_sub  [missing_per_indv &lt; 50, ] </code></pre>
+</div>
+</div>
+</div>
+<div id="create-a-new-dataframe-of-early-and-late-change" class="section level1">
+<h1>Create a new dataframe of early and late change</h1>
+<pre class="r"><code>const.df &lt;- df_sub2[,!grepl (&quot;base|wk&quot;, names(df_sub2))]
+base.df &lt;- df_sub2[,grepl (&quot;base_|duration|symptom&quot;, names(df_sub2))]
+base.df &lt;- base.df[,!grepl (&quot;duration|symptom&quot;, names(base.df))]
+wk5.df &lt;- df_sub2[,grepl (&quot;wk5_&quot;, names(df_sub2))]
+wk10.df &lt;- df_sub2[,grepl (&quot;wk10_&quot;, names(df_sub2))]
+wk26.df &lt;- df_sub2[,grepl (&quot;wk26_&quot;, names(df_sub2))]
+wk52.df &lt;- df_sub2[,grepl (&quot;wk52_&quot;, names(df_sub2))]
+
+wk5_base &lt;- wk5.df - base.df
+wk10_base &lt;- wk10.df - base.df
+wk26_base &lt;- wk26.df - base.df
+wk52_base &lt;- wk52.df - base.df
+
+wk10_wk5 &lt;- wk10.df - wk5.df
+wk26_wk5 &lt;- wk26.df - wk5.df
+wk52_wk5 &lt;- wk52.df - wk5.df
+
+wk26_wk10 &lt;- wk26.df - wk10.df
+wk52_wk10 &lt;- wk52.df - wk10.df
+
+wk52_wk26 &lt;- wk52.df - wk26.df
+
+
+df.list &lt;- list (wk5_base, 
+                 wk10_base,
+                 wk26_base,
+                 wk52_base,
+                 wk10_wk5,
+                 wk26_wk5,
+                 wk52_wk5,
+                 wk26_wk10,
+                 wk52_wk10,
+                 wk52_wk26)
+
+for (n in seq_along (df.list)){
+  
+  df.list[[n]] &lt;- df.list[[n]] %&gt;%
+       mutate (grp = const.df$rx_grp,
+          subgrp = const.df$rx_subgrp,
+          id = const.df$id)
+}
+
+names (df.list) &lt;- c(&quot;wk5_base&quot;, 
+                     &quot;wk10_base&quot;,
+                     &quot;wk26_base&quot;,
+                     &quot;wk52_base&quot;,
+                     &quot;wk10_wk5&quot;,
+                     &quot;wk26_wk5&quot;,
+                     &quot;wk52_wk5&quot;,
+                     &quot;wk26_wk10&quot;,
+                     &quot;wk52_wk10&quot;,
+                     &quot;wk52_wk26&quot;)</code></pre>
+</div>
+<div id="save-split-dataframes" class="section level1">
+<h1>Save split dataframes</h1>
+<pre class="r"><code>saveRDS (df.list, &quot;output/df_change.RDS&quot;)</code></pre>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 3.6.2 (2019-12-12)
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+Running under: Windows 10 x64 (build 18363)
+
+Matrix products: default
+
+locale:
+[1] LC_COLLATE=English_United Kingdom.1252 
+[2] LC_CTYPE=English_United Kingdom.1252   
+[3] LC_MONETARY=English_United Kingdom.1252
+[4] LC_NUMERIC=C                           
+[5] LC_TIME=English_United Kingdom.1252    
+
+attached base packages:
+[1] grid      stats     graphics  grDevices utils     datasets  methods  
+[8] base     
+
+other attached packages:
+ [1] corrr_0.4.2       VIM_5.1.1         data.table_1.12.8 colorspace_1.4-1 
+ [5] mice_3.9.0        xlsx_0.6.3        readxl_1.3.1      magrittr_1.5     
+ [9] janitor_2.0.1     arsenal_3.4.0     tidyselect_1.1.0  forcats_0.5.0    
+[13] stringr_1.4.0     dplyr_0.8.4       purrr_0.3.3       readr_1.3.1      
+[17] tidyr_1.0.0       tibble_3.0.1      ggplot2_3.3.2     tidyverse_1.3.0  
+[21] workflowr_1.6.2  
+
+loaded via a namespace (and not attached):
+ [1] nlme_3.1-142      fs_1.3.1          lubridate_1.7.4   httr_1.4.1       
+ [5] rprojroot_1.3-2   tools_3.6.2       backports_1.1.5   R6_2.4.1         
+ [9] DBI_1.1.0         nnet_7.3-14       withr_2.2.0       sp_1.4-2         
+[13] curl_4.3          compiler_3.6.2    git2r_0.27.1      cli_2.0.2        
+[17] rvest_0.3.5       xml2_1.2.2        scales_1.1.1      lmtest_0.9-37    
+[21] DEoptimR_1.0-8    robustbase_0.93-6 digest_0.6.23     foreign_0.8-72   
+[25] rmarkdown_2.3     rio_0.5.16        pkgconfig_2.0.3   htmltools_0.5.0  
+[29] highr_0.8         dbplyr_1.4.4      rlang_0.4.6       rstudioapi_0.11  
+[33] generics_0.0.2    zoo_1.8-8         jsonlite_1.6      zip_2.0.4        
+[37] car_3.0-8         Matrix_1.2-18     Rcpp_1.0.3        munsell_0.5.0    
+[41] fansi_0.4.0       abind_1.4-5       lifecycle_0.2.0   stringi_1.4.3    
+[45] whisker_0.4       yaml_2.2.1        snakecase_0.11.0  carData_3.0-4    
+[49] MASS_7.3-51.6     blob_1.2.1        promises_1.1.0    crayon_1.3.4     
+[53] lattice_0.20-38   splines_3.6.2     haven_2.2.0       xlsxjars_0.6.1   
+[57] hms_0.5.3         knitr_1.29        pillar_1.4.4      ranger_0.12.1    
+[61] boot_1.3-25       reprex_0.3.0      glue_1.3.1        evaluate_0.14    
+[65] laeken_0.5.1      modelr_0.1.8      vcd_1.4-7         vctrs_0.3.1      
+[69] httpuv_1.5.2      cellranger_1.1.0  gtable_0.3.0      assertthat_0.2.1 
+[73] xfun_0.15         openxlsx_4.1.5    broom_0.5.6       e1071_1.7-3      
+[77] later_1.0.0       survival_3.2-3    class_7.3-17      rJava_0.9-12     
+[81] ellipsis_0.3.1   </code></pre>
+</div>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+http://docs.mathjax.org/en/latest/configuration.html.  This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
