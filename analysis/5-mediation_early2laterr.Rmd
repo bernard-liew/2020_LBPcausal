@@ -1,0 +1,162 @@
+---
+title: "5-mediation_early2laterr"
+author: "bernard-liew"
+date: "2020-07-06"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+
+
+# Load library 
+
+```{r message=FALSE, warning=FALSE}
+
+# Helper packages
+library (tidyverse)
+library (tidyselect)
+library (arsenal)
+library (janitor)
+library (magrittr)
+library (Rgraphviz)
+library (corrr)
+
+# Import
+library(readxl)
+library (xlsx)
+
+# Missing data
+library (mice)
+library (VIM)
+
+# Modelling
+library (bnlearn)
+library (caret)
+
+# Parallel
+library (doParallel)
+
+```
+
+# Introduction
+
+This is a bayesian network analysis where the early change variables are between week 10 and baseline. The late change variables are between week 52 and week 26.
+
+# Import data
+
+```{r}
+
+rm (list = ls())
+df_list <- readRDS("output/df_change.RDS")
+
+```
+
+# Subset data
+
+```{r}
+df1 <- df_list[["wk10_base"]]
+names(df1)[1:8] <- paste0(str_remove(names(df1)[1:8] , "wk10_"), "_early")
+
+df2 <- df_list[["wk52_wk26"]]
+names(df2)[1:8] <- paste0(str_remove(names(df2)[1:8] , "wk52_"), "_late")
+
+df <- bind_cols(df1, df2) %>%
+  select (-c(grp1, subgrp1, id1))
+
+```
+
+# Exploratory  analysis
+
+## Between group comparisons
+
+```{r, results = "asis"}
+tableby (subgrp ~., data = df, digits = 2, digits.p = 2) %>%	
+  summary () 
+```
+
+## Correlation plots
+
+```{r}
+df %>%	
+     select_if (is.numeric) %>%	
+     select(-id) %>%	
+     correlate() %>%	
+     rearrange() %>%	
+     network_plot(colors = c("red", "green"))
+```
+
+# BN analysis
+
+## Early change 
+
+### Create blacklist
+
+```{r}
+
+df.bn = as.data.frame (df)
+df.bn$id <- NULL
+df.bn$subgrp <- NULL # since the earlier descriptives show no difference using ANOVA
+
+tiers_bl = list (colnames (df.bn)[colnames(df.bn) %in% grep ("early",colnames(df.bn), value = TRUE)], 
+                 colnames (df.bn)[colnames(df.bn) %in% grep ("late",colnames(df.bn), value = TRUE)])
+bl1 = tiers2blacklist(tiers_bl)
+
+tiers_bl = list (colnames (df.bn)[colnames(df.bn) %in% grep ("grp",colnames(df.bn), value = TRUE)], 
+                 colnames (df.bn)[colnames(df.bn) %in% grep ("late",colnames(df.bn), value = TRUE)])
+
+bl2 = tiers2blacklist(tiers_bl)
+
+tiers_bl = list (colnames (df.bn)[colnames(df.bn) %in% grep ("grp",colnames(df.bn), value = TRUE)], 
+                 colnames (df.bn)[colnames(df.bn) %in% grep ("early",colnames(df.bn), value = TRUE)])
+
+bl3 = tiers2blacklist(tiers_bl)
+bl = rbind(bl1, bl2, bl3)
+
+```
+
+
+
+### Build BN model
+
+#### Just with blacklist 
+
+```{r}
+
+doParallel::registerDoParallel(4)
+n_boot = 200
+
+
+
+############
+
+boot_bl <-  foreach (B = 1: n_boot) %dopar%{
+    boot.sample = df.bn[sample(nrow(df.bn), 
+                                          nrow(df.bn), replace = TRUE), ]
+    bnlearn::structural.em(boot.sample, impute = "bayes-lw", max.iter = 3,
+                              maximize.args = list(blacklist = bl))
+}
+#############
+
+
+  
+
+```
+
+#### See results
+
+```{r fig.height=10, fig.width=10}
+
+bootstr = custom.strength(boot_bl, nodes = names(df.bn))
+avg = averaged.network(bootstr, threshold = 0.5)
+fit = bn.fit (avg, df.bn, method = "mle")
+
+g = strength.plot(avg, 
+                  bootstr, 
+                  shape = "rectangle",
+                  main = "Figure")
+
+graph::nodeRenderInfo(g) = list(fontsize=18)
+
+
+```
+

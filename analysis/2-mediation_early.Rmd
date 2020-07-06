@@ -181,7 +181,7 @@ boot_wl  =  foreach (B = 1: n_boot) %dopar%{
 
 ```{r fig.height=10, fig.width=10}
 
-bootstr = custom.strength(boot_bl, nodes = names(df.bn))
+bootstr = custom.strength(boot_wl, nodes = names(df.bn))
 avg = averaged.network(bootstr, threshold = 0.5)
 fit = bn.fit (avg, df.bn, method = "mle")
 

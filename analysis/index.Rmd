@@ -16,5 +16,6 @@ Welcome to this website which aims to uncover the causal mechanisms of recovery 
 
 [This code performs BN analysis on late change data](3-mediation_late.html)
 
-[This code performs BN analysis on early and late change data](4-mediation_early2late.html)
+[This code performs BN analysis on early and late change data with late between weeks 10 and 52](4-mediation_early2late.html)
 
+[This code performs BN analysis on early and late change data with late between weeks 26 and 52](5-mediation_early2laterr.html)

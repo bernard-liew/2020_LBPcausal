@@ -405,7 +405,7 @@ div.tocify {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2020-07-03
+<strong>Last updated:</strong> 2020-07-06
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 1
@@ -496,16 +496,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcombernardliew2020LBPcausaltree024005a342e06b73d5bdec1da16a40e595d79bd0targetblank024005aa"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/bernard-liew/2020_LBPcausal/tree/024005a342e06b73d5bdec1da16a40e595d79bd0" target="_blank">024005a</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcombernardliew2020LBPcausaltreec6431d01373d2c2bcbba4d85b2537ad208feee28targetblankc6431d0a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/bernard-liew/2020_LBPcausal/tree/c6431d01373d2c2bcbba4d85b2537ad208feee28" target="_blank">c6431d0</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcombernardliew2020LBPcausaltree024005a342e06b73d5bdec1da16a40e595d79bd0targetblank024005aa" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcombernardliew2020LBPcausaltreec6431d01373d2c2bcbba4d85b2537ad208feee28targetblankc6431d0a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/bernard-liew/2020_LBPcausal/tree/024005a342e06b73d5bdec1da16a40e595d79bd0" target="_blank">024005a</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/bernard-liew/2020_LBPcausal/tree/c6431d01373d2c2bcbba4d85b2537ad208feee28" target="_blank">c6431d0</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -514,12 +514,16 @@ Note that you need to be careful to ensure that all relevant files for the analy
 Ignored files:
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
+    Ignored:    analysis/figure/
     Ignored:    output/data_clean.xlsx
+
+Untracked files:
+    Untracked:  analysis/5-mediation_early2laterr.Rmd
 
 Unstaged changes:
     Modified:   analysis/2-mediation_early.Rmd
     Modified:   analysis/3-mediation_late.Rmd
-    Modified:   analysis/4-mediation_early2late.Rmd
+    Modified:   analysis/index.Rmd
 
 </code></pre>
 <p>
@@ -558,6 +562,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/bernard-liew/2020_LBPcausal/blob/c6431d01373d2c2bcbba4d85b2537ad208feee28/analysis/3-mediation_late.Rmd" target="_blank">c6431d0</a>
+</td>
+<td>
+bernard-liew
+</td>
+<td>
+2020-07-03
+</td>
+<td>
+changed early2late mediation
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/bernard-liew/2020_LBPcausal/c6431d01373d2c2bcbba4d85b2537ad208feee28/docs/3-mediation_late.html" target="_blank">c6431d0</a>
+</td>
+<td>
+bernard-liew
+</td>
+<td>
+2020-07-03
+</td>
+<td>
+changed early2late mediation
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -1232,11 +1270,9 @@ boot_wl  =  foreach (B = 1: n_boot) %dopar%{
 </div>
 <div id="see-results-1" class="section level3">
 <h3>See results</h3>
-<pre class="r"><code>bootstr = custom.strength(boot_bl, nodes = names(df.bn))
-avg = averaged.network(bootstr, threshold = 0.5)</code></pre>
-<pre><code>Warning in averaged.network.backend(strength = strength, nodes = nodes, : arc
-anx_late -&gt; depress_late would introduce cycles in the graph, ignoring.</code></pre>
-<pre class="r"><code>fit = bn.fit (avg, df.bn, method = &quot;mle&quot;)
+<pre class="r"><code>bootstr = custom.strength(boot_wl, nodes = names(df.bn))
+avg = averaged.network(bootstr, threshold = 0.5)
+fit = bn.fit (avg, df.bn, method = &quot;mle&quot;)
 
 g = strength.plot(avg, 
                   bootstr, 
@@ -1391,47 +1427,46 @@ other attached packages:
 [19] arsenal_3.4.0       tidyselect_1.1.0    forcats_0.5.0      
 [22] stringr_1.4.0       dplyr_0.8.4         purrr_0.3.3        
 [25] readr_1.3.1         tidyr_1.0.0         tibble_3.0.1       
-[28] ggplot2_3.3.2       tidyverse_1.3.0    
+[28] ggplot2_3.3.2       tidyverse_1.3.0     workflowr_1.6.2    
 
 loaded via a namespace (and not attached):
-  [1] backports_1.1.5      workflowr_1.6.2      plyr_1.8.6          
-  [4] sp_1.4-2             splines_3.6.2        digest_0.6.23       
-  [7] htmltools_0.5.0      viridis_0.5.1        gdata_2.18.0        
- [10] fansi_0.4.0          cluster_2.1.0        gclus_1.3.2         
- [13] openxlsx_4.1.5       recipes_0.1.13       modelr_0.1.8        
- [16] gower_0.2.2          ggrepel_0.8.2        blob_1.2.1          
- [19] rvest_0.3.5          haven_2.2.0          xfun_0.15           
- [22] crayon_1.3.4         jsonlite_1.6         survival_3.2-3      
- [25] zoo_1.8-8            glue_1.3.1           registry_0.5-1      
- [28] gtable_0.3.0         ipred_0.9-9          car_3.0-8           
- [31] DEoptimR_1.0-8       abind_1.4-5          scales_1.1.1        
- [34] DBI_1.1.0            Rcpp_1.0.3           viridisLite_0.3.0   
- [37] laeken_0.5.1         foreign_0.8-72       stats4_3.6.2        
- [40] lava_1.6.7           prodlim_2019.11.13   vcd_1.4-7           
- [43] httr_1.4.1           gplots_3.0.3         ellipsis_0.3.1      
- [46] farver_2.0.3         pkgconfig_2.0.3      rJava_0.9-12        
- [49] nnet_7.3-14          dbplyr_1.4.4         labeling_0.3        
- [52] rlang_0.4.6          reshape2_1.4.4       later_1.0.0         
- [55] munsell_0.5.0        cellranger_1.1.0     tools_3.6.2         
- [58] cli_2.0.2            generics_0.0.2       ranger_0.12.1       
- [61] broom_0.5.6          evaluate_0.14        yaml_2.2.1          
- [64] ModelMetrics_1.2.2.2 knitr_1.29           fs_1.3.1            
- [67] zip_2.0.4            robustbase_0.93-6    caTools_1.18.0      
- [70] dendextend_1.13.4    nlme_3.1-142         whisker_0.4         
- [73] xml2_1.2.2           compiler_3.6.2       rstudioapi_0.11     
- [76] curl_4.3             e1071_1.7-3          reprex_0.3.0        
- [79] stringi_1.4.3        highr_0.8            Matrix_1.2-18       
- [82] vctrs_0.3.1          pillar_1.4.4         lifecycle_0.2.0     
- [85] lmtest_0.9-37        bitops_1.0-6         seriation_1.2-8     
- [88] httpuv_1.5.2         R6_2.4.1             promises_1.1.0      
- [91] TSP_1.1-10           gridExtra_2.3        KernSmooth_2.23-17  
- [94] rio_0.5.16           codetools_0.2-16     boot_1.3-25         
- [97] MASS_7.3-51.6        gtools_3.8.2         assertthat_0.2.1    
-[100] xlsxjars_0.6.1       rprojroot_1.3-2      withr_2.2.0         
-[103] hms_0.5.3            rpart_4.1-15         timeDate_3043.102   
-[106] class_7.3-17         rmarkdown_2.3        snakecase_0.11.0    
-[109] carData_3.0-4        git2r_0.27.1         pROC_1.16.2         
-[112] lubridate_1.7.4     </code></pre>
+  [1] backports_1.1.5      plyr_1.8.6           sp_1.4-2            
+  [4] splines_3.6.2        digest_0.6.23        htmltools_0.5.0     
+  [7] viridis_0.5.1        gdata_2.18.0         fansi_0.4.0         
+ [10] cluster_2.1.0        gclus_1.3.2          openxlsx_4.1.5      
+ [13] recipes_0.1.13       modelr_0.1.8         gower_0.2.2         
+ [16] ggrepel_0.8.2        blob_1.2.1           rvest_0.3.5         
+ [19] haven_2.2.0          xfun_0.15            crayon_1.3.4        
+ [22] jsonlite_1.6         survival_3.2-3       zoo_1.8-8           
+ [25] glue_1.3.1           registry_0.5-1       gtable_0.3.0        
+ [28] ipred_0.9-9          car_3.0-8            DEoptimR_1.0-8      
+ [31] abind_1.4-5          scales_1.1.1         DBI_1.1.0           
+ [34] Rcpp_1.0.3           viridisLite_0.3.0    laeken_0.5.1        
+ [37] foreign_0.8-72       stats4_3.6.2         lava_1.6.7          
+ [40] prodlim_2019.11.13   vcd_1.4-7            httr_1.4.1          
+ [43] gplots_3.0.3         ellipsis_0.3.1       farver_2.0.3        
+ [46] pkgconfig_2.0.3      rJava_0.9-12         nnet_7.3-14         
+ [49] dbplyr_1.4.4         labeling_0.3         rlang_0.4.6         
+ [52] reshape2_1.4.4       later_1.0.0          munsell_0.5.0       
+ [55] cellranger_1.1.0     tools_3.6.2          cli_2.0.2           
+ [58] generics_0.0.2       ranger_0.12.1        broom_0.5.6         
+ [61] evaluate_0.14        yaml_2.2.1           ModelMetrics_1.2.2.2
+ [64] knitr_1.29           fs_1.3.1             zip_2.0.4           
+ [67] robustbase_0.93-6    caTools_1.18.0       dendextend_1.13.4   
+ [70] nlme_3.1-142         whisker_0.4          xml2_1.2.2          
+ [73] compiler_3.6.2       rstudioapi_0.11      curl_4.3            
+ [76] e1071_1.7-3          reprex_0.3.0         stringi_1.4.3       
+ [79] highr_0.8            Matrix_1.2-18        vctrs_0.3.1         
+ [82] pillar_1.4.4         lifecycle_0.2.0      lmtest_0.9-37       
+ [85] bitops_1.0-6         seriation_1.2-8      httpuv_1.5.2        
+ [88] R6_2.4.1             promises_1.1.0       TSP_1.1-10          
+ [91] gridExtra_2.3        KernSmooth_2.23-17   rio_0.5.16          
+ [94] codetools_0.2-16     boot_1.3-25          MASS_7.3-51.6       
+ [97] gtools_3.8.2         assertthat_0.2.1     xlsxjars_0.6.1      
+[100] rprojroot_1.3-2      withr_2.2.0          hms_0.5.3           
+[103] rpart_4.1-15         timeDate_3043.102    class_7.3-17        
+[106] rmarkdown_2.3        snakecase_0.11.0     carData_3.0-4       
+[109] git2r_0.27.1         pROC_1.16.2          lubridate_1.7.4     </code></pre>
 </div>
 </div>
 </div>
