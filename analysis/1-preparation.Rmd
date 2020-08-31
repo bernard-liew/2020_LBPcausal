@@ -1011,7 +1011,7 @@ df_sub <- df_sub [, !grepl ("pain|dir", names (df_sub))]
 #   str_replace(names (df_sub) [grepl ("oreb_q8", names (df_sub))], "oreb_q8", "pain_pastwk")
 
 names (df_sub) [grepl ("oreb_q11", names (df_sub))] <- 
-  str_replace(names (df_sub) [grepl ("oreb_q11", names (df_sub))], "oreb_q11", "pain_cope_success")
+  str_replace(names (df_sub) [grepl ("oreb_q11", names (df_sub))], "oreb_q11", "pain_cope")
 
 names (df_sub) [grepl ("oreb_q12", names (df_sub))] <- 
   str_replace(names (df_sub) [grepl ("oreb_q12", names (df_sub))], "oreb_q12", "anx")
@@ -1022,6 +1022,12 @@ names (df_sub) [grepl ("oreb_q13", names (df_sub))] <-
 names (df_sub) [grepl ("oreb_q14", names (df_sub))] <- 
   str_replace(names (df_sub) [grepl ("oreb_q14", names (df_sub))], "oreb_q14", "pain_persist")
 
+names (df_sub) [grepl ("oreb_q15", names (df_sub))] <- 
+  str_replace(names (df_sub) [grepl ("oreb_q15", names (df_sub))], "oreb_q15", "work_expect")
+
+names (df_sub) [grepl ("oreb_q24", names (df_sub))] <- 
+  str_replace(names (df_sub) [grepl ("oreb_q24", names (df_sub))], "oreb_q24", "sleep")
+
 # names (df_sub) [grepl ("oreb_q15", names (df_sub))] <-
 #   str_replace(names (df_sub) [grepl ("oreb_q15", names (df_sub))], "oreb_q15", "work_expect")
 
@@ -1030,7 +1036,7 @@ names (df_sub) [grepl ("oreb_q14", names (df_sub))] <-
 
 # Recode orebro function
 
-- func = sum of questions 20 to 24
+- func = sum of questions 20 to 23
 - fear = sum of questions 17 to 19
 
 ```{r}
@@ -1046,7 +1052,7 @@ df_sub <- df_sub %>%
           wk26_fear = wk26_oreb_q17 + wk26_oreb_q18 + wk26_oreb_q19,
           wk52_fear = wk52_oreb_q17 + wk52_oreb_q18 + wk52_oreb_q19) %>%
   dplyr::select (-matches ("oreb")) %>%
-  dplyr::select (-matches ("func")) %>% # remove this as use oswestry as functional outcome
+  #dplyr::select (-matches ("func")) %>% # remove this as use oswestry as functional outcome
   dplyr::select (id, rx_grp, rx_subgrp, matches ("base_"), matches ("wk5_"), 
           matches ("wk10_"), matches ("wk26_"), matches ("wk52_"))
           
@@ -1110,7 +1116,12 @@ df.list <- list (wk5_base,
                  wk52_wk5,
                  wk26_wk10,
                  wk52_wk10,
-                 wk52_wk26)
+                 wk52_wk26,
+                 base.df,
+                 wk5.df,
+                 wk10.df,
+                 wk26.df,
+                 wk52.df)
 
 for (n in seq_along (df.list)){
   
@@ -1129,7 +1140,12 @@ names (df.list) <- c("wk5_base",
                      "wk52_wk5",
                      "wk26_wk10",
                      "wk52_wk10",
-                     "wk52_wk26")
+                     "wk52_wk26",         
+                     "base",
+                     "wk5",
+                     "wk10",
+                     "wk26",
+                     "wk52")
 
 ```
 
