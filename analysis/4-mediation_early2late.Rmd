@@ -63,12 +63,16 @@ names(df2)[grepl("wk", names (df2))] <- paste0(str_remove(names(df2)[grepl("wk",
 
 df3 <- df_list[["wk52"]]
 df3 <- df3 %>%
-  select (id, grp, subgrp, wk52_lbp, wk52_lp, wk52_func) 
+  select (id, grp, subgrp, wk52_lbp, wk52_lp, wk52_osw, wk52_func) 
 names(df3)[grepl("wk", names (df3))] <- paste0(str_remove(names(df3)[grepl("wk", names (df3))], "wk52_"), "_outcome")
 
 df <- df1 %>%
   inner_join (df2, by = c("id", "subgrp", "grp")) %>%
-  inner_join (df3, by = c("id", "subgrp", "grp")) 
+  inner_join (df3, by = c("id", "subgrp", "grp")) %>%
+  #select (-contains ("func_"))%>%
+  rename (disability_early = osw_early,
+          disability_late = osw_late,
+          disability_outcome = osw_outcome)
 ```
 
 # Exploratory  analysis
@@ -101,7 +105,7 @@ df %>%
 ```{r}
 
 df.bn = as.data.frame (df)
-df.bn[, grepl ( "id|subgrp|osw|outcome",names (df.bn))] <- NULL
+df.bn[, grepl ( "id|subgrp|outcome|func",names (df.bn))] <- NULL
 
 tiers_bl = list (colnames (df.bn)[colnames(df.bn) %in% grep ("early",colnames(df.bn), value = TRUE)], 
                  colnames (df.bn)[colnames(df.bn) %in% grep ("late",colnames(df.bn), value = TRUE)])
@@ -151,7 +155,7 @@ boot_bl_rel <-  foreach (B = 1: n_boot) %dopar%{
 ```{r fig.height=10, fig.width=10}
 
 bootstr = custom.strength(boot_bl_rel, nodes = names(df.bn))
-avg = averaged.network(bootstr, threshold = 0.7)
+avg = averaged.network(bootstr, threshold = 0.5)
 fit = bn.fit (avg, df.bn, method = "mle")
 
 g = strength.plot(avg, 
@@ -172,7 +176,7 @@ renderGraph(g)
 ```{r}
 
 df.bn = as.data.frame (df)
-df.bn[, grepl ( "id|subgrp|osw",names (df.bn))] <- NULL
+df.bn[, grepl ( "id|subgrp|func",names (df.bn))] <- NULL
 
 tiers_bl = list (colnames (df.bn)[colnames(df.bn) %in% grep ("early",colnames(df.bn), value = TRUE)], 
                  colnames (df.bn)[colnames(df.bn) %in% grep ("late",colnames(df.bn), value = TRUE)])
@@ -246,7 +250,7 @@ g = strength.plot(avg,
                   shape = "rectangle",
                   main = "Figure")
 
-graph::nodeRenderInfo(g) = list(fontsize=18)
+graph::nodeRenderInfo(g) = list(fontsize=20)
 renderGraph(g)
 
 
@@ -287,11 +291,11 @@ for (k in seq_along(flds)) {
   stopImplicitCluster()
   
   bootstr <-  custom.strength(boot, nodes = names(train))
-  avg <-  averaged.network(bootstr, threshold = 0.7)
+  avg <-  averaged.network(bootstr, threshold = 0.5)
   fit <-  bn.fit (avg, train, method = "mle")
   
   imp.list = impute (fit, data = test, method = "bayes-lw")
-  inames = names (imp.list) [-c(11)]
+  inames = names (imp.list) [!grepl ("grp", names (imp.list))]
   corr.df =  structure(numeric(length (inames)), names = inames)
   
   for (var in inames) {
