@@ -98,77 +98,6 @@ df %>%
 
 # BN analysis
 
-## Early change with func as function, with no absolute outcomes
-
-### Create blacklist
-
-```{r}
-
-df.bn = as.data.frame (df)
-df.bn[, grepl ( "id|subgrp|outcome|func",names (df.bn))] <- NULL
-
-tiers_bl = list (colnames (df.bn)[colnames(df.bn) %in% grep ("early",colnames(df.bn), value = TRUE)], 
-                 colnames (df.bn)[colnames(df.bn) %in% grep ("late",colnames(df.bn), value = TRUE)])
-bl1 = tiers2blacklist(tiers_bl)
-
-tiers_bl = list (colnames (df.bn)[colnames(df.bn) %in% grep ("grp",colnames(df.bn), value = TRUE)], 
-                 colnames (df.bn)[colnames(df.bn) %in% grep ("late",colnames(df.bn), value = TRUE)])
-
-bl2 = tiers2blacklist(tiers_bl)
-
-tiers_bl = list (colnames (df.bn)[colnames(df.bn) %in% grep ("grp",colnames(df.bn), value = TRUE)], 
-                 colnames (df.bn)[colnames(df.bn) %in% grep ("early",colnames(df.bn), value = TRUE)])
-
-bl3 = tiers2blacklist(tiers_bl)
-bl = rbind(bl1, bl2, bl3)
-
-```
-
-
-
-### Build BN model
-
-```{r}
-
-doParallel::registerDoParallel(4)
-n_boot <- 200
-
-set.seed (20200420)
-
-############
-
-boot_bl_rel <-  foreach (B = 1: n_boot) %dopar%{
-    boot.sample = df.bn[sample(nrow(df.bn), 
-                                          nrow(df.bn), replace = TRUE), ]
-    bnlearn::structural.em(boot.sample, impute = "bayes-lw", max.iter = 3,
-                              maximize.args = list(blacklist = bl))
-}
-#############
-
-
-  
-
-```
-
-### See results
-
-```{r fig.height=10, fig.width=10}
-
-bootstr = custom.strength(boot_bl_rel, nodes = names(df.bn))
-avg = averaged.network(bootstr, threshold = 0.5)
-fit = bn.fit (avg, df.bn, method = "mle")
-
-g = strength.plot(avg, 
-                  bootstr, 
-                  shape = "rectangle",
-                  main = "Figure")
-
-graph::nodeRenderInfo(g) = list(fontsize=18)
-renderGraph(g)
-
-
-```
-
 ## Early change with func as function, and with absolute outcome
 
 ### Create blacklist
@@ -242,7 +171,7 @@ boot_bl <-  foreach (B = 1: n_boot) %dopar%{
 ```{r fig.height=10, fig.width=10}
 
 bootstr = custom.strength(boot_bl, nodes = names(df.bn))
-avg = averaged.network(bootstr, threshold = 0.7)
+avg = averaged.network(bootstr, threshold = 0.5)
 fit = bn.fit (avg, df.bn, method = "mle")
 
 g = strength.plot(avg, 
@@ -256,6 +185,59 @@ renderGraph(g)
 
 ```
 
+## Early change with func as function, with no absolute outcomes
+
+### Create blacklist
+
+```{r}
+
+df.bn = as.data.frame (df)
+df.bn[, grepl ( "id|subgrp|outcome|func",names (df.bn))] <- NULL
+
+tiers_bl = list (colnames (df.bn)[colnames(df.bn) %in% grep ("early",colnames(df.bn), value = TRUE)], 
+                 colnames (df.bn)[colnames(df.bn) %in% grep ("late",colnames(df.bn), value = TRUE)])
+bl1 = tiers2blacklist(tiers_bl)
+
+tiers_bl = list (colnames (df.bn)[colnames(df.bn) %in% grep ("grp",colnames(df.bn), value = TRUE)], 
+                 colnames (df.bn)[colnames(df.bn) %in% grep ("late",colnames(df.bn), value = TRUE)])
+
+bl2 = tiers2blacklist(tiers_bl)
+
+tiers_bl = list (colnames (df.bn)[colnames(df.bn) %in% grep ("grp",colnames(df.bn), value = TRUE)], 
+                 colnames (df.bn)[colnames(df.bn) %in% grep ("early",colnames(df.bn), value = TRUE)])
+
+bl3 = tiers2blacklist(tiers_bl)
+bl = rbind(bl1, bl2, bl3)
+
+```
+
+
+
+### Build BN model
+
+```{r}
+
+doParallel::registerDoParallel(4)
+n_boot <- 200
+
+set.seed (20200420)
+
+############
+
+boot_bl_rel <-  foreach (B = 1: n_boot) %dopar%{
+    boot.sample = df.bn[sample(nrow(df.bn), 
+                                          nrow(df.bn), replace = TRUE), ]
+    bnlearn::structural.em(boot.sample, impute = "bayes-lw", max.iter = 3,
+                              maximize.args = list(blacklist = bl))
+}
+#############
+
+
+  
+
+```
+
+
 # Performance evaluation using nested cross validation. 
 
 Inner is bootstrap resampling for model averaging. 
@@ -268,8 +250,6 @@ set.seed (20200420)
 flds <- createFolds(1:nrow(df.bn), 
                             k = 10, returnTrain = TRUE)
 n_boot = 200
-doParallel::registerDoParallel(7)
-
 corr.df.list <- list()
 
 for (k in seq_along(flds)) {
@@ -277,15 +257,14 @@ for (k in seq_along(flds)) {
   train <-  df.bn [flds[[k]], ] %>% as.data.frame()
   test <- df.bn [-flds[[k]], ] %>% as.data.frame()
   
-  doParallel::registerDoParallel(7)
+  doParallel::registerDoParallel(4)
   ############
   
   boot  =  foreach (B = 1: n_boot) %dopar%{
       boot.sample = train[sample(nrow(train), 
                                             nrow(train), replace = TRUE), ]
-      bnlearn::structural.em(boot.sample, impute = "bayes-lw", max.iter = 5,
-                                maximize.args = list(blacklist = bl,  
-                                                      k = log(nrow(boot.sample))))
+      bnlearn::structural.em(boot.sample, impute = "bayes-lw", max.iter = 3,
+                                maximize.args = list(blacklist = bl))
   }
   #############
   stopImplicitCluster()
@@ -314,6 +293,25 @@ corr.df <- bind_cols (corr.df.list) %>%
 names (corr.df) <- inames
 
 corr.df
+```
+
+### See results
+
+```{r fig.height=10, fig.width=10}
+
+bootstr = custom.strength(boot_bl_rel, nodes = names(df.bn))
+avg = averaged.network(bootstr, threshold = 0.5)
+fit = bn.fit (avg, df.bn, method = "mle")
+
+g = strength.plot(avg, 
+                  bootstr, 
+                  shape = "rectangle",
+                  main = "Figure")
+
+graph::nodeRenderInfo(g) = list(fontsize=18)
+renderGraph(g)
+
+
 ```
 
 # Save results
