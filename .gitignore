@@ -16,4 +16,4 @@ code/nw*
 output/*tiff
 output/*nw*
 output/image
-output/temp
+output/temp*
