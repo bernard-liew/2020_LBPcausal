@@ -10,12 +10,6 @@ editor_options:
 
 Welcome to this website which aims to uncover the causal mechanisms of recovery in individuals with low back pain.
 
-[This code cleans the data](1-preparation.html)
+[This code performs BN analysis on early and late change data with late between weeks 10 and 52](BN_analysis.html)
 
-[This code performs BN analysis on early change data](2-mediation_early.html)
-
-[This code performs BN analysis on late change data](3-mediation_late.html)
-
-[This code performs BN analysis on early and late change data with late between weeks 10 and 52](4-mediation_early2late.html)
-
-[This code performs BN analysis on early and late change data with late between weeks 26 and 52](5-mediation_early2laterr.html)
+[This code probes the built BN model for inferences](ReportResults.html)
