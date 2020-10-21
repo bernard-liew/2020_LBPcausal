@@ -1,0 +1,245 @@
+---
+title: "Bayesian Network Analysis"
+author: "bernard-liew"
+date: "2020-10-21"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+
+
+# Load library 
+
+```{r message=FALSE, warning=FALSE}
+
+# Helper packages
+library (tidyverse)
+library (tidyselect)
+library (arsenal)
+library (janitor)
+library (magrittr)
+library (Rgraphviz)
+library (corrr)
+library (corrplot)
+
+# Import
+library(readxl)
+library (xlsx)
+
+# Missing data
+library (mice)
+library (VIM)
+
+# Modelling
+library (bnlearn)
+library (caret)
+
+# Parallel
+library (doParallel)
+
+```
+
+# Introduction
+
+This is a bayesian network analysis where the early change variables are between week 10 and baseline. The late change variables are between week 52 and week 10.
+
+# Import data
+
+```{r}
+
+rm (list = ls())
+df_list <- readRDS("output/df_change.RDS")
+
+```
+
+# Subset data
+
+```{r}
+df1 <- df_list[["wk10_base"]]
+names(df1)[grepl("wk", names (df1))] <- paste0(str_remove(names(df1)[grepl("wk", names (df1))], "wk10_"), "_early")
+
+df2 <- df_list[["wk52_wk10"]]
+names(df2)[grepl("wk", names (df2))] <- paste0(str_remove(names(df2)[grepl("wk", names (df2))], "wk52_"), "_late")
+
+df3 <- df_list[["wk52"]]
+df3 <- df3 %>%
+  select (id, grp, subgrp, wk52_lbp, wk52_lp, wk52_osw, wk52_func) 
+names(df3)[grepl("wk", names (df3))] <- paste0(str_remove(names(df3)[grepl("wk", names (df3))], "wk52_"), "_outcome")
+
+df <- df1 %>%
+  inner_join (df2, by = c("id", "subgrp", "grp")) %>%
+  inner_join (df3, by = c("id", "subgrp", "grp")) %>%
+  #select (-contains ("func_"))%>%
+  rename (disability_early = osw_early,
+          disability_late = osw_late,
+          disability_outcome = osw_outcome)
+```
+
+# Exploratory  analysis
+
+## Between group comparisons
+
+```{r, results = "asis"}
+tableby (subgrp ~., data = df, digits = 2, digits.p = 2) %>%	
+  summary () 
+```
+
+## Correlation plots
+
+```{r}
+col<- colorRampPalette(c("red", "white", "blue"))(20)
+df %>%	
+  select_if (is.numeric) %>%	
+  select (-id) %>%
+  cor (use = "complete.obs") %>%
+  corrplot(type="upper", tl.col="black", tl.srt=45, col=col)
+
+```
+
+# BN analysis
+
+## Create blacklist
+
+```{r, eval = FALSE}
+
+df.bn = as.data.frame (df)
+df.bn[, grepl ( "id|subgrp|outcome|func",names (df.bn))] <- NULL
+
+tiers_bl = list (colnames (df.bn)[colnames(df.bn) %in% grep ("early",colnames(df.bn), value = TRUE)], 
+                 colnames (df.bn)[colnames(df.bn) %in% grep ("late",colnames(df.bn), value = TRUE)])
+bl1 = tiers2blacklist(tiers_bl)
+
+tiers_bl = list (colnames (df.bn)[colnames(df.bn) %in% grep ("grp",colnames(df.bn), value = TRUE)], 
+                 colnames (df.bn)[colnames(df.bn) %in% grep ("late",colnames(df.bn), value = TRUE)])
+
+bl2 = tiers2blacklist(tiers_bl)
+
+tiers_bl = list (colnames (df.bn)[colnames(df.bn) %in% grep ("grp",colnames(df.bn), value = TRUE)], 
+                 colnames (df.bn)[colnames(df.bn) %in% grep ("early",colnames(df.bn), value = TRUE)])
+
+bl3 = tiers2blacklist(tiers_bl)
+bl = rbind(bl1, bl2, bl3)
+
+```
+
+
+
+## Build BN model
+
+```{r, eval = FALSE}
+
+doParallel::registerDoParallel(4)
+n_boot <- 200
+
+set.seed (20200420)
+
+############
+
+boot_bl_rel <-  foreach (B = 1: n_boot) %dopar%{
+    boot.sample = df.bn[sample(nrow(df.bn), 
+                                          nrow(df.bn), replace = TRUE), ]
+    bnlearn::structural.em(boot.sample, impute = "bayes-lw", max.iter = 3,
+                              maximize.args = list(blacklist = bl))
+}
+#############
+
+
+  
+
+```
+
+
+# Performance evaluation using nested cross validation. 
+
+Inner is bootstrap resampling for model averaging. 
+Outer is bootstrap resampling k = 25 for performance evaluation.
+
+```{r, eval= FALSE}
+
+set.seed (20200420)
+
+flds <- createFolds(1:nrow(df.bn), 
+                            k = 10, returnTrain = TRUE)
+n_boot = 200
+corr.df.list <- list()
+
+for (k in seq_along(flds)) {
+  
+  train <-  df.bn [flds[[k]], ] %>% as.data.frame()
+  test <- df.bn [-flds[[k]], ] %>% as.data.frame()
+  
+  doParallel::registerDoParallel(4)
+  ############
+  
+  boot  =  foreach (B = 1: n_boot) %dopar%{
+      boot.sample = train[sample(nrow(train), 
+                                            nrow(train), replace = TRUE), ]
+      bnlearn::structural.em(boot.sample, impute = "bayes-lw", max.iter = 3,
+                                maximize.args = list(blacklist = bl))
+  }
+  #############
+  stopImplicitCluster()
+  
+  bootstr <-  custom.strength(boot, nodes = names(train))
+  avg <-  averaged.network(bootstr, threshold = 0.5)
+  fit <-  bn.fit (avg, train, method = "mle")
+  
+  imp.list = impute (fit, data = test, method = "bayes-lw")
+  inames = names (imp.list) [!grepl ("grp", names (imp.list))]
+  corr.df =  structure(numeric(length (inames)), names = inames)
+  
+  for (var in inames) {
+      corr.df[var] = cor(predict(fit, data = imp.list, var, method = "bayes-lw"), 
+                         imp.list[, var])
+    }
+  
+  corr.df.list[[k]] <- corr.df
+  
+
+}
+
+corr.df <- bind_cols (corr.df.list) %>%
+  apply (1, mean)
+
+names (corr.df) <- inames
+
+corr.df
+```
+
+### See results
+
+```{r fig.height=10, fig.width=10, eval = FALSE}
+
+bootstr = custom.strength(boot_bl_rel, nodes = names(df.bn))
+avg = averaged.network(bootstr, threshold = 0.5)
+fit = bn.fit (avg, df.bn, method = "mle")
+
+g = strength.plot(avg, 
+                  bootstr, 
+                  shape = "rectangle",
+                  main = "Figure")
+
+graph::nodeRenderInfo(g) = list(fontsize=18)
+renderGraph(g)
+
+
+```
+
+# Save results
+
+```{r, eval = FALSE}
+
+save (df,
+      df.bn,
+      bl,
+      boot_bl,
+      boot_bl_rel,
+      bootstr,
+      corr.df,
+      avg,
+      fit,
+      file = "output/results_early2late.RData")
+
+
+```
+

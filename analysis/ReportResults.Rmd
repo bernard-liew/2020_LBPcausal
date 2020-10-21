@@ -1,0 +1,439 @@
+---
+title: "ReportResults"
+author: "Bernard"
+date: "2020-10-21"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+
+# Load library 
+
+```{r message=FALSE, warning=FALSE}
+
+# Helper packages
+library (tidyverse)
+library (Rgraphviz)
+library (corrr)
+library (corrplot)
+library (DataExplorer)
+library (cowplot)
+
+# Modelling
+library (bnlearn)
+library (qgraph)
+
+# Parallel
+library (doParallel)
+
+# Tables
+library (flextable)
+library (officer)
+
+
+```
+
+
+# Import data
+
+```{r}
+
+rm (list = ls())
+
+load ("output/results_early2late.RData")
+
+imp.data = impute (fit, data = df.bn, method = "bayes-lw")
+
+var_order <- c("disability_early", "lbp_early", "lp_early", "pain_cope_early", 
+               "sleep_early", "work_expect_early", "pain_persist_early", 
+               "anx_early", "depress_early","fear_early",
+               "disability_late", "lbp_late", "lp_late", "pain_cope_late", 
+               "sleep_late", "work_expect_late", "pain_persist_late", 
+               "anx_late", "depress_late","fear_late")
+
+```
+
+
+# Descriptive plot
+
+## Mean & SD
+
+```{r}
+df.plot <- df %>%
+  pivot_longer(cols = -c("id", "grp", "subgrp"),
+               names_to = "var",
+               values_to = "val") %>%
+  filter (var %in% var_order) %>%
+  mutate (var = factor (var, levels = var_order),
+          grp = factor (grp, labels = c("Advice", "IndvPT"))) %>%
+  group_by(grp, var) %>%
+  summarize (Mean = mean (val, na.rm = TRUE),
+             Sd = sd (val, na.rm = TRUE))
+
+
+f <- ggplot (df.plot) +
+  geom_point(aes (x = grp, y = Mean), colour = "black", fill = "black", stat = "identity") +
+  geom_errorbar(aes (x = grp, ymin = Mean - Sd, ymax = Mean + Sd), width = 0) +
+  facet_wrap(~ var, scales = "free") +
+  labs (x = "Group",
+        y = "Mean difference (SD)") +
+  theme(text = element_text(size=16)) +
+  theme_cowplot()
+
+f
+
+# tiff(width = 10, height = 8, units = "in", res = 100, file = "../manuscript/fig1.tiff")
+# f
+# dev.off()
+
+```
+
+## Plot missing data of subset data
+
+```{r, results="asis"}
+
+f <- plot_missing(df.bn) +
+  labs (y = "Percentage missing",
+        x = "Variables") +
+  theme_cowplot()
+
+# tiff(width = 10, height = 8, units = "in", res = 300, file = "../manuscript/sm_fig1.tiff")
+# f
+# dev.off()
+
+```
+
+# BN Results
+
+```{r fig.height=10, fig.width=10}
+
+demo.var <- c("grp")
+# out.var <- grep ("outcome", names (df.bn), value = TRUE)
+early.var <-  grep ("early", names (df.bn), value = TRUE)
+late.var <-  grep ("late", names (df.bn), value = TRUE)
+
+bootstr = custom.strength(boot_bl_rel, nodes = names(df.bn))
+avg = averaged.network(bootstr, threshold = 0.5)
+fit = bn.fit (avg, df.bn, method = "mle")
+
+g = strength.plot(avg, 
+                  bootstr, 
+                  shape = "rectangle")
+
+graph::nodeRenderInfo(g) = list(fontsize=18)
+renderGraph(g)
+
+arc_col <- data.frame(arcs = names (edgeRenderInfo(g)$col)) %>%
+  separate(arcs, c("parent", "child"), sep = "~")
+
+coef_fit <- coef(fit) 
+coef_fit <- coef_fit[!map_lgl(coef_fit, is.matrix)]
+coef_fit <- coef_fit[!map_lgl(coef_fit, is.table)]
+coef_fit <-  coef_fit %>%
+  unlist ()
+coef_fit <- coef_fit[!grepl ("Intercept", names (coef_fit))]
+
+coef_fit <- data.frame(arcs = names (coef_fit), coefs = coef_fit) %>%
+  separate(arcs, c ("child", "parent"), sep = "[.]") 
+
+new_col <- arc_col %>%
+  left_join(coef_fit, by = c("parent", "child")) %>%
+  mutate (coefs = replace_na(coefs,88)) %>%
+  mutate (col = ifelse (coefs < 0, "red", 
+                        ifelse (coefs == 88, "black", "blue"))) %>%
+  mutate (col = ifelse (parent == "pain_persist_early" & child == "pain_cope_early", "blue",
+                        ifelse (parent == "lbp_early" & child == "pain_cope_early", "blue", col)))
+
+new_arc_col <- new_col$col
+names (new_arc_col) <-   names (edgeRenderInfo(g)$col)
+
+nodeRenderInfo(g)$fill[demo.var] = "cornsilk"
+nodeRenderInfo(g)$fill[early.var] = "tan1"
+nodeRenderInfo(g)$fill[late.var] = "gold"
+#nodeRenderInfo(g)$fill[out.var] = "tomato"
+edgeRenderInfo(g)$col <- new_arc_col
+graph::nodeRenderInfo(g) = list(fontsize=14)
+
+
+#tiff(width = 25, height = 15, units = "in", res = 300, file = "../manuscript/fig2.tiff")
+renderGraph(g)
+#dev.off()
+
+```
+
+
+# Correlation performance table
+
+```{r, results = "asis"}
+
+corr.df_ord <- corr.df[var_order] 
+correlation <- data.frame(Variable = names (corr.df_ord),
+                          Value = corr.df_ord %>% round (2)) %>%
+  mutate (Strength = ifelse (abs (Value) <= 0.3, "negligible",
+                             ifelse (abs(Value) > 0.3 & abs(Value <= 0.5), "low",
+                                     ifelse (abs(Value) > 0.5 & abs(Value <= 0.7), "moderate",
+                                             ifelse (abs(Value) > 0.7 & abs(Value <= 0.9), "high",
+                                                     "very high")))))
+
+correlation %>%
+  kableExtra::kable()
+
+# ft <- flextable(correlation) %>%
+#       set_caption(paste0("Correlation between observed and predicted change values")) %>%
+#       autofit()
+
+# my_path <- paste0("../manuscript/table1_corr.docx")
+# 
+# my_doc <- read_docx()  %>% 
+#   body_add_flextable(ft)
+# 
+# print (my_doc, target = my_path)
+
+```
+
+
+# Probing the expert system BN model
+
+## Evaluating the correlation between `lbp_early`-`lbp_late` relationship
+
+### See the correlation
+
+```{r fig.height=10, fig.width=10}
+set.seed(123)
+
+sim <- cpdist(fit, nodes = c("lbp_early", "lbp_late"), n = 10^4,
+               evidence = (TRUE))
+
+m <- lm(lbp_late ~ lbp_early, data = sim)
+
+coefs <- coef(m) 
+b0 <- round(coefs[1], 2)
+b1 <- round(coefs[2],2)
+r2 <- round(summary(m)$r.squared, 2)
+summary (m)
+
+eqn <- bquote(italic(lbp_late) == .(b0) + .(b1)*italic(lbp_early) * "," ~~ 
+                  r^2 == .(r2))
+
+#tiff(width = 10, height = 8, units = "in", res = 300, file = "../manuscript/fig3.tiff")
+
+ plot(sim$lbp_early, sim$lbp_late, 
+      ylab = "Late change LBP", xlab = "Early change LBP", col = "grey", cex.axis = 1.5, cex.lab = 1.5) + 
+  abline(coef(m), lwd = 2) +
+  abline(v = 0, col = 2, lty = 2, lwd = 2) +
+  abline(h = 0, col = 2, lty = 2, lwd = 2) +
+  text(x = -5, y = 5, labels = eqn, cex = 1.2)
+ 
+#dev.off()
+
+```
+
+## Evaluating the mediating infuence of `disability_early`  on the `grp`-`lbp_early` relationship
+
+### Influence of `grp` on `lbp_early`
+
+```{r fig.height=10, fig.width=10}
+
+set.seed(123)
+
+sim <- cpdist(fit, nodes = c("grp", "lbp_early"), n = 10^4,
+               evidence = TRUE) # individualisedphysio, advice
+
+m <- lm(lbp_early ~ grp, data = sim)
+
+coefs <- coef(m) 
+b0 <- round(coefs[1], 2)
+b1 <- round(coefs[2],2)
+r2 <- round(summary(m)$r.squared, 2)
+summary (m)
+
+eqn <- bquote(italic(lp_outcome) == .(b0) + .(b1)*italic(lp_late) * "," ~~ 
+                  r^2 == .(r2))
+
+
+sim %>%
+  mutate (grp = ifelse (grp == "advice", "Advice", "IndPT")) %>%
+  group_by(grp) %>%
+  summarize (Mean = mean (lbp_early),
+             Sd = sd (lbp_early))  %>%
+  ggplot () +
+  geom_bar(aes (x = grp, y = Mean), color = "black", stat = "identity") + 
+  geom_errorbar(aes (x = grp, ymin = Mean - Sd, ymax = Mean ), width = 0.2) + 
+  labs (x = "Group",
+        y = "Change in early LBP") + 
+  theme_cowplot()
+
+
+```
+
+
+### Influence of `grp` on `lbp_early` when `disability_early` is constant
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+
+set.seed(123)
+
+avg.mutilated = mutilated(avg, evidence = list(disability_early = 0))
+
+fitted.mutilated = bn.fit (avg.mutilated , df.bn, method = "mle")
+fitted.mutilated$disability_early = list(coef = c("(Intercept)" = 0), sd = 0)
+
+sim <- cpdist(fitted.mutilated, nodes = c("grp", "lbp_early"), n = 10^4,
+               evidence = TRUE) # individualisedphysio, advice
+
+m <- lm(lbp_early ~ grp, data = sim)
+
+coefs <- coef(m) 
+b0 <- round(coefs[1], 2)
+b1 <- round(coefs[2],2)
+r2 <- round(summary(m)$r.squared, 2)
+summary (m)
+
+
+sim %>%
+  mutate (grp = ifelse (grp == "advice", "Advice", "IndPT")) %>%
+  group_by(grp) %>%
+  summarize (Mean = mean (lbp_early),
+             Sd = sd (lbp_early))  %>%
+  ggplot () +
+  geom_bar(aes (x = grp, y = Mean), color = "black", stat = "identity") + 
+  geom_errorbar(aes (x = grp, ymin = Mean - Sd, ymax = Mean ), width = 0.2) + 
+  labs (x = "Group",
+        y = "Change in early LBP") + 
+  theme_cowplot()
+
+
+
+```
+
+## Evaluating the `disability_early`-`depress_early` relationship
+
+### See the correlation
+
+```{r fig.height=10, fig.width=10}
+set.seed(123)
+
+sim <- cpdist(fit, nodes = c("disability_early", "depress_early"), n = 10^4,
+               evidence = (TRUE))
+
+m <- lm(depress_early ~ disability_early, data = sim)
+
+coefs <- coef(m) 
+b0 <- round(coefs[1], 2)
+b1 <- round(coefs[2],2)
+r2 <- round(summary(m)$r.squared, 2)
+summary (m)
+
+eqn <- bquote(italic(depress_early) == .(b0) + .(b1)*italic(disability_early) * "," ~~ 
+                  r^2 == .(r2))
+
+#tiff(width = 10, height = 8, units = "in", res = 300, file = "../manuscript/fig4.tiff")
+
+ plot(sim$disability_early, sim$depress_early, ylab = "Early change depression", xlab = "Early change disability", col = "grey", cex.axis = 1.5, cex.lab = 1.5) + 
+  abline(coef(m), lwd = 2) +
+  abline(v = 0, col = 2, lty = 2, lwd = 2) +
+  abline(h = 0, col = 2, lty = 2, lwd = 2) +
+  text(x = -20, y = 6, labels = eqn, cex = 1.2)
+ 
+#dev.off()
+
+```
+
+### Mediating influence of `fear_early`.
+
+```{r fig.height=10, fig.width=10}
+set.seed(123)
+
+avg.mutilated = mutilated(avg, evidence = list(fear_early = 0))
+fitted.mutilated = bn.fit (avg.mutilated , df.bn, method = "mle")
+fitted.mutilated$fear_early= list(coef = c("(Intercept)" = 0), sd = 0)
+
+sim <- cpdist(fitted.mutilated, nodes = c("disability_early", "depress_early"), n = 10^4,
+               evidence = (TRUE))
+
+m <- lm(depress_early ~ disability_early, data = sim)
+
+coefs <- coef(m) 
+b0 <- round(coefs[1], 2)
+b1 <- round(coefs[2],2)
+r2 <- round(summary(m)$r.squared, 2)
+summary (m)
+
+```
+
+### Mediating influence of `lbp_early`.
+
+```{r fig.height=10, fig.width=10}
+set.seed(123)
+
+avg.mutilated = mutilated(avg, evidence = list(lbp_early = 0))
+fitted.mutilated = bn.fit (avg.mutilated , df.bn, method = "mle")
+fitted.mutilated$lbp_early = list(coef = c("(Intercept)" = 0), sd = 0)
+
+sim <- cpdist(fitted.mutilated, nodes = c("disability_early", "depress_early"), n = 10^4,
+               evidence = (TRUE))
+
+m <- lm(depress_early ~ disability_early, data = sim)
+
+coefs <- coef(m) 
+b0 <- round(coefs[1], 2)
+b1 <- round(coefs[2],2)
+r2 <- round(summary(m)$r.squared, 2)
+summary (m)
+
+```
+
+### Mediating influence of `pain_persist_early`.
+
+```{r fig.height=10, fig.width=10}
+set.seed(123)
+
+avg.mutilated = mutilated(avg, evidence = list(pain_persist_early = 0))
+fitted.mutilated = bn.fit (avg.mutilated , df.bn, method = "mle")
+fitted.mutilated$pain_persist_early = list(coef = c("(Intercept)" = 0), sd = 0)
+
+sim <- cpdist(fitted.mutilated, nodes = c("disability_early", "depress_early"), n = 10^4,
+               evidence = (TRUE))
+
+m <- lm(depress_early ~ disability_early, data = sim)
+
+coefs <- coef(m) 
+b0 <- round(coefs[1], 2)
+b1 <- round(coefs[2],2)
+r2 <- round(summary(m)$r.squared, 2)
+summary (m)
+
+
+```
+
+### Mediating influence of `fear_early`, `lbp_early`,  `pain_persist_early`
+
+```{r fig.height=10, fig.width=10}
+set.seed(123)
+
+avg.mutilated = mutilated(avg, evidence = list(fear_early = 0, lbp_early = 0,  pain_persist_early = 0))
+fitted.mutilated = bn.fit (avg.mutilated , df.bn, method = "mle")
+fitted.mutilated$fear_early = list(coef = c("(Intercept)" = 0), sd = 0)
+fitted.mutilated$lbp_early = list(coef = c("(Intercept)" = 0), sd = 0)
+fitted.mutilated$pain_persist_early = list(coef = c("(Intercept)" = 0), sd = 0)
+
+
+g = strength.plot(avg.mutilated, 
+                  bootstr, 
+                  shape = "rectangle")
+graph::nodeRenderInfo(g) = list(fontsize=18)
+renderGraph(g)
+
+sim <- cpdist(fitted.mutilated, nodes = c("disability_early", "depress_early"), n = 10^4,
+               evidence = (TRUE))
+
+m <- lm(depress_early ~ disability_early, data = sim)
+
+coefs <- coef(m) 
+b0 <- round(coefs[1], 2)
+b1 <- round(coefs[2],2)
+r2 <- round(summary(m)$r.squared, 2)
+summary (m)
+
+
+```
