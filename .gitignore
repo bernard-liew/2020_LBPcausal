@@ -11,3 +11,9 @@ analysis/*_cache
 analysis/site_libs
 data/
 output/*.xlsx
+code/networ*
+code/nw*
+output/*tiff
+output/*nw*
+output/image
+output/temp
