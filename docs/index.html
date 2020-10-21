@@ -307,7 +307,7 @@ $(document).ready(function () {
 
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
-<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span>
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 </button>
 </p>
 <div id="workflowr-report" class="collapse">
@@ -316,7 +316,7 @@ $(document).ready(function () {
 <a data-toggle="tab" href="#summary">Summary</a>
 </li>
 <li>
-<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> </a>
+<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> </a>
 </li>
 <li>
 <a data-toggle="tab" href="#versions">Past versions</a>
@@ -325,10 +325,10 @@ $(document).ready(function () {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2020-07-06
+<strong>Last updated:</strong> 2020-10-21
 </p>
 <p>
-<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 1 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 1
+<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 2 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
 </p>
 <p>
 <strong>Knit directory:</strong> <code>2020_LBPcausal/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
@@ -344,28 +344,28 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges"> <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted changes </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date </a>
 </p>
 </div>
-<div id="strongRMarkdownfilestronguncommittedchanges" class="panel-collapse collapse">
+<div id="strongRMarkdownfilestronguptodate" class="panel-collapse collapse">
 <div class="panel-body">
-<p>The R Markdown file has unstaged changes. To know which version of the R Markdown file created these results, you’ll want to first commit it to the Git repo. If you’re still working on the analysis, you can ignore this warning. When you’re finished, you can run <code>wflow_publish</code> to commit the R Markdown file and build the HTML.</p>
+<p>Great! Since the R Markdown file has been committed to the Git repository, you know the exact version of the code that produced these results.</p>
 </div>
 </div>
 </div>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcombernardliew2020LBPcausaltreec6431d01373d2c2bcbba4d85b2537ad208feee28targetblankc6431d0a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/bernard-liew/2020_LBPcausal/tree/c6431d01373d2c2bcbba4d85b2537ad208feee28" target="_blank">c6431d0</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcombernardliew2020LBPcausaltreee8814e2b9d1a8a183ca93a88a0b7529b65097bb1targetblanke8814e2a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/bernard-liew/2020_LBPcausal/tree/e8814e2b9d1a8a183ca93a88a0b7529b65097bb1" target="_blank">e8814e2</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcombernardliew2020LBPcausaltreec6431d01373d2c2bcbba4d85b2537ad208feee28targetblankc6431d0a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcombernardliew2020LBPcausaltreee8814e2b9d1a8a183ca93a88a0b7529b65097bb1targetblanke8814e2a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/bernard-liew/2020_LBPcausal/tree/c6431d01373d2c2bcbba4d85b2537ad208feee28" target="_blank">c6431d0</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/bernard-liew/2020_LBPcausal/tree/e8814e2b9d1a8a183ca93a88a0b7529b65097bb1" target="_blank">e8814e2</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -374,15 +374,18 @@ Note that you need to be careful to ensure that all relevant files for the analy
 Ignored files:
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
+    Ignored:    code/network_WIP.R
+    Ignored:    code/network_WIP_mgm.R
     Ignored:    output/data_clean.xlsx
+    Ignored:    output/image/
+    Ignored:    output/odi_network.tiff
+    Ignored:    output/odi_nw.RDS
+    Ignored:    output/odi_stability.tiff
+    Ignored:    output/odi_strength.tiff
+    Ignored:    output/orebro_nw.RDS
 
 Untracked files:
-    Untracked:  analysis/5-mediation_early2laterr.Rmd
-
-Unstaged changes:
-    Modified:   analysis/2-mediation_early.Rmd
-    Modified:   analysis/3-mediation_late.Rmd
-    Modified:   analysis/index.Rmd
+    Untracked:  output/temp.RData
 
 </code></pre>
 <p>
@@ -421,6 +424,57 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/bernard-liew/2020_LBPcausal/blob/e8814e2b9d1a8a183ca93a88a0b7529b65097bb1/analysis/index.Rmd" target="_blank">e8814e2</a>
+</td>
+<td>
+bernard-liew
+</td>
+<td>
+2020-10-21
+</td>
+<td>
+modified index to build 2 files for website
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/bernard-liew/2020_LBPcausal/blob/76787dc199a49c22e09224c809660c1ca296984e/analysis/index.Rmd" target="_blank">76787dc</a>
+</td>
+<td>
+bernard-liew
+</td>
+<td>
+2020-07-06
+</td>
+<td>
+git config –global user.email "<a href="mailto:you@example.com%22" class="email">you@example.com"</a>
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/bernard-liew/2020_LBPcausal/76787dc199a49c22e09224c809660c1ca296984e/docs/index.html" target="_blank">76787dc</a>
+</td>
+<td>
+bernard-liew
+</td>
+<td>
+2020-07-06
+</td>
+<td>
+git config –global user.email "<a href="mailto:you@example.com%22" class="email">you@example.com"</a>
+</td>
+</tr>
 <tr>
 <td>
 html
@@ -497,11 +551,8 @@ Start workflowr project.
 </div>
 </div>
 <p>Welcome to this website which aims to uncover the causal mechanisms of recovery in individuals with low back pain.</p>
-<p><a href="1-preparation.html">This code cleans the data</a></p>
-<p><a href="2-mediation_early.html">This code performs BN analysis on early change data</a></p>
-<p><a href="3-mediation_late.html">This code performs BN analysis on late change data</a></p>
-<p><a href="4-mediation_early2late.html">This code performs BN analysis on early and late change data with late between weeks 10 and 52</a></p>
-<p><a href="5-mediation_early2laterr.html">This code performs BN analysis on early and late change data with late between weeks 26 and 52</a></p>
+<p><a href="BN_analysis.html">This code performs BN analysis on early and late change data with late between weeks 10 and 52</a></p>
+<p><a href="ReportResults.html">This code probes the built BN model for inferences</a></p>
 
 
 <!-- Adjust MathJax settings so that all math formulae are shown using

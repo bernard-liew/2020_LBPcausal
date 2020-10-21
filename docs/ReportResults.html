@@ -1,0 +1,1508 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Bernard" />
+
+<meta name="date" content="2020-10-21" />
+
+<title>ReportResults</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/master/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">2020_LBPcausal</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="license.html">License</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">ReportResults</h1>
+<h4 class="author">Bernard</h4>
+<h4 class="date">2020-10-21</h4>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> </a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2020-10-21
+</p>
+<p>
+<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
+</p>
+<p>
+<strong>Knit directory:</strong> <code>2020_LBPcausal/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
+</p>
+<p>
+This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis was created with <a
+  href="https://github.com/jdblischak/workflowr">workflowr</a> (version 1.6.2). The <em>Checks</em> tab describes the reproducibility checks that were applied when the results were created. The <em>Past versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date </a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguptodate" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great! Since the R Markdown file has been committed to the Git repository, you know the exact version of the code that produced these results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the global environment can affect the analysis in your R Markdown file in unknown ways. For reproduciblity it’s best to always run the code in an empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20200422code"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Seed:</strong> <code>set.seed(20200422)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20200422code" class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20200422)</code> was run prior to running the code in the R Markdown file. Setting a seed ensures that any results that rely on randomness, e.g. subsampling or permutations, are reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Session information:</strong> recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be confident that you successfully produced the results during this run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcombernardliew2020LBPcausaltreee8814e2b9d1a8a183ca93a88a0b7529b65097bb1targetblanke8814e2a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/bernard-liew/2020_LBPcausal/tree/e8814e2b9d1a8a183ca93a88a0b7529b65097bb1" target="_blank">e8814e2</a> </a>
+</p>
+</div>
+<div id="strongRepositoryversionstrongahrefhttpsgithubcombernardliew2020LBPcausaltreee8814e2b9d1a8a183ca93a88a0b7529b65097bb1targetblanke8814e2a" class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version <a href="https://github.com/bernard-liew/2020_LBPcausal/tree/e8814e2b9d1a8a183ca93a88a0b7529b65097bb1" target="_blank">e8814e2</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    .Rhistory
+    Ignored:    .Rproj.user/
+    Ignored:    code/network_WIP.R
+    Ignored:    code/network_WIP_mgm.R
+    Ignored:    output/data_clean.xlsx
+    Ignored:    output/image/
+    Ignored:    output/odi_network.tiff
+    Ignored:    output/odi_nw.RDS
+    Ignored:    output/odi_stability.tiff
+    Ignored:    output/odi_strength.tiff
+    Ignored:    output/orebro_nw.RDS
+
+Untracked files:
+    Untracked:  output/temp.RData
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not included in this status report because it is ok for generated content to have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+
+<p>
+These are the previous versions of the repository in which changes were made to the R Markdown (<code>analysis/ReportResults.Rmd</code>) and HTML (<code>docs/ReportResults.html</code>) files. If you’ve configured a remote Git repository (see <code>?wflow_git_remote</code>), click on the hyperlinks in the table below to view the files as they were in that past version.
+</p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/bernard-liew/2020_LBPcausal/blob/71501c30e1080502e7778ed28cfd152876923a30/analysis/ReportResults.Rmd" target="_blank">71501c3</a>
+</td>
+<td>
+bernard-liew
+</td>
+<td>
+2020-10-21
+</td>
+<td>
+added analysis files for publication
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<div id="load-library" class="section level1">
+<h1>Load library</h1>
+<pre class="r"><code># Helper packages
+library (tidyverse)
+library (Rgraphviz)
+library (corrr)
+library (corrplot)
+library (DataExplorer)
+library (cowplot)
+
+# Modelling
+library (bnlearn)
+library (qgraph)
+
+# Parallel
+library (doParallel)
+
+# Tables
+library (flextable)
+library (officer)</code></pre>
+</div>
+<div id="import-data" class="section level1">
+<h1>Import data</h1>
+<pre class="r"><code>rm (list = ls())
+
+load (&quot;output/results_early2late.RData&quot;)
+
+imp.data = impute (fit, data = df.bn, method = &quot;bayes-lw&quot;)
+
+var_order &lt;- c(&quot;disability_early&quot;, &quot;lbp_early&quot;, &quot;lp_early&quot;, &quot;pain_cope_early&quot;, 
+               &quot;sleep_early&quot;, &quot;work_expect_early&quot;, &quot;pain_persist_early&quot;, 
+               &quot;anx_early&quot;, &quot;depress_early&quot;,&quot;fear_early&quot;,
+               &quot;disability_late&quot;, &quot;lbp_late&quot;, &quot;lp_late&quot;, &quot;pain_cope_late&quot;, 
+               &quot;sleep_late&quot;, &quot;work_expect_late&quot;, &quot;pain_persist_late&quot;, 
+               &quot;anx_late&quot;, &quot;depress_late&quot;,&quot;fear_late&quot;)</code></pre>
+</div>
+<div id="descriptive-plot" class="section level1">
+<h1>Descriptive plot</h1>
+<div id="mean-sd" class="section level2">
+<h2>Mean &amp; SD</h2>
+<pre class="r"><code>df.plot &lt;- df %&gt;%
+  pivot_longer(cols = -c(&quot;id&quot;, &quot;grp&quot;, &quot;subgrp&quot;),
+               names_to = &quot;var&quot;,
+               values_to = &quot;val&quot;) %&gt;%
+  filter (var %in% var_order) %&gt;%
+  mutate (var = factor (var, levels = var_order),
+          grp = factor (grp, labels = c(&quot;Advice&quot;, &quot;IndvPT&quot;))) %&gt;%
+  group_by(grp, var) %&gt;%
+  summarize (Mean = mean (val, na.rm = TRUE),
+             Sd = sd (val, na.rm = TRUE))</code></pre>
+<pre><code>`summarise()` regrouping output by &#39;grp&#39; (override with `.groups` argument)</code></pre>
+<pre class="r"><code>f &lt;- ggplot (df.plot) +
+  geom_point(aes (x = grp, y = Mean), colour = &quot;black&quot;, fill = &quot;black&quot;, stat = &quot;identity&quot;) +
+  geom_errorbar(aes (x = grp, ymin = Mean - Sd, ymax = Mean + Sd), width = 0) +
+  facet_wrap(~ var, scales = &quot;free&quot;) +
+  labs (x = &quot;Group&quot;,
+        y = &quot;Mean difference (SD)&quot;) +
+  theme(text = element_text(size=16)) +
+  theme_cowplot()
+
+f</code></pre>
+<p><img src="figure/ReportResults.Rmd/unnamed-chunk-3-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># tiff(width = 10, height = 8, units = &quot;in&quot;, res = 100, file = &quot;../manuscript/fig1.tiff&quot;)
+# f
+# dev.off()</code></pre>
+</div>
+<div id="plot-missing-data-of-subset-data" class="section level2">
+<h2>Plot missing data of subset data</h2>
+<pre class="r"><code>f &lt;- plot_missing(df.bn) +
+  labs (y = &quot;Percentage missing&quot;,
+        x = &quot;Variables&quot;) +
+  theme_cowplot()</code></pre>
+<p><img src="figure/ReportResults.Rmd/unnamed-chunk-4-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># tiff(width = 10, height = 8, units = &quot;in&quot;, res = 300, file = &quot;../manuscript/sm_fig1.tiff&quot;)
+# f
+# dev.off()</code></pre>
+</div>
+</div>
+<div id="bn-results" class="section level1">
+<h1>BN Results</h1>
+<pre class="r"><code>demo.var &lt;- c(&quot;grp&quot;)
+# out.var &lt;- grep (&quot;outcome&quot;, names (df.bn), value = TRUE)
+early.var &lt;-  grep (&quot;early&quot;, names (df.bn), value = TRUE)
+late.var &lt;-  grep (&quot;late&quot;, names (df.bn), value = TRUE)
+
+bootstr = custom.strength(boot_bl_rel, nodes = names(df.bn))
+avg = averaged.network(bootstr, threshold = 0.5)
+fit = bn.fit (avg, df.bn, method = &quot;mle&quot;)
+
+g = strength.plot(avg, 
+                  bootstr, 
+                  shape = &quot;rectangle&quot;)</code></pre>
+<p><img src="figure/ReportResults.Rmd/unnamed-chunk-5-1.png" width="960" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>graph::nodeRenderInfo(g) = list(fontsize=18)
+renderGraph(g)</code></pre>
+<p><img src="figure/ReportResults.Rmd/unnamed-chunk-5-2.png" width="960" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>arc_col &lt;- data.frame(arcs = names (edgeRenderInfo(g)$col)) %&gt;%
+  separate(arcs, c(&quot;parent&quot;, &quot;child&quot;), sep = &quot;~&quot;)
+
+coef_fit &lt;- coef(fit) 
+coef_fit &lt;- coef_fit[!map_lgl(coef_fit, is.matrix)]
+coef_fit &lt;- coef_fit[!map_lgl(coef_fit, is.table)]
+coef_fit &lt;-  coef_fit %&gt;%
+  unlist ()
+coef_fit &lt;- coef_fit[!grepl (&quot;Intercept&quot;, names (coef_fit))]
+
+coef_fit &lt;- data.frame(arcs = names (coef_fit), coefs = coef_fit) %&gt;%
+  separate(arcs, c (&quot;child&quot;, &quot;parent&quot;), sep = &quot;[.]&quot;) 
+
+new_col &lt;- arc_col %&gt;%
+  left_join(coef_fit, by = c(&quot;parent&quot;, &quot;child&quot;)) %&gt;%
+  mutate (coefs = replace_na(coefs,88)) %&gt;%
+  mutate (col = ifelse (coefs &lt; 0, &quot;red&quot;, 
+                        ifelse (coefs == 88, &quot;black&quot;, &quot;blue&quot;))) %&gt;%
+  mutate (col = ifelse (parent == &quot;pain_persist_early&quot; &amp; child == &quot;pain_cope_early&quot;, &quot;blue&quot;,
+                        ifelse (parent == &quot;lbp_early&quot; &amp; child == &quot;pain_cope_early&quot;, &quot;blue&quot;, col)))
+
+new_arc_col &lt;- new_col$col
+names (new_arc_col) &lt;-   names (edgeRenderInfo(g)$col)
+
+nodeRenderInfo(g)$fill[demo.var] = &quot;cornsilk&quot;
+nodeRenderInfo(g)$fill[early.var] = &quot;tan1&quot;
+nodeRenderInfo(g)$fill[late.var] = &quot;gold&quot;
+#nodeRenderInfo(g)$fill[out.var] = &quot;tomato&quot;
+edgeRenderInfo(g)$col &lt;- new_arc_col
+graph::nodeRenderInfo(g) = list(fontsize=14)
+
+
+#tiff(width = 25, height = 15, units = &quot;in&quot;, res = 300, file = &quot;../manuscript/fig2.tiff&quot;)
+renderGraph(g)</code></pre>
+<p><img src="figure/ReportResults.Rmd/unnamed-chunk-5-3.png" width="960" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>#dev.off()</code></pre>
+</div>
+<div id="correlation-performance-table" class="section level1">
+<h1>Correlation performance table</h1>
+<pre class="r"><code>corr.df_ord &lt;- corr.df[var_order] 
+correlation &lt;- data.frame(Variable = names (corr.df_ord),
+                          Value = corr.df_ord %&gt;% round (2)) %&gt;%
+  mutate (Strength = ifelse (abs (Value) &lt;= 0.3, &quot;negligible&quot;,
+                             ifelse (abs(Value) &gt; 0.3 &amp; abs(Value &lt;= 0.5), &quot;low&quot;,
+                                     ifelse (abs(Value) &gt; 0.5 &amp; abs(Value &lt;= 0.7), &quot;moderate&quot;,
+                                             ifelse (abs(Value) &gt; 0.7 &amp; abs(Value &lt;= 0.9), &quot;high&quot;,
+                                                     &quot;very high&quot;)))))
+
+correlation %&gt;%
+  kableExtra::kable()</code></pre>
+<table>
+<thead>
+<tr>
+<th style="text-align:left;">
+Variable
+</th>
+<th style="text-align:right;">
+Value
+</th>
+<th style="text-align:left;">
+Strength
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+disability_early
+</td>
+<td style="text-align:right;">
+0.72
+</td>
+<td style="text-align:left;">
+high
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+lbp_early
+</td>
+<td style="text-align:right;">
+0.68
+</td>
+<td style="text-align:left;">
+moderate
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+lp_early
+</td>
+<td style="text-align:right;">
+0.71
+</td>
+<td style="text-align:left;">
+high
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+pain_cope_early
+</td>
+<td style="text-align:right;">
+0.52
+</td>
+<td style="text-align:left;">
+moderate
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+sleep_early
+</td>
+<td style="text-align:right;">
+0.53
+</td>
+<td style="text-align:left;">
+moderate
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+work_expect_early
+</td>
+<td style="text-align:right;">
+0.44
+</td>
+<td style="text-align:left;">
+low
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+pain_persist_early
+</td>
+<td style="text-align:right;">
+0.62
+</td>
+<td style="text-align:left;">
+moderate
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+anx_early
+</td>
+<td style="text-align:right;">
+0.76
+</td>
+<td style="text-align:left;">
+high
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+depress_early
+</td>
+<td style="text-align:right;">
+0.69
+</td>
+<td style="text-align:left;">
+moderate
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+fear_early
+</td>
+<td style="text-align:right;">
+0.55
+</td>
+<td style="text-align:left;">
+moderate
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+disability_late
+</td>
+<td style="text-align:right;">
+0.73
+</td>
+<td style="text-align:left;">
+high
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+lbp_late
+</td>
+<td style="text-align:right;">
+0.71
+</td>
+<td style="text-align:left;">
+high
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+lp_late
+</td>
+<td style="text-align:right;">
+0.70
+</td>
+<td style="text-align:left;">
+moderate
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+pain_cope_late
+</td>
+<td style="text-align:right;">
+0.46
+</td>
+<td style="text-align:left;">
+low
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+sleep_late
+</td>
+<td style="text-align:right;">
+0.59
+</td>
+<td style="text-align:left;">
+moderate
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+work_expect_late
+</td>
+<td style="text-align:right;">
+0.42
+</td>
+<td style="text-align:left;">
+low
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+pain_persist_late
+</td>
+<td style="text-align:right;">
+0.65
+</td>
+<td style="text-align:left;">
+moderate
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+anx_late
+</td>
+<td style="text-align:right;">
+0.74
+</td>
+<td style="text-align:left;">
+high
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+depress_late
+</td>
+<td style="text-align:right;">
+0.65
+</td>
+<td style="text-align:left;">
+moderate
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+fear_late
+</td>
+<td style="text-align:right;">
+0.53
+</td>
+<td style="text-align:left;">
+moderate
+</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code># ft &lt;- flextable(correlation) %&gt;%
+#       set_caption(paste0(&quot;Correlation between observed and predicted change values&quot;)) %&gt;%
+#       autofit()
+
+# my_path &lt;- paste0(&quot;../manuscript/table1_corr.docx&quot;)
+# 
+# my_doc &lt;- read_docx()  %&gt;% 
+#   body_add_flextable(ft)
+# 
+# print (my_doc, target = my_path)</code></pre>
+</div>
+<div id="probing-the-expert-system-bn-model" class="section level1">
+<h1>Probing the expert system BN model</h1>
+<div id="evaluating-the-correlation-between-lbp_early-lbp_late-relationship" class="section level2">
+<h2>Evaluating the correlation between <code>lbp_early</code>-<code>lbp_late</code> relationship</h2>
+<div id="see-the-correlation" class="section level3">
+<h3>See the correlation</h3>
+<pre class="r"><code>set.seed(123)
+
+sim &lt;- cpdist(fit, nodes = c(&quot;lbp_early&quot;, &quot;lbp_late&quot;), n = 10^4,
+               evidence = (TRUE))
+
+m &lt;- lm(lbp_late ~ lbp_early, data = sim)
+
+coefs &lt;- coef(m) 
+b0 &lt;- round(coefs[1], 2)
+b1 &lt;- round(coefs[2],2)
+r2 &lt;- round(summary(m)$r.squared, 2)
+summary (m)</code></pre>
+<pre><code>
+Call:
+lm(formula = lbp_late ~ lbp_early, data = sim)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-7.8249 -1.3806  0.0108  1.3642  7.3142 
+
+Coefficients:
+             Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept) -1.334012   0.027806  -47.98   &lt;2e-16 ***
+lbp_early   -0.431937   0.008416  -51.33   &lt;2e-16 ***
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+
+Residual standard error: 2.015 on 9998 degrees of freedom
+Multiple R-squared:  0.2085,    Adjusted R-squared:  0.2085 
+F-statistic:  2634 on 1 and 9998 DF,  p-value: &lt; 2.2e-16</code></pre>
+<pre class="r"><code>eqn &lt;- bquote(italic(lbp_late) == .(b0) + .(b1)*italic(lbp_early) * &quot;,&quot; ~~ 
+                  r^2 == .(r2))
+
+#tiff(width = 10, height = 8, units = &quot;in&quot;, res = 300, file = &quot;../manuscript/fig3.tiff&quot;)
+
+ plot(sim$lbp_early, sim$lbp_late, 
+      ylab = &quot;Late change LBP&quot;, xlab = &quot;Early change LBP&quot;, col = &quot;grey&quot;, cex.axis = 1.5, cex.lab = 1.5) + 
+  abline(coef(m), lwd = 2) +
+  abline(v = 0, col = 2, lty = 2, lwd = 2) +
+  abline(h = 0, col = 2, lty = 2, lwd = 2) +
+  text(x = -5, y = 5, labels = eqn, cex = 1.2)</code></pre>
+<p><img src="figure/ReportResults.Rmd/unnamed-chunk-7-1.png" width="960" style="display: block; margin: auto;" /></p>
+<pre><code>integer(0)</code></pre>
+<pre class="r"><code>#dev.off()</code></pre>
+</div>
+</div>
+<div id="evaluating-the-mediating-infuence-of-disability_early-on-the-grp-lbp_early-relationship" class="section level2">
+<h2>Evaluating the mediating infuence of <code>disability_early</code> on the <code>grp</code>-<code>lbp_early</code> relationship</h2>
+<div id="influence-of-grp-on-lbp_early" class="section level3">
+<h3>Influence of <code>grp</code> on <code>lbp_early</code></h3>
+<pre class="r"><code>set.seed(123)
+
+sim &lt;- cpdist(fit, nodes = c(&quot;grp&quot;, &quot;lbp_early&quot;), n = 10^4,
+               evidence = TRUE) # individualisedphysio, advice
+
+m &lt;- lm(lbp_early ~ grp, data = sim)
+
+coefs &lt;- coef(m) 
+b0 &lt;- round(coefs[1], 2)
+b1 &lt;- round(coefs[2],2)
+r2 &lt;- round(summary(m)$r.squared, 2)
+summary (m)</code></pre>
+<pre><code>
+Call:
+lm(formula = lbp_early ~ grp, data = sim)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-8.6173 -1.6432 -0.0218  1.6649  9.8886 
+
+Coefficients:
+                        Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)             -2.09537    0.03512 -59.657   &lt;2e-16 ***
+grpindividualisedphysio -0.41786    0.04815  -8.677   &lt;2e-16 ***
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+
+Residual standard error: 2.403 on 9998 degrees of freedom
+Multiple R-squared:  0.007475,  Adjusted R-squared:  0.007376 
+F-statistic:  75.3 on 1 and 9998 DF,  p-value: &lt; 2.2e-16</code></pre>
+<pre class="r"><code>eqn &lt;- bquote(italic(lp_outcome) == .(b0) + .(b1)*italic(lp_late) * &quot;,&quot; ~~ 
+                  r^2 == .(r2))
+
+
+sim %&gt;%
+  mutate (grp = ifelse (grp == &quot;advice&quot;, &quot;Advice&quot;, &quot;IndPT&quot;)) %&gt;%
+  group_by(grp) %&gt;%
+  summarize (Mean = mean (lbp_early),
+             Sd = sd (lbp_early))  %&gt;%
+  ggplot () +
+  geom_bar(aes (x = grp, y = Mean), color = &quot;black&quot;, stat = &quot;identity&quot;) + 
+  geom_errorbar(aes (x = grp, ymin = Mean - Sd, ymax = Mean ), width = 0.2) + 
+  labs (x = &quot;Group&quot;,
+        y = &quot;Change in early LBP&quot;) + 
+  theme_cowplot()</code></pre>
+<pre><code>`summarise()` ungrouping output (override with `.groups` argument)</code></pre>
+<p><img src="figure/ReportResults.Rmd/unnamed-chunk-8-1.png" width="960" style="display: block; margin: auto;" /></p>
+</div>
+<div id="influence-of-grp-on-lbp_early-when-disability_early-is-constant" class="section level3">
+<h3>Influence of <code>grp</code> on <code>lbp_early</code> when <code>disability_early</code> is constant</h3>
+<pre class="r"><code>set.seed(123)
+
+avg.mutilated = mutilated(avg, evidence = list(disability_early = 0))
+
+fitted.mutilated = bn.fit (avg.mutilated , df.bn, method = &quot;mle&quot;)
+fitted.mutilated$disability_early = list(coef = c(&quot;(Intercept)&quot; = 0), sd = 0)
+
+sim &lt;- cpdist(fitted.mutilated, nodes = c(&quot;grp&quot;, &quot;lbp_early&quot;), n = 10^4,
+               evidence = TRUE) # individualisedphysio, advice
+
+m &lt;- lm(lbp_early ~ grp, data = sim)
+
+coefs &lt;- coef(m) 
+b0 &lt;- round(coefs[1], 2)
+b1 &lt;- round(coefs[2],2)
+r2 &lt;- round(summary(m)$r.squared, 2)
+summary (m)</code></pre>
+<pre><code>
+Call:
+lm(formula = lbp_early ~ grp, data = sim)
+
+Residuals:
+   Min     1Q Median     3Q    Max 
+-7.073 -1.386 -0.015  1.360  8.758 
+
+Coefficients:
+                        Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)             -1.31150    0.02958 -44.343   &lt;2e-16 ***
+grpindividualisedphysio  0.04672    0.04055   1.152    0.249    
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+
+Residual standard error: 2.023 on 9998 degrees of freedom
+Multiple R-squared:  0.0001328, Adjusted R-squared:  3.277e-05 
+F-statistic: 1.328 on 1 and 9998 DF,  p-value: 0.2492</code></pre>
+<pre class="r"><code>sim %&gt;%
+  mutate (grp = ifelse (grp == &quot;advice&quot;, &quot;Advice&quot;, &quot;IndPT&quot;)) %&gt;%
+  group_by(grp) %&gt;%
+  summarize (Mean = mean (lbp_early),
+             Sd = sd (lbp_early))  %&gt;%
+  ggplot () +
+  geom_bar(aes (x = grp, y = Mean), color = &quot;black&quot;, stat = &quot;identity&quot;) + 
+  geom_errorbar(aes (x = grp, ymin = Mean - Sd, ymax = Mean ), width = 0.2) + 
+  labs (x = &quot;Group&quot;,
+        y = &quot;Change in early LBP&quot;) + 
+  theme_cowplot()</code></pre>
+<p><img src="figure/ReportResults.Rmd/unnamed-chunk-9-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+<div id="evaluating-the-disability_early-depress_early-relationship" class="section level2">
+<h2>Evaluating the <code>disability_early</code>-<code>depress_early</code> relationship</h2>
+<div id="see-the-correlation-1" class="section level3">
+<h3>See the correlation</h3>
+<pre class="r"><code>set.seed(123)
+
+sim &lt;- cpdist(fit, nodes = c(&quot;disability_early&quot;, &quot;depress_early&quot;), n = 10^4,
+               evidence = (TRUE))
+
+m &lt;- lm(depress_early ~ disability_early, data = sim)
+
+coefs &lt;- coef(m) 
+b0 &lt;- round(coefs[1], 2)
+b1 &lt;- round(coefs[2],2)
+r2 &lt;- round(summary(m)$r.squared, 2)
+summary (m)</code></pre>
+<pre><code>
+Call:
+lm(formula = depress_early ~ disability_early, data = sim)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-10.0691  -1.9157  -0.0429   1.9069  11.9347 
+
+Coefficients:
+                  Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)      -0.632550   0.036458  -17.35   &lt;2e-16 ***
+disability_early  0.044540   0.002185   20.38   &lt;2e-16 ***
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+
+Residual standard error: 2.828 on 9998 degrees of freedom
+Multiple R-squared:  0.03989,   Adjusted R-squared:  0.0398 
+F-statistic: 415.4 on 1 and 9998 DF,  p-value: &lt; 2.2e-16</code></pre>
+<pre class="r"><code>eqn &lt;- bquote(italic(depress_early) == .(b0) + .(b1)*italic(disability_early) * &quot;,&quot; ~~ 
+                  r^2 == .(r2))
+
+#tiff(width = 10, height = 8, units = &quot;in&quot;, res = 300, file = &quot;../manuscript/fig4.tiff&quot;)
+
+ plot(sim$disability_early, sim$depress_early, ylab = &quot;Early change depression&quot;, xlab = &quot;Early change disability&quot;, col = &quot;grey&quot;, cex.axis = 1.5, cex.lab = 1.5) + 
+  abline(coef(m), lwd = 2) +
+  abline(v = 0, col = 2, lty = 2, lwd = 2) +
+  abline(h = 0, col = 2, lty = 2, lwd = 2) +
+  text(x = -20, y = 6, labels = eqn, cex = 1.2)</code></pre>
+<p><img src="figure/ReportResults.Rmd/unnamed-chunk-10-1.png" width="960" style="display: block; margin: auto;" /></p>
+<pre><code>integer(0)</code></pre>
+<pre class="r"><code>#dev.off()</code></pre>
+</div>
+<div id="mediating-influence-of-fear_early." class="section level3">
+<h3>Mediating influence of <code>fear_early</code>.</h3>
+<pre class="r"><code>set.seed(123)
+
+avg.mutilated = mutilated(avg, evidence = list(fear_early = 0))
+fitted.mutilated = bn.fit (avg.mutilated , df.bn, method = &quot;mle&quot;)
+fitted.mutilated$fear_early= list(coef = c(&quot;(Intercept)&quot; = 0), sd = 0)
+
+sim &lt;- cpdist(fitted.mutilated, nodes = c(&quot;disability_early&quot;, &quot;depress_early&quot;), n = 10^4,
+               evidence = (TRUE))
+
+m &lt;- lm(depress_early ~ disability_early, data = sim)
+
+coefs &lt;- coef(m) 
+b0 &lt;- round(coefs[1], 2)
+b1 &lt;- round(coefs[2],2)
+r2 &lt;- round(summary(m)$r.squared, 2)
+summary (m)</code></pre>
+<pre><code>
+Call:
+lm(formula = depress_early ~ disability_early, data = sim)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-10.1033  -1.9252  -0.0339   1.9126  11.9575 
+
+Coefficients:
+                  Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)      -0.615390   0.036416  -16.90   &lt;2e-16 ***
+disability_early  0.041966   0.002183   19.23   &lt;2e-16 ***
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+
+Residual standard error: 2.824 on 9998 degrees of freedom
+Multiple R-squared:  0.03566,   Adjusted R-squared:  0.03556 
+F-statistic: 369.7 on 1 and 9998 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+<div id="mediating-influence-of-lbp_early." class="section level3">
+<h3>Mediating influence of <code>lbp_early</code>.</h3>
+<pre class="r"><code>set.seed(123)
+
+avg.mutilated = mutilated(avg, evidence = list(lbp_early = 0))
+fitted.mutilated = bn.fit (avg.mutilated , df.bn, method = &quot;mle&quot;)
+fitted.mutilated$lbp_early = list(coef = c(&quot;(Intercept)&quot; = 0), sd = 0)
+
+sim &lt;- cpdist(fitted.mutilated, nodes = c(&quot;disability_early&quot;, &quot;depress_early&quot;), n = 10^4,
+               evidence = (TRUE))
+
+m &lt;- lm(depress_early ~ disability_early, data = sim)
+
+coefs &lt;- coef(m) 
+b0 &lt;- round(coefs[1], 2)
+b1 &lt;- round(coefs[2],2)
+r2 &lt;- round(summary(m)$r.squared, 2)
+summary (m)</code></pre>
+<pre><code>
+Call:
+lm(formula = depress_early ~ disability_early, data = sim)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-10.0558  -1.9166  -0.0348   1.9094  12.0480 
+
+Coefficients:
+                  Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)      -0.558694   0.036407  -15.35   &lt;2e-16 ***
+disability_early  0.038628   0.002182   17.70   &lt;2e-16 ***
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+
+Residual standard error: 2.824 on 9998 degrees of freedom
+Multiple R-squared:  0.03039,   Adjusted R-squared:  0.03029 
+F-statistic: 313.3 on 1 and 9998 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+<div id="mediating-influence-of-pain_persist_early." class="section level3">
+<h3>Mediating influence of <code>pain_persist_early</code>.</h3>
+<pre class="r"><code>set.seed(123)
+
+avg.mutilated = mutilated(avg, evidence = list(pain_persist_early = 0))
+fitted.mutilated = bn.fit (avg.mutilated , df.bn, method = &quot;mle&quot;)
+fitted.mutilated$pain_persist_early = list(coef = c(&quot;(Intercept)&quot; = 0), sd = 0)
+
+sim &lt;- cpdist(fitted.mutilated, nodes = c(&quot;disability_early&quot;, &quot;depress_early&quot;), n = 10^4,
+               evidence = (TRUE))
+
+m &lt;- lm(depress_early ~ disability_early, data = sim)
+
+coefs &lt;- coef(m) 
+b0 &lt;- round(coefs[1], 2)
+b1 &lt;- round(coefs[2],2)
+r2 &lt;- round(summary(m)$r.squared, 2)
+summary (m)</code></pre>
+<pre><code>
+Call:
+lm(formula = depress_early ~ disability_early, data = sim)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-10.3899  -1.8847  -0.0044   1.8833  11.2537 
+
+Coefficients:
+                  Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)      -0.439643   0.035721  -12.31   &lt;2e-16 ***
+disability_early  0.027573   0.002141   12.88   &lt;2e-16 ***
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+
+Residual standard error: 2.77 on 9998 degrees of freedom
+Multiple R-squared:  0.01632,   Adjusted R-squared:  0.01622 
+F-statistic: 165.8 on 1 and 9998 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+<div id="mediating-influence-of-fear_early-lbp_early-pain_persist_early" class="section level3">
+<h3>Mediating influence of <code>fear_early</code>, <code>lbp_early</code>, <code>pain_persist_early</code></h3>
+<pre class="r"><code>set.seed(123)
+
+avg.mutilated = mutilated(avg, evidence = list(fear_early = 0, lbp_early = 0,  pain_persist_early = 0))
+fitted.mutilated = bn.fit (avg.mutilated , df.bn, method = &quot;mle&quot;)
+fitted.mutilated$fear_early = list(coef = c(&quot;(Intercept)&quot; = 0), sd = 0)
+fitted.mutilated$lbp_early = list(coef = c(&quot;(Intercept)&quot; = 0), sd = 0)
+fitted.mutilated$pain_persist_early = list(coef = c(&quot;(Intercept)&quot; = 0), sd = 0)
+
+
+g = strength.plot(avg.mutilated, 
+                  bootstr, 
+                  shape = &quot;rectangle&quot;)</code></pre>
+<p><img src="figure/ReportResults.Rmd/unnamed-chunk-14-1.png" width="960" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>graph::nodeRenderInfo(g) = list(fontsize=18)
+renderGraph(g)</code></pre>
+<p><img src="figure/ReportResults.Rmd/unnamed-chunk-14-2.png" width="960" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>sim &lt;- cpdist(fitted.mutilated, nodes = c(&quot;disability_early&quot;, &quot;depress_early&quot;), n = 10^4,
+               evidence = (TRUE))
+
+m &lt;- lm(depress_early ~ disability_early, data = sim)
+
+coefs &lt;- coef(m) 
+b0 &lt;- round(coefs[1], 2)
+b1 &lt;- round(coefs[2],2)
+r2 &lt;- round(summary(m)$r.squared, 2)
+summary (m)</code></pre>
+<pre><code>
+Call:
+lm(formula = depress_early ~ disability_early, data = sim)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-11.1248  -1.8079  -0.0121   1.7921  11.4957 
+
+Coefficients:
+                  Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)      -0.437358   0.035500  -12.32   &lt;2e-16 ***
+disability_early  0.024434   0.002132   11.46   &lt;2e-16 ***
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+
+Residual standard error: 2.752 on 9998 degrees of freedom
+Multiple R-squared:  0.01296,   Adjusted R-squared:  0.01286 
+F-statistic: 131.3 on 1 and 9998 DF,  p-value: &lt; 2.2e-16</code></pre>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 3.6.2 (2019-12-12)
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+Running under: Windows 10 x64 (build 18363)
+
+Matrix products: default
+
+locale:
+[1] LC_COLLATE=English_United Kingdom.1252 
+[2] LC_CTYPE=English_United Kingdom.1252   
+[3] LC_MONETARY=English_United Kingdom.1252
+[4] LC_NUMERIC=C                           
+[5] LC_TIME=English_United Kingdom.1252    
+
+attached base packages:
+[1] grid      parallel  stats     graphics  grDevices utils     datasets 
+[8] methods   base     
+
+other attached packages:
+ [1] officer_0.3.12      flextable_0.5.10    doParallel_1.0.15  
+ [4] iterators_1.0.12    foreach_1.5.0       qgraph_1.6.5       
+ [7] bnlearn_4.5         cowplot_1.0.0       DataExplorer_0.8.1 
+[10] corrplot_0.84       corrr_0.4.2         Rgraphviz_2.30.0   
+[13] graph_1.64.0        BiocGenerics_0.32.0 forcats_0.5.0      
+[16] stringr_1.4.0       dplyr_1.0.1         purrr_0.3.4        
+[19] readr_1.3.1         tidyr_1.1.1         tibble_3.0.3       
+[22] ggplot2_3.3.2       tidyverse_1.3.0     workflowr_1.6.2    
+
+loaded via a namespace (and not attached):
+  [1] readxl_1.3.1        uuid_0.1-4          backports_1.1.7    
+  [4] Hmisc_4.4-1         BDgraph_2.62        systemfonts_0.2.3  
+  [7] plyr_1.8.6          igraph_1.2.5        splines_3.6.2      
+ [10] digest_0.6.25       htmltools_0.5.0     fansi_0.4.1        
+ [13] magrittr_1.5        checkmate_2.0.0     cluster_2.1.0      
+ [16] modelr_0.1.8        jpeg_0.1-8.1        colorspace_1.4-1   
+ [19] blob_1.2.1          rvest_0.3.6         haven_2.3.1        
+ [22] xfun_0.16           crayon_1.3.4        jsonlite_1.7.0     
+ [25] survival_3.2-3      glue_1.4.1          kableExtra_1.1.0   
+ [28] gtable_0.3.0        webshot_0.5.2       abind_1.4-5        
+ [31] scales_1.1.1        DBI_1.1.0           Rcpp_1.0.5         
+ [34] viridisLite_0.3.0   htmlTable_2.0.1     foreign_0.8-72     
+ [37] Formula_1.2-3       stats4_3.6.2        htmlwidgets_1.5.1  
+ [40] httr_1.4.2          RColorBrewer_1.1-2  lavaan_0.6-7       
+ [43] ellipsis_0.3.1      pkgconfig_2.0.3     farver_2.0.3       
+ [46] nnet_7.3-14         dbplyr_1.4.4        tidyselect_1.1.0   
+ [49] labeling_0.3        rlang_0.4.7         reshape2_1.4.4     
+ [52] later_1.1.0.1       munsell_0.5.0       cellranger_1.1.0   
+ [55] tools_3.6.2         cli_2.0.2           generics_0.0.2     
+ [58] broom_0.7.0         fdrtool_1.2.15      evaluate_0.14      
+ [61] yaml_2.2.1          knitr_1.29          fs_1.5.0           
+ [64] zip_2.1.0           glasso_1.11         pbapply_1.4-3      
+ [67] nlme_3.1-142        whisker_0.4         xml2_1.3.2         
+ [70] compiler_3.6.2      rstudioapi_0.11     png_0.1-7          
+ [73] reprex_0.3.0        huge_1.3.4.1        pbivnorm_0.6.0     
+ [76] stringi_1.4.6       highr_0.8           gdtools_0.2.2      
+ [79] lattice_0.20-41     Matrix_1.2-18       psych_2.0.7        
+ [82] vctrs_0.3.2         pillar_1.4.6        lifecycle_0.2.0    
+ [85] networkD3_0.4       data.table_1.13.0   corpcor_1.6.9      
+ [88] httpuv_1.5.4        R6_2.4.1            latticeExtra_0.6-29
+ [91] promises_1.1.1      gridExtra_2.3       codetools_0.2-16   
+ [94] MASS_7.3-51.6       gtools_3.8.2        assertthat_0.2.1   
+ [97] rprojroot_1.3-2     rjson_0.2.20        withr_2.2.0        
+[100] mnormt_1.5-5        hms_0.5.3           rpart_4.1-15       
+[103] rmarkdown_2.3       git2r_0.27.1        d3Network_0.5.2.1  
+[106] lubridate_1.7.9     base64enc_0.1-3    </code></pre>
+</div>
+</div>
+</div>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+http://docs.mathjax.org/en/latest/configuration.html.  This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

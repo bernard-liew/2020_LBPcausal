@@ -1,0 +1,2069 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="bernard-liew" />
+
+<meta name="date" content="2020-10-21" />
+
+<title>Bayesian Network Analysis</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/master/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">2020_LBPcausal</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="license.html">License</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Bayesian Network Analysis</h1>
+<h4 class="author">bernard-liew</h4>
+<h4 class="date">2020-10-21</h4>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> </a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2020-10-21
+</p>
+<p>
+<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
+</p>
+<p>
+<strong>Knit directory:</strong> <code>2020_LBPcausal/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
+</p>
+<p>
+This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis was created with <a
+  href="https://github.com/jdblischak/workflowr">workflowr</a> (version 1.6.2). The <em>Checks</em> tab describes the reproducibility checks that were applied when the results were created. The <em>Past versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date </a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguptodate" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great! Since the R Markdown file has been committed to the Git repository, you know the exact version of the code that produced these results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the global environment can affect the analysis in your R Markdown file in unknown ways. For reproduciblity it’s best to always run the code in an empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20200422code"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Seed:</strong> <code>set.seed(20200422)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20200422code" class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20200422)</code> was run prior to running the code in the R Markdown file. Setting a seed ensures that any results that rely on randomness, e.g. subsampling or permutations, are reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Session information:</strong> recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be confident that you successfully produced the results during this run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcombernardliew2020LBPcausaltreee8814e2b9d1a8a183ca93a88a0b7529b65097bb1targetblanke8814e2a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/bernard-liew/2020_LBPcausal/tree/e8814e2b9d1a8a183ca93a88a0b7529b65097bb1" target="_blank">e8814e2</a> </a>
+</p>
+</div>
+<div id="strongRepositoryversionstrongahrefhttpsgithubcombernardliew2020LBPcausaltreee8814e2b9d1a8a183ca93a88a0b7529b65097bb1targetblanke8814e2a" class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version <a href="https://github.com/bernard-liew/2020_LBPcausal/tree/e8814e2b9d1a8a183ca93a88a0b7529b65097bb1" target="_blank">e8814e2</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    .Rhistory
+    Ignored:    .Rproj.user/
+    Ignored:    code/network_WIP.R
+    Ignored:    code/network_WIP_mgm.R
+    Ignored:    output/data_clean.xlsx
+    Ignored:    output/image/
+    Ignored:    output/odi_network.tiff
+    Ignored:    output/odi_nw.RDS
+    Ignored:    output/odi_stability.tiff
+    Ignored:    output/odi_strength.tiff
+    Ignored:    output/orebro_nw.RDS
+
+Untracked files:
+    Untracked:  output/temp.RData
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not included in this status report because it is ok for generated content to have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+
+<p>
+These are the previous versions of the repository in which changes were made to the R Markdown (<code>analysis/BN_analysis.Rmd</code>) and HTML (<code>docs/BN_analysis.html</code>) files. If you’ve configured a remote Git repository (see <code>?wflow_git_remote</code>), click on the hyperlinks in the table below to view the files as they were in that past version.
+</p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/bernard-liew/2020_LBPcausal/blob/71501c30e1080502e7778ed28cfd152876923a30/analysis/BN_analysis.Rmd" target="_blank">71501c3</a>
+</td>
+<td>
+bernard-liew
+</td>
+<td>
+2020-10-21
+</td>
+<td>
+added analysis files for publication
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<div id="load-library" class="section level1">
+<h1>Load library</h1>
+<pre class="r"><code># Helper packages
+library (tidyverse)
+library (tidyselect)
+library (arsenal)
+library (janitor)
+library (magrittr)
+library (Rgraphviz)
+library (corrr)
+library (corrplot)
+
+# Import
+library(readxl)
+library (xlsx)
+
+# Missing data
+library (mice)
+library (VIM)
+
+# Modelling
+library (bnlearn)
+library (caret)
+
+# Parallel
+library (doParallel)</code></pre>
+</div>
+<div id="introduction" class="section level1">
+<h1>Introduction</h1>
+<p>This is a bayesian network analysis where the early change variables are between week 10 and baseline. The late change variables are between week 52 and week 10.</p>
+</div>
+<div id="import-data" class="section level1">
+<h1>Import data</h1>
+<pre class="r"><code>rm (list = ls())
+df_list &lt;- readRDS(&quot;output/df_change.RDS&quot;)</code></pre>
+</div>
+<div id="subset-data" class="section level1">
+<h1>Subset data</h1>
+<pre class="r"><code>df1 &lt;- df_list[[&quot;wk10_base&quot;]]
+names(df1)[grepl(&quot;wk&quot;, names (df1))] &lt;- paste0(str_remove(names(df1)[grepl(&quot;wk&quot;, names (df1))], &quot;wk10_&quot;), &quot;_early&quot;)
+
+df2 &lt;- df_list[[&quot;wk52_wk10&quot;]]
+names(df2)[grepl(&quot;wk&quot;, names (df2))] &lt;- paste0(str_remove(names(df2)[grepl(&quot;wk&quot;, names (df2))], &quot;wk52_&quot;), &quot;_late&quot;)
+
+df3 &lt;- df_list[[&quot;wk52&quot;]]
+df3 &lt;- df3 %&gt;%
+  select (id, grp, subgrp, wk52_lbp, wk52_lp, wk52_osw, wk52_func) 
+names(df3)[grepl(&quot;wk&quot;, names (df3))] &lt;- paste0(str_remove(names(df3)[grepl(&quot;wk&quot;, names (df3))], &quot;wk52_&quot;), &quot;_outcome&quot;)
+
+df &lt;- df1 %&gt;%
+  inner_join (df2, by = c(&quot;id&quot;, &quot;subgrp&quot;, &quot;grp&quot;)) %&gt;%
+  inner_join (df3, by = c(&quot;id&quot;, &quot;subgrp&quot;, &quot;grp&quot;)) %&gt;%
+  #select (-contains (&quot;func_&quot;))%&gt;%
+  rename (disability_early = osw_early,
+          disability_late = osw_late,
+          disability_outcome = osw_outcome)</code></pre>
+</div>
+<div id="exploratory-analysis" class="section level1">
+<h1>Exploratory analysis</h1>
+<div id="between-group-comparisons" class="section level2">
+<h2>Between group comparisons</h2>
+<pre class="r"><code>tableby (subgrp ~., data = df, digits = 2, digits.p = 2) %&gt;%    
+  summary () </code></pre>
+<table>
+<colgroup>
+<col width="24%" />
+<col width="11%" />
+<col width="11%" />
+<col width="11%" />
+<col width="11%" />
+<col width="11%" />
+<col width="11%" />
+<col width="4%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="center">dhr (N=54)</th>
+<th align="center">nrdp (N=7)</th>
+<th align="center">rdp (N=63)</th>
+<th align="center">mfp (N=91)</th>
+<th align="center">mtg (N=74)</th>
+<th align="center">Total (N=289)</th>
+<th align="right">p value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><strong>disability_early</strong></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="right">0.35</td>
+</tr>
+<tr class="even">
+<td align="left">   N-Miss</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">1</td>
+<td align="center">2</td>
+<td align="center">1</td>
+<td align="center">4</td>
+<td align="right"></td>
+</tr>
+<tr class="odd">
+<td align="left">   Mean (SD)</td>
+<td align="center">-12.63 (14.97)</td>
+<td align="center">-10.29 (7.16)</td>
+<td align="center">-7.97 (10.81)</td>
+<td align="center">-9.58 (12.55)</td>
+<td align="center">-11.23 (13.56)</td>
+<td align="center">-10.25 (12.88)</td>
+<td align="right"></td>
+</tr>
+<tr class="even">
+<td align="left">   Range</td>
+<td align="center">-42.00 - 30.00</td>
+<td align="center">-16.00 - 4.00</td>
+<td align="center">-34.00 - 14.00</td>
+<td align="center">-36.00 - 38.00</td>
+<td align="center">-44.00 - 30.00</td>
+<td align="center">-44.00 - 38.00</td>
+<td align="right"></td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>lbp_early</strong></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="right">0.32</td>
+</tr>
+<tr class="even">
+<td align="left">   N-Miss</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="right"></td>
+</tr>
+<tr class="odd">
+<td align="left">   Mean (SD)</td>
+<td align="center">-1.84 (2.47)</td>
+<td align="center">-1.86 (1.46)</td>
+<td align="center">-2.54 (2.26)</td>
+<td align="center">-2.13 (2.31)</td>
+<td align="center">-2.62 (2.57)</td>
+<td align="center">-2.28 (2.39)</td>
+<td align="right"></td>
+</tr>
+<tr class="even">
+<td align="left">   Range</td>
+<td align="center">-6.00 - 3.00</td>
+<td align="center">-3.00 - 1.00</td>
+<td align="center">-8.00 - 3.00</td>
+<td align="center">-7.00 - 4.00</td>
+<td align="center">-8.00 - 4.00</td>
+<td align="center">-8.00 - 4.00</td>
+<td align="right"></td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>lp_early</strong></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="right">0.68</td>
+</tr>
+<tr class="even">
+<td align="left">   N-Miss</td>
+<td align="center">0</td>
+<td align="center">1</td>
+<td align="center">14</td>
+<td align="center">15</td>
+<td align="center">10</td>
+<td align="center">40</td>
+<td align="right"></td>
+</tr>
+<tr class="odd">
+<td align="left">   Mean (SD)</td>
+<td align="center">-2.53 (2.82)</td>
+<td align="center">-2.67 (1.86)</td>
+<td align="center">-2.20 (2.78)</td>
+<td align="center">-1.84 (2.49)</td>
+<td align="center">-2.30 (3.04)</td>
+<td align="center">-2.20 (2.75)</td>
+<td align="right"></td>
+</tr>
+<tr class="even">
+<td align="left">   Range</td>
+<td align="center">-8.00 - 3.00</td>
+<td align="center">-5.00 - 0.00</td>
+<td align="center">-8.00 - 3.00</td>
+<td align="center">-6.00 - 5.00</td>
+<td align="center">-9.00 - 5.00</td>
+<td align="center">-9.00 - 5.00</td>
+<td align="right"></td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>pain_cope_early</strong></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="right">0.38</td>
+</tr>
+<tr class="even">
+<td align="left">   N-Miss</td>
+<td align="center">3</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">4</td>
+<td align="center">3</td>
+<td align="center">10</td>
+<td align="right"></td>
+</tr>
+<tr class="odd">
+<td align="left">   Mean (SD)</td>
+<td align="center">-0.96 (2.84)</td>
+<td align="center">0.29 (3.40)</td>
+<td align="center">-1.57 (3.14)</td>
+<td align="center">-1.12 (3.33)</td>
+<td align="center">-1.70 (3.19)</td>
+<td align="center">-1.30 (3.17)</td>
+<td align="right"></td>
+</tr>
+<tr class="even">
+<td align="left">   Range</td>
+<td align="center">-7.00 - 6.00</td>
+<td align="center">-4.00 - 4.00</td>
+<td align="center">-9.00 - 6.00</td>
+<td align="center">-9.00 - 9.00</td>
+<td align="center">-10.00 - 6.00</td>
+<td align="center">-10.00 - 9.00</td>
+<td align="right"></td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>anx_early</strong></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="right">0.16</td>
+</tr>
+<tr class="even">
+<td align="left">   N-Miss</td>
+<td align="center">3</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">3</td>
+<td align="center">3</td>
+<td align="center">9</td>
+<td align="right"></td>
+</tr>
+<tr class="odd">
+<td align="left">   Mean (SD)</td>
+<td align="center">-1.57 (2.95)</td>
+<td align="center">-3.86 (2.73)</td>
+<td align="center">-1.74 (2.64)</td>
+<td align="center">-1.33 (2.93)</td>
+<td align="center">-2.00 (2.72)</td>
+<td align="center">-1.70 (2.83)</td>
+<td align="right"></td>
+</tr>
+<tr class="even">
+<td align="left">   Range</td>
+<td align="center">-8.00 - 4.00</td>
+<td align="center">-9.00 - -1.00</td>
+<td align="center">-7.00 - 4.00</td>
+<td align="center">-8.00 - 5.00</td>
+<td align="center">-9.00 - 4.00</td>
+<td align="center">-9.00 - 5.00</td>
+<td align="right"></td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>depress_early</strong></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="right">0.12</td>
+</tr>
+<tr class="even">
+<td align="left">   N-Miss</td>
+<td align="center">3</td>
+<td align="center">0</td>
+<td align="center">2</td>
+<td align="center">3</td>
+<td align="center">4</td>
+<td align="center">12</td>
+<td align="right"></td>
+</tr>
+<tr class="odd">
+<td align="left">   Mean (SD)</td>
+<td align="center">-1.59 (2.82)</td>
+<td align="center">-3.29 (3.50)</td>
+<td align="center">-1.20 (2.82)</td>
+<td align="center">-0.68 (2.96)</td>
+<td align="center">-1.00 (2.88)</td>
+<td align="center">-1.11 (2.92)</td>
+<td align="right"></td>
+</tr>
+<tr class="even">
+<td align="left">   Range</td>
+<td align="center">-8.00 - 5.00</td>
+<td align="center">-9.00 - 1.00</td>
+<td align="center">-8.00 - 6.00</td>
+<td align="center">-7.00 - 8.00</td>
+<td align="center">-8.00 - 6.00</td>
+<td align="center">-9.00 - 8.00</td>
+<td align="right"></td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>pain_persist_early</strong></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="right">0.61</td>
+</tr>
+<tr class="even">
+<td align="left">   N-Miss</td>
+<td align="center">3</td>
+<td align="center">0</td>
+<td align="center">1</td>
+<td align="center">4</td>
+<td align="center">3</td>
+<td align="center">11</td>
+<td align="right"></td>
+</tr>
+<tr class="odd">
+<td align="left">   Mean (SD)</td>
+<td align="center">-2.08 (3.52)</td>
+<td align="center">-3.86 (2.19)</td>
+<td align="center">-1.98 (3.48)</td>
+<td align="center">-1.93 (2.68)</td>
+<td align="center">-2.30 (3.40)</td>
+<td align="center">-2.11 (3.20)</td>
+<td align="right"></td>
+</tr>
+<tr class="even">
+<td align="left">   Range</td>
+<td align="center">-9.00 - 7.00</td>
+<td align="center">-7.00 - -1.00</td>
+<td align="center">-10.00 - 6.00</td>
+<td align="center">-8.00 - 5.00</td>
+<td align="center">-9.00 - 6.00</td>
+<td align="center">-10.00 - 7.00</td>
+<td align="right"></td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>work_expect_early</strong></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="right">0.32</td>
+</tr>
+<tr class="even">
+<td align="left">   N-Miss</td>
+<td align="center">9</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">5</td>
+<td align="center">3</td>
+<td align="center">17</td>
+<td align="right"></td>
+</tr>
+<tr class="odd">
+<td align="left">   Mean (SD)</td>
+<td align="center">-0.35 (2.95)</td>
+<td align="center">-0.86 (1.07)</td>
+<td align="center">-0.28 (2.40)</td>
+<td align="center">0.34 (2.14)</td>
+<td align="center">-0.17 (2.11)</td>
+<td align="center">-0.08 (2.33)</td>
+<td align="right"></td>
+</tr>
+<tr class="even">
+<td align="left">   Range</td>
+<td align="center">-8.00 - 5.51</td>
+<td align="center">-3.00 - 0.00</td>
+<td align="center">-9.11 - 7.00</td>
+<td align="center">-5.00 - 10.00</td>
+<td align="center">-8.00 - 7.13</td>
+<td align="center">-9.11 - 10.00</td>
+<td align="right"></td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>sleep_early</strong></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="right">0.28</td>
+</tr>
+<tr class="even">
+<td align="left">   N-Miss</td>
+<td align="center">3</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">2</td>
+<td align="center">3</td>
+<td align="center">8</td>
+<td align="right"></td>
+</tr>
+<tr class="odd">
+<td align="left">   Mean (SD)</td>
+<td align="center">-2.00 (2.76)</td>
+<td align="center">-2.29 (2.69)</td>
+<td align="center">-1.05 (2.80)</td>
+<td align="center">-1.78 (2.54)</td>
+<td align="center">-1.34 (2.81)</td>
+<td align="center">-1.56 (2.72)</td>
+<td align="right"></td>
+</tr>
+<tr class="even">
+<td align="left">   Range</td>
+<td align="center">-9.00 - 4.00</td>
+<td align="center">-7.00 - 1.00</td>
+<td align="center">-6.00 - 10.00</td>
+<td align="center">-8.00 - 4.00</td>
+<td align="center">-9.00 - 8.00</td>
+<td align="center">-9.00 - 10.00</td>
+<td align="right"></td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>func_early</strong></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="right">0.18</td>
+</tr>
+<tr class="even">
+<td align="left">   N-Miss</td>
+<td align="center">3</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">2</td>
+<td align="center">3</td>
+<td align="center">8</td>
+<td align="right"></td>
+</tr>
+<tr class="odd">
+<td align="left">   Mean (SD)</td>
+<td align="center">-6.28 (6.36)</td>
+<td align="center">-5.43 (8.60)</td>
+<td align="center">-2.63 (8.58)</td>
+<td align="center">-5.01 (8.42)</td>
+<td align="center">-3.97 (8.88)</td>
+<td align="center">-4.46 (8.29)</td>
+<td align="right"></td>
+</tr>
+<tr class="even">
+<td align="left">   Range</td>
+<td align="center">-26.00 - 7.00</td>
+<td align="center">-18.00 - 11.00</td>
+<td align="center">-23.00 - 27.00</td>
+<td align="center">-29.00 - 14.00</td>
+<td align="center">-24.00 - 25.00</td>
+<td align="center">-29.00 - 27.00</td>
+<td align="right"></td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>fear_early</strong></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="right">0.76</td>
+</tr>
+<tr class="even">
+<td align="left">   N-Miss</td>
+<td align="center">6</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">3</td>
+<td align="center">4</td>
+<td align="center">15</td>
+<td align="right"></td>
+</tr>
+<tr class="odd">
+<td align="left">   Mean (SD)</td>
+<td align="center">-3.15 (7.57)</td>
+<td align="center">-5.80 (11.28)</td>
+<td align="center">-2.28 (6.39)</td>
+<td align="center">-3.32 (6.73)</td>
+<td align="center">-2.88 (7.02)</td>
+<td align="center">-3.00 (6.97)</td>
+<td align="right"></td>
+</tr>
+<tr class="even">
+<td align="left">   Range</td>
+<td align="center">-19.00 - 11.00</td>
+<td align="center">-22.00 - 8.00</td>
+<td align="center">-17.00 - 18.00</td>
+<td align="center">-24.00 - 12.00</td>
+<td align="center">-25.00 - 13.00</td>
+<td align="center">-25.00 - 18.00</td>
+<td align="right"></td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>grp</strong></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="right">1.00</td>
+</tr>
+<tr class="even">
+<td align="left">   advice</td>
+<td align="center">26 (48.1%)</td>
+<td align="center">3 (42.9%)</td>
+<td align="center">30 (47.6%)</td>
+<td align="center">43 (47.3%)</td>
+<td align="center">35 (47.3%)</td>
+<td align="center">137 (47.4%)</td>
+<td align="right"></td>
+</tr>
+<tr class="odd">
+<td align="left">   individualisedphysio</td>
+<td align="center">28 (51.9%)</td>
+<td align="center">4 (57.1%)</td>
+<td align="center">33 (52.4%)</td>
+<td align="center">48 (52.7%)</td>
+<td align="center">39 (52.7%)</td>
+<td align="center">152 (52.6%)</td>
+<td align="right"></td>
+</tr>
+<tr class="even">
+<td align="left"><strong>id</strong></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="right">&lt; 0.01</td>
+</tr>
+<tr class="odd">
+<td align="left">   Mean (SD)</td>
+<td align="center">1526.96 (209.06)</td>
+<td align="center">4573.71 (56.44)</td>
+<td align="center">5529.14 (211.09)</td>
+<td align="center">2514.09 (228.03)</td>
+<td align="center">3515.42 (234.58)</td>
+<td align="center">3293.19 (1403.85)</td>
+<td align="right"></td>
+</tr>
+<tr class="even">
+<td align="left">   Range</td>
+<td align="center">1101.00 - 1806.00</td>
+<td align="center">4501.00 - 4652.00</td>
+<td align="center">5101.00 - 5903.00</td>
+<td align="center">2101.00 - 2951.00</td>
+<td align="center">3101.00 - 3905.00</td>
+<td align="center">1101.00 - 5903.00</td>
+<td align="right"></td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>disability_late</strong></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="right">0.84</td>
+</tr>
+<tr class="even">
+<td align="left">   N-Miss</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td align="center">7</td>
+<td align="center">6</td>
+<td align="center">3</td>
+<td align="center">17</td>
+<td align="right"></td>
+</tr>
+<tr class="odd">
+<td align="left">   Mean (SD)</td>
+<td align="center">-5.72 (14.45)</td>
+<td align="center">-4.86 (5.15)</td>
+<td align="center">-3.54 (9.44)</td>
+<td align="center">-3.97 (12.63)</td>
+<td align="center">-3.35 (11.33)</td>
+<td align="center">-4.08 (11.92)</td>
+<td align="right"></td>
+</tr>
+<tr class="even">
+<td align="left">   Range</td>
+<td align="center">-52.00 - 28.00</td>
+<td align="center">-12.00 - 4.00</td>
+<td align="center">-40.00 - 24.00</td>
+<td align="center">-45.12 - 34.00</td>
+<td align="center">-28.00 - 36.00</td>
+<td align="center">-52.00 - 36.00</td>
+<td align="right"></td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>lbp_late</strong></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="right">0.24</td>
+</tr>
+<tr class="even">
+<td align="left">   N-Miss</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td align="center">6</td>
+<td align="center">4</td>
+<td align="center">2</td>
+<td align="center">13</td>
+<td align="right"></td>
+</tr>
+<tr class="odd">
+<td align="left">   Mean (SD)</td>
+<td align="center">-0.13 (2.13)</td>
+<td align="center">-1.14 (3.39)</td>
+<td align="center">0.05 (1.65)</td>
+<td align="center">-0.55 (2.52)</td>
+<td align="center">-0.72 (2.32)</td>
+<td align="center">-0.40 (2.27)</td>
+<td align="right"></td>
+</tr>
+<tr class="even">
+<td align="left">   Range</td>
+<td align="center">-7.00 - 5.00</td>
+<td align="center">-7.00 - 4.00</td>
+<td align="center">-4.00 - 4.00</td>
+<td align="center">-7.00 - 6.00</td>
+<td align="center">-8.00 - 5.50</td>
+<td align="center">-8.00 - 6.00</td>
+<td align="right"></td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>lp_late</strong></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="right">0.37</td>
+</tr>
+<tr class="even">
+<td align="left">   N-Miss</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">19</td>
+<td align="center">18</td>
+<td align="center">11</td>
+<td align="center">50</td>
+<td align="right"></td>
+</tr>
+<tr class="odd">
+<td align="left">   Mean (SD)</td>
+<td align="center">-0.77 (2.65)</td>
+<td align="center">-0.67 (1.75)</td>
+<td align="center">0.00 (1.67)</td>
+<td align="center">-0.76 (2.93)</td>
+<td align="center">-0.12 (2.64)</td>
+<td align="center">-0.45 (2.58)</td>
+<td align="right"></td>
+</tr>
+<tr class="even">
+<td align="left">   Range</td>
+<td align="center">-8.00 - 4.00</td>
+<td align="center">-3.00 - 2.00</td>
+<td align="center">-4.00 - 4.00</td>
+<td align="center">-10.00 - 7.00</td>
+<td align="center">-9.00 - 9.00</td>
+<td align="center">-10.00 - 9.00</td>
+<td align="right"></td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>pain_cope_late</strong></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="right">0.74</td>
+</tr>
+<tr class="even">
+<td align="left">   N-Miss</td>
+<td align="center">4</td>
+<td align="center">0</td>
+<td align="center">11</td>
+<td align="center">18</td>
+<td align="center">12</td>
+<td align="center">45</td>
+<td align="right"></td>
+</tr>
+<tr class="odd">
+<td align="left">   Mean (SD)</td>
+<td align="center">-0.33 (2.93)</td>
+<td align="center">-1.55 (1.88)</td>
+<td align="center">-0.63 (2.41)</td>
+<td align="center">-0.22 (3.45)</td>
+<td align="center">-0.08 (3.72)</td>
+<td align="center">-0.33 (3.18)</td>
+<td align="right"></td>
+</tr>
+<tr class="even">
+<td align="left">   Range</td>
+<td align="center">-7.00 - 8.00</td>
+<td align="center">-4.00 - 1.00</td>
+<td align="center">-8.00 - 5.00</td>
+<td align="center">-9.12 - 10.00</td>
+<td align="center">-8.00 - 9.00</td>
+<td align="center">-9.12 - 10.00</td>
+<td align="right"></td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>anx_late</strong></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="right">0.71</td>
+</tr>
+<tr class="even">
+<td align="left">   N-Miss</td>
+<td align="center">4</td>
+<td align="center">0</td>
+<td align="center">11</td>
+<td align="center">18</td>
+<td align="center">12</td>
+<td align="center">45</td>
+<td align="right"></td>
+</tr>
+<tr class="odd">
+<td align="left">   Mean (SD)</td>
+<td align="center">-0.56 (2.35)</td>
+<td align="center">-0.86 (1.86)</td>
+<td align="center">0.18 (2.51)</td>
+<td align="center">-0.23 (3.21)</td>
+<td align="center">-0.20 (2.95)</td>
+<td align="center">-0.22 (2.80)</td>
+<td align="right"></td>
+</tr>
+<tr class="even">
+<td align="left">   Range</td>
+<td align="center">-7.00 - 4.00</td>
+<td align="center">-4.00 - 1.00</td>
+<td align="center">-8.46 - 6.00</td>
+<td align="center">-9.00 - 9.00</td>
+<td align="center">-6.00 - 7.00</td>
+<td align="center">-9.00 - 9.00</td>
+<td align="right"></td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>depress_late</strong></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="right">0.31</td>
+</tr>
+<tr class="even">
+<td align="left">   N-Miss</td>
+<td align="center">4</td>
+<td align="center">0</td>
+<td align="center">11</td>
+<td align="center">18</td>
+<td align="center">12</td>
+<td align="center">45</td>
+<td align="right"></td>
+</tr>
+<tr class="odd">
+<td align="left">   Mean (SD)</td>
+<td align="center">-0.16 (2.06)</td>
+<td align="center">-1.14 (1.21)</td>
+<td align="center">0.24 (2.18)</td>
+<td align="center">0.20 (2.55)</td>
+<td align="center">-0.42 (2.48)</td>
+<td align="center">-0.06 (2.34)</td>
+<td align="right"></td>
+</tr>
+<tr class="even">
+<td align="left">   Range</td>
+<td align="center">-6.00 - 5.00</td>
+<td align="center">-3.00 - 0.00</td>
+<td align="center">-7.00 - 7.00</td>
+<td align="center">-7.00 - 8.00</td>
+<td align="center">-7.00 - 7.00</td>
+<td align="center">-7.00 - 8.00</td>
+<td align="right"></td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>pain_persist_late</strong></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="right">0.38</td>
+</tr>
+<tr class="even">
+<td align="left">   N-Miss</td>
+<td align="center">4</td>
+<td align="center">0</td>
+<td align="center">11</td>
+<td align="center">18</td>
+<td align="center">12</td>
+<td align="center">45</td>
+<td align="right"></td>
+</tr>
+<tr class="odd">
+<td align="left">   Mean (SD)</td>
+<td align="center">-0.12 (3.90)</td>
+<td align="center">-2.43 (2.37)</td>
+<td align="center">0.34 (3.68)</td>
+<td align="center">-0.22 (3.76)</td>
+<td align="center">0.33 (3.65)</td>
+<td align="center">-0.00 (3.72)</td>
+<td align="right"></td>
+</tr>
+<tr class="even">
+<td align="left">   Range</td>
+<td align="center">-9.00 - 8.00</td>
+<td align="center">-5.00 - 1.00</td>
+<td align="center">-10.00 - 9.00</td>
+<td align="center">-10.00 - 7.00</td>
+<td align="center">-7.50 - 9.00</td>
+<td align="center">-10.00 - 9.00</td>
+<td align="right"></td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>work_expect_late</strong></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="right">0.97</td>
+</tr>
+<tr class="even">
+<td align="left">   N-Miss</td>
+<td align="center">4</td>
+<td align="center">0</td>
+<td align="center">11</td>
+<td align="center">18</td>
+<td align="center">12</td>
+<td align="center">45</td>
+<td align="right"></td>
+</tr>
+<tr class="odd">
+<td align="left">   Mean (SD)</td>
+<td align="center">0.32 (3.55)</td>
+<td align="center">0.00 (0.82)</td>
+<td align="center">0.03 (1.35)</td>
+<td align="center">0.20 (2.31)</td>
+<td align="center">0.13 (1.72)</td>
+<td align="center">0.17 (2.29)</td>
+<td align="right"></td>
+</tr>
+<tr class="even">
+<td align="left">   Range</td>
+<td align="center">-7.00 - 10.00</td>
+<td align="center">-1.00 - 1.00</td>
+<td align="center">-4.00 - 4.00</td>
+<td align="center">-10.00 - 8.00</td>
+<td align="center">-5.00 - 6.00</td>
+<td align="center">-10.00 - 10.00</td>
+<td align="right"></td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>sleep_late</strong></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="right">0.74</td>
+</tr>
+<tr class="even">
+<td align="left">   N-Miss</td>
+<td align="center">4</td>
+<td align="center">0</td>
+<td align="center">11</td>
+<td align="center">17</td>
+<td align="center">12</td>
+<td align="center">44</td>
+<td align="right"></td>
+</tr>
+<tr class="odd">
+<td align="left">   Mean (SD)</td>
+<td align="center">0.12 (2.09)</td>
+<td align="center">-0.14 (2.12)</td>
+<td align="center">-0.21 (1.35)</td>
+<td align="center">0.03 (2.65)</td>
+<td align="center">-0.38 (2.11)</td>
+<td align="center">-0.11 (2.15)</td>
+<td align="right"></td>
+</tr>
+<tr class="even">
+<td align="left">   Range</td>
+<td align="center">-5.00 - 8.00</td>
+<td align="center">-2.00 - 4.00</td>
+<td align="center">-3.00 - 4.00</td>
+<td align="center">-8.00 - 9.00</td>
+<td align="center">-9.00 - 5.00</td>
+<td align="center">-9.00 - 9.00</td>
+<td align="right"></td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>func_late</strong></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="right">0.10</td>
+</tr>
+<tr class="even">
+<td align="left">   N-Miss</td>
+<td align="center">4</td>
+<td align="center">0</td>
+<td align="center">11</td>
+<td align="center">17</td>
+<td align="center">12</td>
+<td align="center">44</td>
+<td align="right"></td>
+</tr>
+<tr class="odd">
+<td align="left">   Mean (SD)</td>
+<td align="center">-2.37 (6.69)</td>
+<td align="center">-4.29 (6.07)</td>
+<td align="center">-1.58 (4.38)</td>
+<td align="center">0.63 (7.89)</td>
+<td align="center">-1.15 (7.66)</td>
+<td align="center">-1.04 (6.98)</td>
+<td align="right"></td>
+</tr>
+<tr class="even">
+<td align="left">   Range</td>
+<td align="center">-22.00 - 12.00</td>
+<td align="center">-16.00 - 2.00</td>
+<td align="center">-15.00 - 7.00</td>
+<td align="center">-17.00 - 30.00</td>
+<td align="center">-21.00 - 28.00</td>
+<td align="center">-22.00 - 30.00</td>
+<td align="right"></td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>fear_late</strong></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="right">0.50</td>
+</tr>
+<tr class="even">
+<td align="left">   N-Miss</td>
+<td align="center">4</td>
+<td align="center">0</td>
+<td align="center">11</td>
+<td align="center">17</td>
+<td align="center">12</td>
+<td align="center">44</td>
+<td align="right"></td>
+</tr>
+<tr class="odd">
+<td align="left">   Mean (SD)</td>
+<td align="center">-1.23 (5.71)</td>
+<td align="center">3.26 (3.75)</td>
+<td align="center">-0.73 (6.18)</td>
+<td align="center">-0.77 (6.94)</td>
+<td align="center">-1.27 (6.61)</td>
+<td align="center">-0.87 (6.39)</td>
+<td align="right"></td>
+</tr>
+<tr class="even">
+<td align="left">   Range</td>
+<td align="center">-14.00 - 10.00</td>
+<td align="center">-2.00 - 10.00</td>
+<td align="center">-13.00 - 14.00</td>
+<td align="center">-17.00 - 15.46</td>
+<td align="center">-15.00 - 14.00</td>
+<td align="center">-17.00 - 15.46</td>
+<td align="right"></td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>lbp_outcome</strong></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="right">0.06</td>
+</tr>
+<tr class="even">
+<td align="left">   N-Miss</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td align="center">6</td>
+<td align="center">4</td>
+<td align="center">1</td>
+<td align="center">12</td>
+<td align="right"></td>
+</tr>
+<tr class="odd">
+<td align="left">   Mean (SD)</td>
+<td align="center">2.98 (2.27)</td>
+<td align="center">3.57 (2.70)</td>
+<td align="center">2.47 (2.16)</td>
+<td align="center">3.01 (2.53)</td>
+<td align="center">2.10 (1.88)</td>
+<td align="center">2.67 (2.27)</td>
+<td align="right"></td>
+</tr>
+<tr class="even">
+<td align="left">   Range</td>
+<td align="center">0.00 - 8.00</td>
+<td align="center">1.00 - 7.00</td>
+<td align="center">0.00 - 8.00</td>
+<td align="center">0.00 - 9.00</td>
+<td align="center">0.00 - 8.00</td>
+<td align="center">0.00 - 9.00</td>
+<td align="right"></td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>lp_outcome</strong></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="right">0.35</td>
+</tr>
+<tr class="even">
+<td align="left">   N-Miss</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">19</td>
+<td align="center">18</td>
+<td align="center">10</td>
+<td align="center">49</td>
+<td align="right"></td>
+</tr>
+<tr class="odd">
+<td align="left">   Mean (SD)</td>
+<td align="center">2.49 (2.59)</td>
+<td align="center">2.00 (2.10)</td>
+<td align="center">1.98 (2.29)</td>
+<td align="center">2.08 (2.52)</td>
+<td align="center">1.54 (2.36)</td>
+<td align="center">2.01 (2.45)</td>
+<td align="right"></td>
+</tr>
+<tr class="even">
+<td align="left">   Range</td>
+<td align="center">0.00 - 8.00</td>
+<td align="center">0.00 - 5.00</td>
+<td align="center">0.00 - 8.50</td>
+<td align="center">0.00 - 9.00</td>
+<td align="center">0.00 - 9.00</td>
+<td align="center">0.00 - 9.00</td>
+<td align="right"></td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>disability_outcome</strong></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="right">0.11</td>
+</tr>
+<tr class="even">
+<td align="left">   N-Miss</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td align="center">6</td>
+<td align="center">4</td>
+<td align="center">2</td>
+<td align="center">13</td>
+<td align="right"></td>
+</tr>
+<tr class="odd">
+<td align="left">   Mean (SD)</td>
+<td align="center">18.30 (18.67)</td>
+<td align="center">13.14 (8.71)</td>
+<td align="center">11.58 (12.21)</td>
+<td align="center">16.74 (14.36)</td>
+<td align="center">13.98 (13.11)</td>
+<td align="center">15.16 (14.58)</td>
+<td align="right"></td>
+</tr>
+<tr class="even">
+<td align="left">   Range</td>
+<td align="center">0.00 - 70.00</td>
+<td align="center">2.00 - 26.00</td>
+<td align="center">0.00 - 70.00</td>
+<td align="center">0.00 - 54.00</td>
+<td align="center">0.00 - 60.00</td>
+<td align="center">0.00 - 70.00</td>
+<td align="right"></td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>func_outcome</strong></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="right">0.50</td>
+</tr>
+<tr class="even">
+<td align="left">   N-Miss</td>
+<td align="center">2</td>
+<td align="center">0</td>
+<td align="center">11</td>
+<td align="center">17</td>
+<td align="center">12</td>
+<td align="center">42</td>
+<td align="right"></td>
+</tr>
+<tr class="odd">
+<td align="left">   Mean (SD)</td>
+<td align="center">7.00 (8.14)</td>
+<td align="center">5.57 (4.47)</td>
+<td align="center">5.71 (7.63)</td>
+<td align="center">7.99 (9.45)</td>
+<td align="center">5.88 (7.48)</td>
+<td align="center">6.70 (8.22)</td>
+<td align="right"></td>
+</tr>
+<tr class="even">
+<td align="left">   Range</td>
+<td align="center">0.00 - 28.00</td>
+<td align="center">0.00 - 14.00</td>
+<td align="center">0.00 - 38.00</td>
+<td align="center">0.00 - 36.00</td>
+<td align="center">0.00 - 34.00</td>
+<td align="center">0.00 - 38.00</td>
+<td align="right"></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="correlation-plots" class="section level2">
+<h2>Correlation plots</h2>
+<pre class="r"><code>col&lt;- colorRampPalette(c(&quot;red&quot;, &quot;white&quot;, &quot;blue&quot;))(20)
+df %&gt;%  
+  select_if (is.numeric) %&gt;%    
+  select (-id) %&gt;%
+  cor (use = &quot;complete.obs&quot;) %&gt;%
+  corrplot(type=&quot;upper&quot;, tl.col=&quot;black&quot;, tl.srt=45, col=col)</code></pre>
+<p><img src="figure/BN_analysis.Rmd/unnamed-chunk-5-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+<div id="bn-analysis" class="section level1">
+<h1>BN analysis</h1>
+<div id="create-blacklist" class="section level2">
+<h2>Create blacklist</h2>
+<pre class="r"><code>df.bn = as.data.frame (df)
+df.bn[, grepl ( &quot;id|subgrp|outcome|func&quot;,names (df.bn))] &lt;- NULL
+
+tiers_bl = list (colnames (df.bn)[colnames(df.bn) %in% grep (&quot;early&quot;,colnames(df.bn), value = TRUE)], 
+                 colnames (df.bn)[colnames(df.bn) %in% grep (&quot;late&quot;,colnames(df.bn), value = TRUE)])
+bl1 = tiers2blacklist(tiers_bl)
+
+tiers_bl = list (colnames (df.bn)[colnames(df.bn) %in% grep (&quot;grp&quot;,colnames(df.bn), value = TRUE)], 
+                 colnames (df.bn)[colnames(df.bn) %in% grep (&quot;late&quot;,colnames(df.bn), value = TRUE)])
+
+bl2 = tiers2blacklist(tiers_bl)
+
+tiers_bl = list (colnames (df.bn)[colnames(df.bn) %in% grep (&quot;grp&quot;,colnames(df.bn), value = TRUE)], 
+                 colnames (df.bn)[colnames(df.bn) %in% grep (&quot;early&quot;,colnames(df.bn), value = TRUE)])
+
+bl3 = tiers2blacklist(tiers_bl)
+bl = rbind(bl1, bl2, bl3)</code></pre>
+</div>
+<div id="build-bn-model" class="section level2">
+<h2>Build BN model</h2>
+<pre class="r"><code>doParallel::registerDoParallel(4)
+n_boot &lt;- 200
+
+set.seed (20200420)
+
+############
+
+boot_bl_rel &lt;-  foreach (B = 1: n_boot) %dopar%{
+    boot.sample = df.bn[sample(nrow(df.bn), 
+                                          nrow(df.bn), replace = TRUE), ]
+    bnlearn::structural.em(boot.sample, impute = &quot;bayes-lw&quot;, max.iter = 3,
+                              maximize.args = list(blacklist = bl))
+}
+#############</code></pre>
+</div>
+</div>
+<div id="performance-evaluation-using-nested-cross-validation." class="section level1">
+<h1>Performance evaluation using nested cross validation.</h1>
+<p>Inner is bootstrap resampling for model averaging. Outer is bootstrap resampling k = 25 for performance evaluation.</p>
+<pre class="r"><code>set.seed (20200420)
+
+flds &lt;- createFolds(1:nrow(df.bn), 
+                            k = 10, returnTrain = TRUE)
+n_boot = 200
+corr.df.list &lt;- list()
+
+for (k in seq_along(flds)) {
+  
+  train &lt;-  df.bn [flds[[k]], ] %&gt;% as.data.frame()
+  test &lt;- df.bn [-flds[[k]], ] %&gt;% as.data.frame()
+  
+  doParallel::registerDoParallel(4)
+  ############
+  
+  boot  =  foreach (B = 1: n_boot) %dopar%{
+      boot.sample = train[sample(nrow(train), 
+                                            nrow(train), replace = TRUE), ]
+      bnlearn::structural.em(boot.sample, impute = &quot;bayes-lw&quot;, max.iter = 3,
+                                maximize.args = list(blacklist = bl))
+  }
+  #############
+  stopImplicitCluster()
+  
+  bootstr &lt;-  custom.strength(boot, nodes = names(train))
+  avg &lt;-  averaged.network(bootstr, threshold = 0.5)
+  fit &lt;-  bn.fit (avg, train, method = &quot;mle&quot;)
+  
+  imp.list = impute (fit, data = test, method = &quot;bayes-lw&quot;)
+  inames = names (imp.list) [!grepl (&quot;grp&quot;, names (imp.list))]
+  corr.df =  structure(numeric(length (inames)), names = inames)
+  
+  for (var in inames) {
+      corr.df[var] = cor(predict(fit, data = imp.list, var, method = &quot;bayes-lw&quot;), 
+                         imp.list[, var])
+    }
+  
+  corr.df.list[[k]] &lt;- corr.df
+  
+
+}
+
+corr.df &lt;- bind_cols (corr.df.list) %&gt;%
+  apply (1, mean)
+
+names (corr.df) &lt;- inames
+
+corr.df</code></pre>
+<div id="see-results" class="section level3">
+<h3>See results</h3>
+<pre class="r"><code>bootstr = custom.strength(boot_bl_rel, nodes = names(df.bn))
+avg = averaged.network(bootstr, threshold = 0.5)
+fit = bn.fit (avg, df.bn, method = &quot;mle&quot;)
+
+g = strength.plot(avg, 
+                  bootstr, 
+                  shape = &quot;rectangle&quot;,
+                  main = &quot;Figure&quot;)
+
+graph::nodeRenderInfo(g) = list(fontsize=18)
+renderGraph(g)</code></pre>
+</div>
+</div>
+<div id="save-results" class="section level1">
+<h1>Save results</h1>
+<pre class="r"><code>save (df,
+      df.bn,
+      bl,
+      boot_bl,
+      boot_bl_rel,
+      bootstr,
+      corr.df,
+      avg,
+      fit,
+      file = &quot;output/results_early2late.RData&quot;)</code></pre>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 3.6.2 (2019-12-12)
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+Running under: Windows 10 x64 (build 18363)
+
+Matrix products: default
+
+locale:
+[1] LC_COLLATE=English_United Kingdom.1252 
+[2] LC_CTYPE=English_United Kingdom.1252   
+[3] LC_MONETARY=English_United Kingdom.1252
+[4] LC_NUMERIC=C                           
+[5] LC_TIME=English_United Kingdom.1252    
+
+attached base packages:
+[1] grid      parallel  stats     graphics  grDevices utils     datasets 
+[8] methods   base     
+
+other attached packages:
+ [1] doParallel_1.0.15   iterators_1.0.12    foreach_1.5.0      
+ [4] caret_6.0-86        lattice_0.20-41     bnlearn_4.5        
+ [7] VIM_5.1.1           data.table_1.13.0   colorspace_1.4-1   
+[10] mice_3.11.0         xlsx_0.6.3          readxl_1.3.1       
+[13] corrplot_0.84       corrr_0.4.2         Rgraphviz_2.30.0   
+[16] graph_1.64.0        BiocGenerics_0.32.0 magrittr_1.5       
+[19] janitor_2.0.1       arsenal_3.5.0       tidyselect_1.1.0   
+[22] forcats_0.5.0       stringr_1.4.0       dplyr_1.0.1        
+[25] purrr_0.3.4         readr_1.3.1         tidyr_1.1.1        
+[28] tibble_3.0.3        ggplot2_3.3.2       tidyverse_1.3.0    
+[31] workflowr_1.6.2    
+
+loaded via a namespace (and not attached):
+ [1] ellipsis_0.3.1       class_7.3-17         rio_0.5.16          
+ [4] rprojroot_1.3-2      snakecase_0.11.0     fs_1.5.0            
+ [7] rstudioapi_0.11      prodlim_2019.11.13   fansi_0.4.1         
+[10] lubridate_1.7.9      ranger_0.12.1        xml2_1.3.2          
+[13] splines_3.6.2        codetools_0.2-16     robustbase_0.93-6   
+[16] knitr_1.29           jsonlite_1.7.0       pROC_1.16.2         
+[19] rJava_0.9-12         broom_0.7.0          dbplyr_1.4.4        
+[22] compiler_3.6.2       httr_1.4.2           backports_1.1.7     
+[25] assertthat_0.2.1     Matrix_1.2-18        cli_2.0.2           
+[28] later_1.1.0.1        htmltools_0.5.0      tools_3.6.2         
+[31] gtable_0.3.0         glue_1.4.1           reshape2_1.4.4      
+[34] Rcpp_1.0.5           carData_3.0-4        cellranger_1.1.0    
+[37] vctrs_0.3.2          nlme_3.1-142         lmtest_0.9-37       
+[40] timeDate_3043.102    gower_0.2.2          xfun_0.16           
+[43] laeken_0.5.1         xlsxjars_0.6.1       openxlsx_4.1.5      
+[46] rvest_0.3.6          lifecycle_0.2.0      DEoptimR_1.0-8      
+[49] MASS_7.3-51.6        zoo_1.8-8            scales_1.1.1        
+[52] ipred_0.9-9          hms_0.5.3            promises_1.1.1      
+[55] yaml_2.2.1           curl_4.3             rpart_4.1-15        
+[58] stringi_1.4.6        highr_0.8            e1071_1.7-3         
+[61] boot_1.3-25          zip_2.1.0            lava_1.6.7          
+[64] rlang_0.4.7          pkgconfig_2.0.3      evaluate_0.14       
+[67] recipes_0.1.13       plyr_1.8.6           R6_2.4.1            
+[70] generics_0.0.2       DBI_1.1.0            pillar_1.4.6        
+[73] haven_2.3.1          whisker_0.4          foreign_0.8-72      
+[76] withr_2.2.0          survival_3.2-3       abind_1.4-5         
+[79] sp_1.4-2             nnet_7.3-14          modelr_0.1.8        
+[82] crayon_1.3.4         car_3.0-9            rmarkdown_2.3       
+[85] blob_1.2.1           git2r_0.27.1         ModelMetrics_1.2.2.2
+[88] vcd_1.4-7            reprex_0.3.0         digest_0.6.25       
+[91] httpuv_1.5.4         stats4_3.6.2         munsell_0.5.0       </code></pre>
+</div>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+http://docs.mathjax.org/en/latest/configuration.html.  This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
