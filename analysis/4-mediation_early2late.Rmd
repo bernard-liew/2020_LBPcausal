@@ -102,7 +102,7 @@ df %>%
 
 ### Create blacklist
 
-```{r}
+```{r, eval = FALSE}
 
 df.bn = as.data.frame (df)
 df.bn[, grepl ( "id|subgrp|func",names (df.bn))] <- NULL
@@ -144,7 +144,7 @@ bl = rbind(bl1, bl2, bl3, bl4, bl5, bl6)
 
 ### Build BN model
 
-```{r}
+```{r, eval = FALSE}
 
 doParallel::registerDoParallel(4)
 n_boot <- 200
